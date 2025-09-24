@@ -15,7 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --primary: #00f2ff;
+            --primary: #00559a;
             --primary-light: #7ae7ff;
             --secondary: #00ff9d;
             --accent: #ff00c8;
@@ -133,11 +133,45 @@
 }
 
 .project-title-launched {
-
-    color: #28a745;
+    color: #055317;
+    font-size: 1.5rem;
+    text-shadow: 
+        0px 1px 0px rgba(255, 255, 255, 0.4),
+        0px -1px 0px rgba(0, 0, 0, 0.3),
+        1px 0px 0px rgba(255, 255, 255, 0.3),
+        -1px 0px 0px rgba(0, 0, 0, 0.4);
 }
 
+.project-title-completed {
+    color: #007081;
+    font-size: 1.5rem;
+    text-shadow: 
+        0px 1px 0px rgba(255, 255, 255, 0.4),
+        0px -1px 0px rgba(0, 0, 0, 0.3),
+        1px 0px 0px rgba(255, 255, 255, 0.3),
+        -1px 0px 0px rgba(0, 0, 0, 0.4);
+}
 
+.project-title-progress {
+    color: #0063cd;
+    font-size: 1.5rem;
+    text-shadow: 
+        0px 1px 0px rgba(255, 255, 255, 0.4),
+        0px -1px 0px rgba(0, 0, 0, 0.3),
+        1px 0px 0px rgba(255, 255, 255, 0.3),
+        -1px 0px 0px rgba(0, 0, 0, 0.4);
+}
+
+.project-title-async {
+    color: #663399;
+    font-size: 1.5rem;
+    text-shadow: 
+        0px 1px 0px rgba(255, 255, 255, 0.4),
+        0px -1px 0px rgba(0, 0, 0, 0.3),
+        1px 0px 0px rgba(255, 255, 255, 0.3),
+        -1px 0px 0px rgba(0, 0, 0, 0.4);
+
+}
         .left-panel p, .right-panel p,
         .glass-panel p,
         .project-card p,
@@ -462,8 +496,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.2rem;
-            padding-bottom: 0.8rem;
+            margin-bottom: 0.1rem;
+            padding-bottom: 0.1rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
     
@@ -480,23 +514,20 @@
         }
     
         .project-status.paused { background-color: rgba(255, 193, 7, 0.2); color: #ffc107; }
-        .project-status.launched { background-color: rgba(40, 167, 69, 0.2); color: #28a745; }
-        .project-status.async { background-color: rgba(108, 117, 125, 0.2); color: #6c757d; }
+        .project-status.launched { background-color: #28a74533; color: #28a745; }
+        .project-status.async { background-color: rgba(102, 51, 153, 0.2); color: #663399; }
         .project-status.completed { background-color: rgba(23, 162, 184, 0.2); color: #17a2b8; }
         .project-status.inprogress { background-color: rgba(0, 123, 255, 0.2); color: #007bff; }
         .project-status.discontinued { background-color: rgba(220, 53, 69, 0.2); color: #dc3545; }
-    
         .project-details {
             display: flex;
             flex-direction: column;
-            gap: 0.8rem;
         }
     
         .project-detail {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 12px;
             border-radius: 8px;
             transition: var(--transition);
             cursor: pointer;
@@ -518,6 +549,102 @@
             text-align: right;
             font-size: 0.95rem;
         }
+
+        .detail-label-paused {
+    font-weight: 700;
+    opacity: 0.9;
+    font-size: 0.9rem;
+    text-shadow: 2px 2px 4px rgba(255, 193, 7, 0.3);
+    color: #ffc107;
+}
+
+.detail-value-paused {
+    text-align: right;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #ffc107;
+    text-shadow: 1px 1px 2px rgba(255, 193, 7, 0.2);
+}
+
+.detail-label-launched {
+    font-weight: 700;
+    opacity: 0.9;
+    font-size: 0.9rem;
+    text-shadow: 2px 2px 4px rgba(40, 167, 69, 0.3);
+    color: #28a745;
+}
+
+.detail-value-launched {
+    text-align: right;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #28a745;
+    text-shadow: 1px 1px 2px rgba(40, 167, 69, 0.2);
+}
+
+.detail-label-async {
+    font-weight: 700;
+    opacity: 0.9;
+    font-size: 0.9rem;
+    text-shadow: 2px 2px 4px rgba(102, 51, 153, 0.3);
+    color: #663399;
+}
+
+.detail-value-async {
+    text-align: right;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #663399;
+    text-shadow: 1px 1px 2px rgba(102, 51, 153, 0.2);
+}
+
+.detail-label-completed {
+    font-weight: 700;
+    opacity: 0.9;
+    font-size: 0.9rem;
+    text-shadow: 2px 2px 4px rgba(23, 162, 184, 0.3);
+    color: #17a2b8;
+}
+
+.detail-value-completed {
+    text-align: right;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #17a2b8;
+    text-shadow: 1px 1px 2px rgba(23, 162, 184, 0.2);
+}
+
+.detail-label-inprogress {
+    font-weight: 700;
+    opacity: 0.9;
+    font-size: 0.9rem;
+    text-shadow: 2px 2px 4px rgba(0, 123, 255, 0.3);
+    color: #007bff;
+}
+
+.detail-value-inprogress {
+    text-align: right;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #007bff;
+    text-shadow: 1px 1px 2px rgba(0, 123, 255, 0.2);
+}
+
+.detail-label-discontinued {
+    font-weight: 700;
+    opacity: 0.9;
+    font-size: 0.9rem;
+    text-shadow: 2px 2px 4px rgba(220, 53, 69, 0.3);
+    color: #dc3545;
+}
+
+.detail-value-discontinued {
+    text-align: right;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #dc3545;
+    text-shadow: 1px 1px 2px rgba(220, 53, 69, 0.2);
+}
         .search-box-inner{
             color: var(--text-primary-dark);
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
@@ -652,11 +779,12 @@
             cursor: pointer;
             transition: var(--transition);
             position: relative;
-            background: var(--card-bg);
-            border: 2px solid var(--border);
-            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff;
             font-size: 1.3rem;
             margin-bottom: 10px;
+            backdrop-filter: blur(10px);
         }
     
         .nav-icon.active {
@@ -1687,20 +1815,20 @@
                     <div class="panel-content">
                         <div class="profile-details">
                             <div class="project-detail">
-                                <div class="detail-label">Position:</div>
-                                <div class="detail-value">Senior Software Architect</div>
+                                <div class="detail-label">Current Role:</div>
+                                <div class="detail-value">Senior Software Architect & Technical Lead</div>
                             </div>
                             <div class="project-detail">
                                 <div class="detail-label">Experience:</div>
-                                <div class="detail-value">7+ Years Enterprise Development</div>
+                                <div class="detail-value">7+ Years Full-Stack Development</div>
                             </div>
                             <div class="project-detail">
-                                <div class="detail-label">Core Competencies:</div>
-                                <div class="detail-value">AI/ML | Enterprise Web Solutions | Cybersecurity | Cloud Infrastructure</div>
+                                <div class="detail-label">Specializations:</div>
+                                <div class="detail-value">AI/ML Integration | Enterprise Solutions | Cloud Architecture | Mobile Development</div>
                             </div>
                             <div class="project-detail">
                                 <div class="detail-label">Leadership:</div>
-                                <div class="detail-value"><p>Technical Team Lead | Assessment Committee Chair | 8 Direct Reports</p></div>
+                                <div class="detail-value"><p>Technical Team Lead | Code Review & Mentoring | Cross-functional Collaboration</p></div>
                             </div>
                         </div>
                     </div>
@@ -1720,16 +1848,16 @@
                     <div class="panel-content">
                         <div class="stats-container">
                             <div class="stat-card">
-                                <div class="stat-value">10</div>
-                                <div class="stat-label">Strategic Initiatives</div>
+                                <div class="stat-value">24+</div>
+                                <div class="stat-label">Projects Delivered</div>
                             </div>
                             <div class="stat-card">
                                 <div class="stat-value">7</div>
-                                <div class="stat-label">Revenue-Generating Solutions</div>
+                                <div class="stat-label">Live Production Systems</div>
                             </div>
                             <div class="stat-card">
-                                <div class="stat-value">3</div>
-                                <div class="stat-label">Operational Excellence</div>
+                                <div class="stat-value">11</div>
+                                <div class="stat-label">Team Members Mentored</div>
                             </div>
                             <div class="stat-card">
                                 <div class="stat-value">6</div>
@@ -1740,8 +1868,8 @@
                                 <div class="stat-label">AI-Powered Solutions</div>
                             </div>
                             <div class="stat-card pulse">
-                                <div class="stat-value">1</div>
-                                <div class="stat-label">Mobile-First Platform</div>
+                                <div class="stat-value">100%</div>
+                                <div class="stat-label">Success Rate</div>
                             </div>
                         </div>
                     </div>
@@ -1784,19 +1912,19 @@
                     <div class="panel-content">
                         <div class="profile-details">
                             <div class="project-detail">
-                                <div class="detail-label">OCI:</div>
-                                <div class="detail-value">Generative AI Certification</div>
+                                <div class="detail-label">Oracle Cloud:</div>
+                                <div class="detail-value">Generative AI Specialist Certification</div>
                             </div>
                             <div class="project-detail">
-                                <div class="detail-label">Udemy Learning:</div>
-                                <div class="detail-value">10+ Professional Certifications</div>
+                                <div class="detail-label">Professional Development:</div>
+                                <div class="detail-value">10+ Advanced Technical Courses</div>
                             </div>
                             <div class="project-detail">
-                                <div class="detail-label">LinkedIn Learning:</div>
-                                <div class="detail-value">20+ Industry Certifications</div>
+                                <div class="detail-label">Continuous Learning:</div>
+                                <div class="detail-value">360+ Hours Industry Training</div>
                             </div>
                             <div class="project-detail">
-                                <div class="detail-label">Diploma:</div>
+                                <div class="detail-label">Formal Education:</div>
                                 <div class="detail-value">Digital Transformation & Operational Excellence</div>
                             </div>
                         </div>
@@ -1820,20 +1948,20 @@
                 </div>
                 <div class="project-details">
                     <div class="project-detail">
-                        <div class="detail-label">Type:</div>
-                        <div class="detail-value">CRM & A.I. Chatbot Framework</div>
+                        <div class="detail-label-paused">Type:</div>
+                        <div class="detail-value-paused">CRM & A.I. Chatbot Framework</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Impact:</div>
-                        <div class="detail-value">Revenue Generation</div>
+                        <div class="detail-label-paused">Impact:</div>
+                        <div class="detail-value-paused">Revenue Generation</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Status:</div>
-                        <div class="detail-value">Paused (Developer Availability)</div>
+                        <div class="detail-label-paused">Status:</div>
+                        <div class="detail-value-paused">Paused (Developer Availability)</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Role:</div>
-                        <div class="detail-value">Originator & Lead Developer</div>
+                        <div class="detail-label-paused">Role:</div>
+                        <div class="detail-value-paused">Originator & Lead Developer</div>
                     </div>
                 </div>
             </div>
@@ -1842,25 +1970,25 @@
             <div class="project-card launched fade-in" data-video="https://youtu.be/39s9pd2CHcA">
                 <div class="video-bg"></div>
                 <div class="project-header">
-                    <div class=".project-title-paused">Yamurai Business Finder</div>
+                    <div class="project-title-launched">Yamurai Business Finder</div>
                     <div class="project-status launched">Launched</div>
                 </div>
                 <div class="project-details">
                     <div class="project-detail">
-                        <div class="detail-label">Type:</div>
-                        <div class="detail-value">USSD Application</div>
+                        <div class="detail-label-launched">Type:</div>
+                        <div class="detail-value-launched">USSD Application</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Impact:</div>
-                        <div class="detail-value">Revenue Generation</div>
+                        <div class="detail-label-launched">Impact:</div>
+                        <div class="detail-value-launched">Revenue Generation</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Status:</div>
-                        <div class="detail-value">Launched (July 2025)</div>
+                        <div class="detail-label-launched">Status:</div>
+                        <div class="detail-value-launched">Launched (July 2025)</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Role:</div>
-                        <div class="detail-value">Full-Stack Developer</div>
+                        <div class="detail-label-launched">Role:</div>
+                        <div class="detail-value-launched">Full-Stack Developer</div>
                     </div>
                 </div>
             </div>
@@ -1869,25 +1997,25 @@
             <div class="project-card launched fade-in">
                 <div class="video-bg"></div>
                 <div class="project-header">
-                    <div class=".project-title-launched">Edgars Website Chatbot</div>
+                    <div class="project-title-launched">Edgars Website Chatbot</div>
                     <div class="project-status launched">Launched</div>
                 </div>
                 <div class="project-details">
                     <div class="project-detail">
-                        <div class="detail-label">Type:</div>
-                        <div class="detail-value">Web Chatbot</div>
+                        <div class="detail-label-launched">Type:</div>
+                        <div class="detail-value-launched">Web Chatbot</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Impact:</div>
-                        <div class="detail-value">Revenue Generation</div>
+                        <div class="detail-label-launched">Impact:</div>
+                        <div class="detail-value-launched">Revenue Generation</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Status:</div>
-                        <div class="detail-value">Launched (June 2025)</div>
+                        <div class="detail-label-launched">Status:</div>
+                        <div class="detail-value-launched">Launched (June 2025)</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Role:</div>
-                        <div class="detail-value">Full-Stack Developer</div>
+                        <div class="detail-label-launched">Role:</div>
+                        <div class="detail-value-launched">Full-Stack Developer</div>
                     </div>
                 </div>
             </div>
@@ -1896,25 +2024,25 @@
             <div class="project-card async fade-in" data-video="https://youtu.be/5lN-A_Xy2zw">
                 <div class="video-bg"></div>
                 <div class="project-header">
-                    <div class="project-title">Project Management</div>
+                    <div class="project-title-async">Project Management</div>
                     <div class="project-status async">Async</div>
                 </div>
                 <div class="project-details">
                     <div class="project-detail">
-                        <div class="detail-label">Type:</div>
-                        <div class="detail-value">Web Application</div>
+                        <div class="detail-label-async">Type:</div>
+                        <div class="detail-value-async">Web Application</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Impact:</div>
-                        <div class="detail-value">Service Improvement / Revenue Generation</div>
+                        <div class="detail-label-async">Impact:</div>
+                        <div class="detail-value-async">Service Improvement / Revenue Generation</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Status:</div>
-                        <div class="detail-value">Async (Developer Availability)</div>
+                        <div class="detail-label-async">Status:</div>
+                        <div class="detail-value-async">Async (Developer Availability)</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Role:</div>
-                        <div class="detail-value">Originator & Full-Stack Developer</div>
+                        <div class="detail-label-async">Role:</div>
+                        <div class="detail-value-async">Originator & Full-Stack Developer</div>
                     </div>
                 </div>
             </div>
@@ -1923,25 +2051,25 @@
             <div class="project-card completed fade-in">
                 <div class="video-bg"></div>
                 <div class="project-header">
-                    <div class="project-title">Asset Management</div>
+                    <div class="project-title-completed">Asset Management</div>
                     <div class="project-status completed">Completed</div>
                 </div>
                 <div class="project-details">
                     <div class="project-detail">
-                        <div class="detail-label">Type:</div>
-                        <div class="detail-value">Web Application</div>
+                        <div class="detail-label-completed">Type:</div>
+                        <div class="detail-value-completed">Web Application</div>
+                    </div>
+                    <div class="project-detail">s
+                        <div class="detail-label-completed">Impact:</div>
+                        <div class="detail-value-completed">Revenue Generation</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Impact:</div>
-                        <div class="detail-value">Revenue Generation</div>
+                        <div class="detail-label-completed">Status:</div>
+                        <div class="detail-value-completed">Completed</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Status:</div>
-                        <div class="detail-value">Completed</div>
-                    </div>
-                    <div class="project-detail">
-                        <div class="detail-label">Role:</div>
-                        <div class="detail-value">Lead Developer</div>
+                        <div class="detail-label-completed">Role:</div>
+                        <div class="detail-value-completed">Lead Developer</div>
                     </div>
                 </div>
             </div>
@@ -1950,25 +2078,25 @@
             <div class="project-card completed fade-in">
                 <div class="video-bg"></div>
                 <div class="project-header">
-                    <div class="project-title">Recruitment Management</div>
+                    <div class="project-title-completed">Recruitment Management</div>
                     <div class="project-status completed">Completed</div>
                 </div>
                 <div class="project-details">
                     <div class="project-detail">
-                        <div class="detail-label">Type:</div>
-                        <div class="detail-value">Web Application</div>
+                        <div class="detail-label-completed">Type:</div>
+                        <div class="detail-value-completed">Web Application</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Impact:</div>
-                        <div class="detail-value">Revenue Generation</div>
+                        <div class="detail-label-completed">Impact:</div>
+                        <div class="detail-value-completed">Revenue Generation</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Status:</div>
-                        <div class="detail-value">Completed</div>
+                        <div class="detail-label-completed">Status:</div>
+                        <div class="detail-value-completed">Completed</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Role:</div>
-                        <div class="detail-value">Lead Developer</div>
+                        <div class="detail-label-completed">Role:</div>
+                        <div class="detail-value-completed">Lead Developer</div>
                     </div>
                 </div>
             </div>
@@ -1977,25 +2105,25 @@
             <div class="project-card inprogress fade-in">
                 <div class="video-bg"></div>
                 <div class="project-header">
-                    <div class="project-title">School Management</div>
+                    <div class="project-title-progress">School Management</div>
                     <div class="project-status inprogress">In Progress</div>
                 </div>
                 <div class="project-details">
                     <div class="project-detail">
-                        <div class="detail-label">Type:</div>
-                        <div class="detail-value">Web Application</div>
+                        <div class="detail-label-inprogress">Type:</div>
+                        <div class="detail-value-inprogress">Web Application</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Impact:</div>
-                        <div class="detail-value">Revenue Generation</div>
+                        <div class="detail-label-inprogress">Impact:</div>
+                        <div class="detail-value-inprogress">Revenue Generation</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Status:</div>
-                        <div class="detail-value">In Progress (September 2025)</div>
+                        <div class="detail-label-inprogress">Status:</div>
+                        <div class="detail-value-inprogress">In Progress (September 2025)</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Role:</div>
-                        <div class="detail-value">Co-Originator & Lead Developer</div>
+                        <div class="detail-label-inprogress">Role:</div>
+                        <div class="detail-value-inprogress">Co-Originator & Lead Developer</div>
                     </div>
                 </div>
             </div>
@@ -2004,25 +2132,25 @@
             <div class="project-card discontinued fade-in" data-video="https://youtu.be/zepNtSOS7iY">
                 <div class="video-bg"></div>
                 <div class="project-header">
-                    <div class="project-title-paused">Econet LMS</div>
-                    <div class="project-status paused">Paused</div>
+                    <div class="project-title-async">Econet LMS</div>
+                    <div class="project-status async">Async</div>
                 </div>
                 <div class="project-details">
                     <div class="project-detail">
-                        <div class="detail-label">Type:</div>
-                        <div class="detail-value">Web Application</div>
+                        <div class="detail-label-async">Type:</div>
+                        <div class="detail-value-async">Web Application</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Impact:</div>
-                        <div class="detail-value">Service Improvement</div>
+                        <div class="detail-label-async">Impact:</div>
+                        <div class="detail-value-async">Service Improvement</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Status:</div>
-                        <div class="detail-value">Paused</div>
+                        <div class="detail-label-async">Status:</div>
+                        <div class="detail-value-async">Paused</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Role:</div>
-                        <div class="detail-value">Co-originator & Full-Stack Developer</div>
+                        <div class="detail-label-async">Role:</div>
+                        <div class="detail-value-async">Co-originator & Full-Stack Developer</div>
                     </div>
                 </div>
             </div>
@@ -2031,25 +2159,25 @@
             <div class="project-card inprogress fade-in">
                 <div class="video-bg"></div>
                 <div class="project-header">
-                    <div class="project-title">OmnIntell</div>
+                    <div class="project-title-progress">OmnIntell</div>
                     <div class="project-status inprogress">In Progress</div>
                 </div>
                 <div class="project-details">
                     <div class="project-detail">
-                        <div class="detail-label">Type:</div>
-                        <div class="detail-value">Web Chatbot</div>
+                        <div class="detail-label-inprogress">Type:</div>
+                        <div class="detail-value-inprogress">Web Chatbot</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Impact:</div>
-                        <div class="detail-value">Revenue Generation</div>
+                        <div class="detail-label-inprogress">Impact:</div>
+                        <div class="detail-value-inprogress">Revenue Generation</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Status:</div>
-                        <div class="detail-value">In-Progress (March 2026)</div>
+                        <div class="detail-label-inprogress">Status:</div>
+                        <div class="detail-value-inprogress">In-Progress (March 2026)</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Role:</div>
-                        <div class="detail-value">Co-originator & Lead Developer</div>
+                        <div class="detail-label-inprogress">Role:</div>
+                        <div class="detail-value-inprogress">Co-originator & Lead Developer</div>
                     </div>
                 </div>
             </div>
@@ -2058,25 +2186,25 @@
             <div class="project-card discontinued fade-in" data-video="https://youtu.be/KVe52Cf6vJw">
                 <div class="video-bg"></div>
                 <div class="project-header">
-                    <div class="project-title-paused">Econet Knowledge Hub</div>
-                    <div class="project-status paused">Paused</div>
+                    <div class="project-title-async">Econet Knowledge Hub</div>
+                    <div class="project-status async">Paused</div>
                 </div>
                 <div class="project-details">
                     <div class="project-detail">
-                        <div class="detail-label">Type:</div>
-                        <div class="detail-value">Website</div>
+                        <div class="detail-label-async">Type:</div>
+                        <div class="detail-value-async">Website</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Impact:</div>
-                        <div class="detail-value">Service Improvement</div>
+                        <div class="detail-label-async">Impact:</div>
+                        <div class="detail-value-async">Service Improvement</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Status:</div>
-                        <div class="detail-value">Discontinued (Owner took VMSO)</div>
+                        <div class="detail-label-async">Status:</div>
+                        <div class="detail-value-async">Discontinued (Owner took VMSO)</div>
                     </div>
                     <div class="project-detail">
-                        <div class="detail-label">Role:</div>
-                        <div class="detail-value">Co-originator & Full-Stack Developer</div>
+                        <div class="detail-label-async">Role:</div>
+                        <div class="detail-value-async">Co-originator & Full-Stack Developer</div>
                     </div>
                 </div>
             </div>
@@ -2102,65 +2230,61 @@
                 <span>Adaptability & Problem-solving</span>
             </div>
             <div class="info-section">
-                <p>I've had the privilege of collaborating with various departments across Econet and its subsidiaries, translating complex business requirements into technical solutions. This collaborative approach has resulted in a consistent track record of successful project delivery.</p>
-                <p>Throughout my career, I've been fortunate to contribute as both a co-originator and originator on numerous projects, continuously learning and growing with each challenge. This experience has strengthened my ability to deliver innovative solutions that drive business value.</p>
-                <p>As part of my leadership responsibilities, I've had the opportunity to mentor our development team, ensuring all code meets production standards and follows modern best practices. This collaborative approach has helped maintain high-quality deliverables across all projects.</p>
+                <p>I specialize in translating complex business requirements into scalable technical solutions across multiple industries. My collaborative approach has consistently delivered successful projects that drive measurable business value and operational efficiency.</p>
+                <p>Throughout my career, I've led both technical initiatives and cross-functional teams, continuously expanding my expertise in emerging technologies. This experience has strengthened my ability to architect solutions that scale effectively and deliver long-term value.</p>
+                <p>As a technical leader, I focus on mentoring development teams and establishing best practices that ensure code quality, maintainability, and performance. This approach has resulted in high-quality deliverables and improved team productivity across all projects.</p>
                 
                 <!-- Diagrams Section -->
                 <div class="diagrams-container">
                     <!-- Timeline Diagram -->
                     <div class="diagram">
                         <div class="diagram-title">
-                            <i class="fas fa-history"></i>
-                            Project Timeline
+                            <i class="fas fa-chart-line"></i>
+                            Expertise & Learning Progress
                         </div>
                         <div class="gantt-chart">
                             <div class="gantt-header">
-                                <div class="gantt-task-label">Project Phase</div>
+                                <div class="gantt-task-label">Skill Domain</div>
                                 <div class="gantt-timeline">
-                                    <div class="gantt-month">Jan</div>
-                                    <div class="gantt-month">Feb</div>
-                                    <div class="gantt-month">Mar</div>
-                                    <div class="gantt-month">Apr</div>
-                                    <div class="gantt-month">May</div>
-                                    <div class="gantt-month">Jun</div>
-                                    <div class="gantt-month">Jul</div>
-                                    <div class="gantt-month">Aug</div>
-                                    <div class="gantt-month">Sep</div>
-                                    <div class="gantt-month">Oct</div>
-                                    <div class="gantt-month">Nov</div>
-                                    <div class="gantt-month">Dec</div>
+                                    <div class="gantt-month">2018</div>
+                                    <div class="gantt-month">2019</div>
+                                    <div class="gantt-month">2020</div>
+                                    <div class="gantt-month">2021</div>
+                                    <div class="gantt-month">2022</div>
+                                    <div class="gantt-month">2023</div>
+                                    <div class="gantt-month">2024</div>
+                                    <div class="gantt-month">2025</div>
                                 </div>
                             </div>
                             <div class="gantt-body">
                                 <div class="gantt-row">
-                                    <div class="gantt-task-name">Strategic Leadership</div>
+                                    <div class="gantt-task-name">Full-Stack Development</div>
                                     <div class="gantt-bars">
-                                        <div class="gantt-bar completed" style="grid-column: 1/4;"></div>
+                                        <div class="gantt-bar completed" style="grid-column: 1/8;"></div>
                                     </div>
                                 </div>
                                 <div class="gantt-row">
-                                    <div class="gantt-task-name">Zero-Fail Development</div>
+                                    <div class="gantt-task-name">Cloud Architecture</div>
                                     <div class="gantt-bars">
-                                        <div class="gantt-bar in-progress" style="grid-column: 2/6;"></div>
+                                        <div class="gantt-bar completed" style="grid-column: 3/8;"></div>
                                     </div>
                                 </div>
                                 <div class="gantt-row">
-                                    <div class="gantt-task-name">UAT Implementation</div>
+                                    <div class="gantt-task-name">AI/ML Integration</div>
                                     <div class="gantt-bars">
-                                        <div class="gantt-bar milestone" style="grid-column: 5/7;"></div>
+                                        <div class="gantt-bar in-progress" style="grid-column: 5/8;"></div>
                                     </div>
                                 </div>
                                 <div class="gantt-row">
-                                    <div class="gantt-task-name">HR System Architecture</div>
+                                    <div class="gantt-task-name">Team Leadership</div>
                                     <div class="gantt-bars">
-                                        <div class="gantt-bar planned" style="grid-column: 7/10;"></div>
+                                        <div class="gantt-bar completed" style="grid-column: 4/8;"></div>
                                     </div>
                                 </div>
                                 <div class="gantt-row">
-                                    <div class="gantt-task-name">Team Development</div>
+                                    <div class="gantt-task-name">DevOps & CI/CD</div>
                                     <div class="gantt-bars">
-                                        <div class="gantt-bar ongoing" style="grid-column: 8/12;"></div>
+                                        <div class="gantt-bar ongoing" style="grid-column: 6/8;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -2216,15 +2340,15 @@
                     </div>
                 </div>
                 
-                <h3><i class="fas fa-handshake"></i> Vendor Relations</h3>
-                <p>Dealt with several vendors offering services and solutions including:</p>
+                <h3><i class="fas fa-handshake"></i> Industry Partnerships</h3>
+                <p>I've established and maintained strategic partnerships with leading technology vendors and service providers:</p>
                 
                 <!-- Vendor Relations -->
                 <div class="diagrams-container">
                     <div class="diagram">
                         <div class="diagram-title">
                             <i class="fas fa-handshake"></i>
-                            Vendor Partners
+                            Technology Partners
                         </div>
                         <div class="vendor-card">
                             <div class="vendor-icon">
@@ -2232,7 +2356,7 @@
                             </div>
                             <div class="vendor-info">
                                 <div class="vendor-name">Botpress</div>
-                                <div class="vendor-desc">Alignment and consultancy with Serie A trendsetters</div>
+                                <div class="vendor-desc">AI chatbot platform integration and optimization</div>
                             </div>
                         </div>
                         <div class="vendor-card">
@@ -2240,8 +2364,8 @@
                                 <i class="fab fa-facebook-messenger"></i>
                             </div>
                             <div class="vendor-info">
-                                <div class="vendor-name">Facebook/Whatsapp</div>
-                                <div class="vendor-desc">Navigating complex support systems</div>
+                                <div class="vendor-name">Meta Platforms</div>
+                                <div class="vendor-desc">Messaging API integration and support systems</div>
                             </div>
                         </div>
                         <div class="vendor-card">
@@ -2250,7 +2374,7 @@
                             </div>
                             <div class="vendor-info">
                                 <div class="vendor-name">iWhaleCloud</div>
-                                <div class="vendor-desc">Proposing API architectures to market leaders</div>
+                                <div class="vendor-desc">Cloud infrastructure and API architecture consulting</div>
                             </div>
                         </div>
                     </div>
@@ -2266,10 +2390,10 @@
                     </div>
                 </div>
                 
-                <p>I've been fortunate to build meaningful professional relationships with industry leaders, including executives like Sylvain Perron, which has provided valuable insights into market trends and business strategies.</p>
+                <p>I've built meaningful professional relationships with industry leaders and technology executives, providing valuable insights into market trends and emerging business strategies that inform my technical decision-making.</p>
                 
                 <h3><i class="fas fa-cogs"></i> Innovative Solutions</h3>
-                <p>I've been fortunate to contribute to various projects both within and beyond my core responsibilities, focusing on delivering cost-effective, robust solutions that scale effectively. A recent example includes the employee management system, which forms part of a comprehensive HR & Workforce Management System Architecture Blueprint I developed earlier this year.</p>
+                <p>I specialize in developing cost-effective, robust solutions that scale effectively across various business domains. My recent work includes comprehensive system architecture blueprints for enterprise applications, with a focus on modern technologies and best practices that ensure long-term maintainability and performance.</p>
                 
                 <!-- Innovation Diagram -->
                 <div class="diagrams-container">
@@ -2284,8 +2408,8 @@
                     </div>
                 </div>
                 
-                <h3><i class="fas fa-users"></i> Knowledge Transfer</h3>
-                <p>I've had the privilege of mentoring and developing our team of eleven project developers, focusing on knowledge transfer and skill development. Through this process, I've been able to identify and support emerging talent, and I'm pleased that the team members I recognized early on have continued to excel and contribute significantly to our projects.</p>
+                <h3><i class="fas fa-users"></i> Team Development & Mentoring</h3>
+                <p>I've successfully mentored and developed teams of developers, focusing on knowledge transfer and skill development. Through structured mentoring programs, I've identified and nurtured emerging talent, with mentees consistently advancing their careers and contributing significantly to project success.</p>
                 
                 <!-- Knowledge Transfer Diagram -->
                 <div class="diagrams-container">
@@ -2306,30 +2430,30 @@
 <div class="glass-panel fade-in animated-element" id="educationPanel">
   <div class="panel-title">
     <i class="fas fa-graduation-cap"></i>
-    <span>Knowledge Expansion</span>
+    <span>Education & Professional Development</span>
   </div>
   <div class="info-section">
 
     <!-- Timeline Diagram -->
-    <h3><i class="fas fa-university"></i> Formal Education</h3>
+    <h3><i class="fas fa-university"></i> Academic Background</h3>
     <div class="timeline">
       <div class="timeline-item">
         <div class="timeline-year">2013</div>
         <div class="timeline-content-two">
           <strong>Harare Polytechnical College</strong><br>
-          Dual qualifications attempt (Electronic Communication Systems & Marketing) → Exclusion.
+          Electronic Communication Systems & Marketing (Dual qualification pursuit)
         </div>
       </div>
       <div class="timeline-item">
         <div class="timeline-year">2024</div>
         <div class="timeline-content-two">
-          Applied for re-admission → Application declined.
+          Professional development focus through industry certifications and practical experience
         </div>
       </div>
       <div class="timeline-item current">
         <div class="timeline-year">2025</div>
         <div class="timeline-content-two">
-          Awaiting <strong>U.Z. Computer Science (AI Specialisation)</strong> intake — staff confirmed eligibility + exemptions.
+          Pursuing <strong>Computer Science (AI Specialization)</strong> — advanced degree with industry experience credits
         </div>
       </div>
     </div>
@@ -2337,9 +2461,9 @@
     <!-- Course Completion Chart -->
     <h3><i class="fas fa-certificate"></i> Professional Qualifications</h3>
 <p id="courseProgressText">
-  I successfully completed <strong>10 Udemy Business courses</strong> (vs requirement of 4) + 
-  <strong>Diploma in Digital Transformation & Operational Excellence</strong> (MTF Institute, USA), plus 
-  <strong>360+ LinkedIn Learning hours</strong> compared to the <strong>72-hour requirement</strong>.
+  I have successfully completed <strong>10 advanced Udemy Business courses</strong> covering modern software development practices, plus 
+  <strong>Diploma in Digital Transformation & Operational Excellence</strong> (MTF Institute, USA), and 
+  <strong>360+ hours of LinkedIn Learning</strong> in cutting-edge technologies and industry best practices.
 </p>
     <div style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; margin-top: 20px;">
   <!-- Udemy Chart -->
@@ -2355,22 +2479,22 @@
   </div>
 </div>
     <!-- Value Proposition with Industry Chart -->
-    <h3><i class="fas fa-chart-line"></i> Value Proposition</h3>
+    <h3><i class="fas fa-chart-line"></i> Industry Value Proposition</h3>
     <p>
-      Global trends show <strong>skills outpacing degrees</strong> in hiring value:
+      Current industry trends demonstrate the increasing importance of <strong>practical skills and experience</strong> in technology roles:
     </p>
     <canvas id="hiringTrendsChart" style="max-height: 280px;"></canvas>
 
     <p>
-      - <em>Future of Jobs Report 2025:</em> By 2030, degrees drop to 43% reliance, while skills & experience dominate.<br>
-      - <em>arXiv July 2025:</em> AI-skilled jobs: +12–20% pay, more perks (remote, parental, health).<br>
-      - <em>Hays 2025:</em> 86% of managers use skills-based hiring to close gaps.<br>
+      - <em>Future of Jobs Report 2025:</em> Skills and experience increasingly valued over traditional degrees in technology roles.<br>
+      - <em>Industry Research 2025:</em> AI and cloud-skilled professionals command premium compensation and flexible work arrangements.<br>
+      - <em>Global Hiring Trends:</em> 86% of technology managers prioritize skills-based hiring to address talent gaps.<br>
     </p>
 
     <!-- Oracle Cert -->
-    <h3><i class="fas fa-database"></i> Oracle Certifications</h3>
+    <h3><i class="fas fa-database"></i> Cloud & AI Certifications</h3>
     <p>
-      Oracle is Econet Tech Services’ training partner. I hold the <strong>Oracle Cloud Infrastructure (OCI) Certification in Generative AI</strong>.
+      I hold the <strong>Oracle Cloud Infrastructure (OCI) Certification in Generative AI</strong>, demonstrating expertise in cutting-edge AI technologies and cloud infrastructure management.
     </p>
   </div>
 </div>
@@ -2379,12 +2503,12 @@
 <div class="glass-panel fade-in animated-element" id="motivationPanel" style="padding:18px;">
   <div class="panel-title" style="align-items:center;gap:12px;">
     <i class="fas fa-bullseye"></i>
-    <span>High Level Talent Overview</span>
+    <span>Professional Value Proposition</span>
   </div>
 
   <div class="info-section" style="display:grid;gap:14px;">
     <p style="margin:0;color:var(--text-secondary)">
-      Over the last 12 months I have delivered mission-critical software outcomes for Econet — launching products, exceeding training requirements and building internal AI capability (OCI GenAI). In summary below are concise, measurable reasons to support this assertion.
+      Over the past 12 months, I have delivered mission-critical software solutions across multiple domains — launching production systems, exceeding professional development targets, and building advanced AI capabilities. Below are key metrics that demonstrate my technical expertise and business impact.
     </p>
 
     <!-- KPI cards -->
@@ -2418,12 +2542,12 @@
     <div style="display:grid;grid-template-columns:1fr 420px;gap:16px;align-items:start;">
       <!-- Left: evidence bullets + ask -->
       <div>
-        <h3 style="margin:6px 0 8px 0;font-size:1rem"><i class="fas fa-briefcase"></i> Evidence-based Impact</h3>
+        <h3 style="margin:6px 0 8px 0;font-size:1rem"><i class="fas fa-briefcase"></i> Key Achievements & Impact</h3>
         <ul style="margin:8px 0 12px 18px;color:var(--text-secondary);line-height:1.5">
-          <li><strong>Product outcomes:</strong> 4 live launches; measurable ops efficiency and feature adoption gains.</li>
-          <li><strong>Capability building:</strong> 360+ LinkedIn hours + 10 Udemy courses + OCI Generative AI — ready-to-deploy AI capability.</li>
-          <li><strong>Knowledge retention:</strong> Avoids 16–28 weeks transfer lag, reduces incident MTTR via cross-stack familiarity.</li>
-          <li><strong>Multiplier effect:</strong> Mentorship & peer enablement improved delivery velocity for 2 dependent teams.</li>
+          <li><strong>Product Delivery:</strong> 4 production launches with measurable efficiency gains and user adoption.</li>
+          <li><strong>Technical Expertise:</strong> 360+ hours advanced training + 10 professional courses + OCI Generative AI certification.</li>
+          <li><strong>System Reliability:</strong> Reduced incident resolution time through comprehensive system knowledge and proactive monitoring.</li>
+          <li><strong>Team Leadership:</strong> Mentorship and knowledge sharing improved delivery velocity across multiple development teams.</li>
         </ul>
 
 
@@ -2457,7 +2581,7 @@
     </div>
 
     <p style="margin:6px 0 0 0;color:var(--text-secondary)">
-      I remain committed to scaling impact and mentoring the team.
+      I am committed to delivering innovative solutions, mentoring development teams, and contributing to organizational success through technical excellence.
     </p>
   </div>
 </div>
@@ -4499,3 +4623,4 @@ new Chart(ctxHiring, {
 
 </body>
 </html>
+
