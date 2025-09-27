@@ -5631,6 +5631,83 @@ new Chart(ctxHiring, {
   }
 });
 </script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Portfolio</title>
+    <style>
+        /* Sticky Footer Solution using Flexbox :cite[5] */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Ensures the body takes at least the full viewport height */
+        }
+        .site-content {
+            flex: 1; /* This makes the main content area expand to fill available space */
+        }
+
+        /* Styles for the Visit Counter Footer */
+        #visit-counter {
+            background-color: #f1f1f1;
+            text-align: center;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 1.1em;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+    <!-- Include the PureCounter library -->
+    <script src="https://cdn.jsdelivr.net/npm/purecounterjs/dist/purecounter_vanilla.js"></script>
+
+    <!-- The visit counter footer -->
+    <footer id="visit-counter">
+        My profile has been viewed <span class="purecounter" data-purecounter-duration="2">0</span> times.
+    </footer>
+
+    <script>
+        // Function to get or initialize the visit count from localStorage
+        function getVisitCount() {
+            // Check if the count already exists in the browser's storage
+            if(localStorage.getItem('pageVisitCount')) {
+                // If it exists, get the count, convert it to a number, and increment it
+                let count = parseInt(localStorage.getItem('pageVisitCount')) + 1;
+                localStorage.setItem('pageVisitCount', count);
+                return count;
+            } else {
+                // If it doesn't exist, this is the first visit. Initialize with 1.
+                localStorage.setItem('pageVisitCount', '1');
+                return 1;
+            }
+        }
+
+        // Function to update the counter on the page
+        function updateCounter() {
+            const count = getVisitCount();
+            const counterElement = document.querySelector('.purecounter');
+
+            // Set the end value for the PureCounter animation
+            counterElement.setAttribute('data-purecounter-end', count);
+            counterElement.textContent = count; // Set the initial static value
+
+            // Initialize PureCounter to animate the number :cite[1]
+            new PureCounter({
+                selector: '.purecounter',
+                duration: 2,
+                once: true
+            });
+        }
+
+        // Run the update function when the page loads
+        document.addEventListener('DOMContentLoaded', updateCounter);
+    </script>
 
 </body>
 </html>
+
