@@ -271,6 +271,35 @@
         -1px 0px 0px rgba(0, 0, 0, 0.4);
         }
         
+        /* Innovative Solutions section - etched white text */
+        .innovative-solutions-section,
+        .innovative-solutions-section h3,
+        .innovative-solutions-section p,
+        .innovative-solutions-section .diagram,
+        .innovative-solutions-section .diagram-title,
+        .innovative-solutions-section .chart-container {
+            color: var(--text-primary) !important;
+            text-shadow: var(--etch-shadow) !important;
+        }
+        
+        /* Team Development & Mentoring section - etched white text */
+        .team-mentoring-section,
+        .team-mentoring-section h3,
+        .team-mentoring-section p,
+        .team-mentoring-section .diagram,
+        .team-mentoring-section .diagram-title,
+        .team-mentoring-section .chart-container {
+            color: var(--text-primary) !important;
+            text-shadow: var(--etch-shadow) !important;
+        }
+        
+        /* Adaptability & Problem-solving section - etched white text */
+        .adaptability-section,
+        .adaptability-section p {
+            color: var(--text-primary) !important;
+            text-shadow: var(--etch-shadow) !important;
+        }
+        
         .vendor-card, .vendor-info, .vendor-name, .vendor-desc,
         .chart-container, .stats-container, .stat-card, .stat-value, .stat-label,
         .timeline-content, .timeline-date {
@@ -3208,9 +3237,9 @@
                 <span>Adaptability & Problem-solving</span>
             </div>
             <div class="info-section">
-                <p class="vendor-desc">I specialize in translating complex business requirements into scalable technical solutions across multiple industries. My collaborative approach has consistently delivered successful projects that drive measurable business value and operational efficiency.</p>
-                <p class="vendor-desc">Throughout my career, I've led both technical initiatives and cross-functional teams, continuously expanding my expertise in emerging technologies. This experience has strengthened my ability to architect solutions that scale effectively and deliver long-term value.</p>
-                <p class="vendor-desc">As a technical leader, I focus on mentoring development teams and establishing best practices that ensure code quality, maintainability, and performance. This approach has resulted in high-quality deliverables and improved team productivity across all projects.</p>
+                <p class="adaptability-section">I specialize in translating complex business requirements into scalable technical solutions across multiple industries. My collaborative approach has consistently delivered successful projects that drive measurable business value and operational efficiency.</p>
+                <p class="adaptability-section">Throughout my career, I've led both technical initiatives and cross-functional teams, continuously expanding my expertise in emerging technologies. This experience has strengthened my ability to architect solutions that scale effectively and deliver long-term value.</p>
+                <p class="adaptability-section">As a technical leader, I focus on mentoring development teams and establishing best practices that ensure code quality, maintainability, and performance. This approach has resulted in high-quality deliverables and improved team productivity across all projects.</p>
                 
                 <!-- Diagrams Section -->
                 <div class="diagrams-container">
@@ -3280,60 +3309,9 @@
                         </div>
                     </div>
                     
-                <h3><i class="fas fa-handshake"></i> Industry Partnerships</h3>
-                <p class="vendor-desc">I've established and maintained strategic partnerships with leading technology vendors and service providers:</p>
-                
-                <!-- Vendor Relations -->
-                <div class="diagrams-container">
-                    <div class="diagram">
-                        <div class="diagram-title">
-                            <i class="fas fa-handshake"></i>
-                            Technology Partners
-                        </div>
-                        <div class="vendor-card">
-                            <div class="vendor-icon">
-                                <i class="fas fa-robot"></i>
-                            </div>
-                            <div class="vendor-info">
-                                <div class="vendor-name">Botpress</div>
-                                <div class="vendor-desc">AI chatbot platform integration and optimization</div>
-                            </div>
-                        </div>
-                        <div class="vendor-card">
-                            <div class="vendor-icon">
-                                <i class="fab fa-facebook-messenger"></i>
-                            </div>
-                            <div class="vendor-info">
-                                <div class="vendor-name">Meta Platforms</div>
-                                <div class="vendor-desc">Messaging API integration and support systems</div>
-                            </div>
-                        </div>
-                        <div class="vendor-card">
-                            <div class="vendor-icon">
-                                <i class="fas fa-cloud"></i>
-                            </div>
-                            <div class="vendor-info">
-                                <div class="vendor-name">iWhaleCloud</div>
-                                <div class="vendor-desc">Cloud infrastructure and API architecture consulting</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="diagram">
-                        <div class="diagram-title">
-                            <i class="fas fa-network-wired"></i>
-                            Vendor Relationship Map
-                        </div>
-                        <div class="chart-container">
-                            <canvas id="vendorChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-                
-                <p class="vendor-desc">I've built meaningful professional relationships with industry leaders and technology executives, providing valuable insights into market trends and emerging business strategies that inform my technical decision-making.</p>
-                
+                <div class="innovative-solutions-section">
                 <h3><i class="fas fa-cogs"></i> Innovative Solutions</h3>
-                <p class="vendor-desc">I specialize in developing cost-effective, robust solutions that scale effectively across various business domains. My recent work includes comprehensive system architecture blueprints for enterprise applications, with a focus on modern technologies and best practices that ensure long-term maintainability and performance.</p>
+                <p class="courseProgressText">I specialize in developing cost-effective, robust solutions that scale effectively across various business domains. My recent work includes comprehensive system architecture blueprints for enterprise applications, with a focus on modern technologies and best practices that ensure long-term maintainability and performance.</p>
                 
                 <!-- Innovation Diagram -->
                 <div class="diagrams-container">
@@ -3347,7 +3325,9 @@
                         </div>
                     </div>
                 </div>
+                </div>
                 
+                <div class="team-mentoring-section">
                 <h3><i class="fas fa-users"></i> Team Development & Mentoring</h3>
                 <p class="vendor-desc">I've successfully mentored and developed teams of developers, focusing on knowledge transfer and skill development. Through structured mentoring programs, I've identified and nurtured emerging talent, with mentees consistently advancing their careers and contributing significantly to project success.</p>
                 
@@ -3362,6 +3342,7 @@
                             <canvas id="knowledgeChart"></canvas>
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
         </div>
@@ -5631,83 +5612,6 @@ new Chart(ctxHiring, {
   }
 });
 </script>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Portfolio</title>
-    <style>
-        /* Sticky Footer Solution using Flexbox :cite[5] */
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh; /* Ensures the body takes at least the full viewport height */
-        }
-        .site-content {
-            flex: 1; /* This makes the main content area expand to fill available space */
-        }
-
-        /* Styles for the Visit Counter Footer */
-        #visit-counter {
-            background-color: #f1f1f1;
-            text-align: center;
-            padding: 10px;
-            font-family: monospace;
-            font-size: 1.1em;
-            border-top: 1px solid #ddd;
-        }
-    </style>
-    <!-- Include the PureCounter library -->
-    <script src="https://cdn.jsdelivr.net/npm/purecounterjs/dist/purecounter_vanilla.js"></script>
-
-    <!-- The visit counter footer -->
-    <footer id="visit-counter">
-        My profile has been viewed <span class="purecounter" data-purecounter-duration="2">0</span> times.
-    </footer>
-
-    <script>
-        // Function to get or initialize the visit count from localStorage
-        function getVisitCount() {
-            // Check if the count already exists in the browser's storage
-            if(localStorage.getItem('pageVisitCount')) {
-                // If it exists, get the count, convert it to a number, and increment it
-                let count = parseInt(localStorage.getItem('pageVisitCount')) + 1;
-                localStorage.setItem('pageVisitCount', count);
-                return count;
-            } else {
-                // If it doesn't exist, this is the first visit. Initialize with 1.
-                localStorage.setItem('pageVisitCount', '1');
-                return 1;
-            }
-        }
-
-        // Function to update the counter on the page
-        function updateCounter() {
-            const count = getVisitCount();
-            const counterElement = document.querySelector('.purecounter');
-
-            // Set the end value for the PureCounter animation
-            counterElement.setAttribute('data-purecounter-end', count);
-            counterElement.textContent = count; // Set the initial static value
-
-            // Initialize PureCounter to animate the number :cite[1]
-            new PureCounter({
-                selector: '.purecounter',
-                duration: 2,
-                once: true
-            });
-        }
-
-        // Run the update function when the page loads
-        document.addEventListener('DOMContentLoaded', updateCounter);
-    </script>
 
 </body>
 </html>
-
