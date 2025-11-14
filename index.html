@@ -19,18 +19,21 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-    // Initial background display
-    gsap.to('#backgroundCanvas', {duration: 0.5, opacity: 1});
+    // Initial background display with soft gradient so the page never starts black
+    gsap.set('#backgroundCanvas', { opacity: 0 });
+    gsap.to('#backgroundCanvas', { duration: 0.8, opacity: 1, ease: 'power2.out' });
     
-    // Content reveal after pause
-    gsap.delayedCall(4, () => {
-        gsap.to('.content-container', {
-            duration: 1.5,
+    // Content reveal without long delay
+    const contentContainer = document.querySelector('.content-container');
+    if (contentContainer) {
+        contentContainer.style.visibility = 'visible';
+        gsap.to(contentContainer, {
+            duration: 1.2,
             opacity: 1,
-            visibility: 'visible',
-            ease: 'power4.out'
+            delay: 0.3,
+            ease: 'power3.out'
         });
-    });
+    }
     // Initialize Skills Charts
     const chartOptions = {
         maintainAspectRatio: false,
@@ -182,6 +185,10 @@
             --text-color: #ffffff;
             --node-glow: 0 0 15px var(--primary-color);
             --orbit-glow: 0 0 8px rgba(0, 255, 255, 0.5);
+            --font-body: 'Cherry Cream Soda', 'Space Grotesk', cursive;
+            --font-display: 'Cherry Cream Soda', 'Orbitron', 'Space Grotesk', sans-serif;
+            --font-accent: 'Cherry Cream Soda', 'Orbitron', cursive;
+            --font-mono: 'Cherry Cream Soda', 'JetBrains Mono', 'Space Grotesk', monospace;
         }
         
         #skills-orbit {
@@ -249,7 +256,7 @@
         
         .back-button:hover {
             background: rgba(0, 255, 255, 0.2);
-            transform: translateY(-2px);
+            transform: translate3d(0, -2px, 0);
         }
         
         .title {
@@ -312,6 +319,23 @@
     margin: 0;
     padding: 15px;
 }
+        #backgroundCanvas {
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at top, rgba(8, 19, 51, 0.95), rgba(2, 4, 12, 0.9) 60%),
+                linear-gradient(135deg, rgba(0, 174, 255, 0.25), rgba(255, 0, 200, 0.2));
+            background-blend-mode: screen;
+            filter: saturate(1.15);
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .content-container {
+            position: relative;
+            z-index: 1;
+        }
         
         :root {
     /* Text shadow variables */
@@ -358,7 +382,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: var(--font-body);
         }
 
         p {
@@ -370,7 +394,7 @@
     min-width: 100vw;
     background: var(--background);
     color: var(--text-primary);
-    font-family: 'Inter', sans-serif;
+    font-family: 'Cherry Cream Soda', 'Space Grotesk', cursive;
     line-height: 1.6;
     transition: var(--transition);
     padding: 0;
@@ -379,6 +403,70 @@
     overflow-x: auto;
 }
     
+h1, h2, h3, h4, h5, h6,
+.panel-title,
+.project-title,
+.vendor-name,
+.stat-value,
+.chart-title,
+.heading-2025,
+.status-filter,
+.tour-btn,
+.nav-icon label {
+font-family: var(--font-display);
+}
+
+.body-font-heading {
+font-family: var(--font-body);
+letter-spacing: 0.5px;
+}
+
+p,
+.detail-label,
+.detail-value,
+.project-detail,
+.vendor-desc,
+.timeline-content,
+.timeline-date {
+font-family: var(--font-body);
+}
+
+code,
+pre,
+.description {
+font-family: var(--font-mono);
+}
+
+.glass-panel,
+.status-filter,
+.stat-card,
+.project-card,
+.nav-icon,
+.theme-toggle,
+.back-button,
+.tour-btn {
+will-change: transform, box-shadow, filter;
+transform: translateZ(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+.glass-panel:hover,
+.status-filter:hover,
+.stat-card:hover,
+.project-card:hover,
+.nav-icon:hover,
+.theme-toggle:hover,
+.back-button:hover,
+.tour-btn:hover {
+transform: none !important;
+box-shadow: none !important;
+}
+
+.stat-card:hover .stat-value {
+transform: none !important;
+}
+}
+
         .container {
     width: 100%;
     min-width: 100vw;
@@ -409,7 +497,7 @@
             font-weight: 600;
             color: #2C3E50;
             letter-spacing: -0.8px;
-            font-family: "Cherry Cream Soda", system-ui;
+            font-family: var(--font-display);
             margin: 0;
             text-shadow: var(--text-shadow-complete);
             line-height: 1.1;
@@ -570,7 +658,7 @@
             max-width: 600px;
             line-height: 1.6;
             margin: 0;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-weight: 400;
             letter-spacing: 0.5px;
             text-transform: uppercase;
@@ -582,12 +670,6 @@
         }
     
         /* Skills Overview Styles */
-        <div id="skills-orbit-container" style="width: 100%; height: 800px; position: relative;">
-            <div id="skills-orbit"></div>
-            <div class="tooltip"></div>
-            <button class="back-button">Back to Overview</button>
-            <div class="instructions">Click on a category to focus, or hover over a skill for details.</div>
-        </div>
 
 .chart-container {
     background: var(--card-bg);
@@ -654,8 +736,8 @@
             transition: var(--transition);
         }
     
-        .glass-panel:hover {
-            transform: translateY(-3px);
+.glass-panel:hover {
+    transform: translate3d(0, -3px, 0);
             box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.5);
         }
     
@@ -686,6 +768,41 @@
         0px -1px 0px rgba(0, 0, 0, 0.3),
         1px 0px 0px rgba(255, 255, 255, 0.3),
         -1px 0px 0px rgba(0, 0, 0, 0.4);
+        }
+    
+        .lead-snapshot {
+            background: transparent !important;
+            border-color: rgba(255, 255, 255, 0.2);
+            text-shadow: var(--etch-shadow);
+        }
+
+        .lead-snapshot .panel-title,
+        .lead-snapshot .snapshot-body {
+            position: relative;
+            z-index: 1; /* just above the background canvas */
+            text-shadow: var(--etch-shadow);
+        }
+
+        .lead-snapshot .snapshot-body {
+            mix-blend-mode: screen;
+            color: #ffffff;
+        }
+
+        .lead-snapshot .snapshot-body p,
+        .lead-snapshot .snapshot-body li,
+        .lead-snapshot .snapshot-body strong {
+            text-shadow: var(--etch-shadow);
+        }
+
+        .lead-snapshot .snapshot-body p,
+        .lead-snapshot .snapshot-body li,
+        .lead-snapshot .snapshot-body strong,
+        .lead-snapshot .snapshot-body a {
+            color: inherit;
+        }
+
+        .lead-snapshot .snapshot-body li::marker {
+            color: inherit;
         }
     
         .status-filters {
@@ -725,8 +842,8 @@
             }
         }
     
-        .status-filter:hover {
-            transform: translateX(3px);
+.status-filter:hover {
+    transform: translate3d(3px, 0, 0);
             text-shadow: 
         0px 1px 0px rgba(255, 255, 255, 0.4),
         0px -1px 0px rgba(0, 0, 0, 0.3),
@@ -823,8 +940,8 @@
         -1px 0px 0px rgba(0, 0, 0, 0.4);
         }
     
-        .stat-card:hover {
-            transform: translateY(-5px) scale(1.05);
+.stat-card:hover {
+    transform: translate3d(0, -5px, 0) scale3d(1.05, 1.05, 1);
             box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
         }
         
@@ -841,9 +958,9 @@
         -1px 0px 0px rgba(0, 0, 0, 0.4);
         }
         
-        .stat-card:hover .stat-value {
-            color: var(--secondary);
-            transform: scale(1.1);
+.stat-card:hover .stat-value {
+    color: var(--secondary);
+    transform: scale3d(1.1, 1.1, 1);
             text-shadow: 
         0px 1px 0px rgba(255, 255, 255, 0.4),
         0px -1px 0px rgba(0, 0, 0, 0.3),
@@ -943,8 +1060,8 @@
         -1px 0px 0px rgba(0, 0, 0, 0.4);
         }
     
-        .project-card:hover {
-            transform: translateY(-5px);
+.project-card:hover {
+    transform: translate3d(0, -5px, 0);
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
             text-shadow: 
         0px 1px 0px rgba(255, 255, 255, 0.4),
@@ -1093,7 +1210,7 @@
         
         .project-detail:hover {
             background: rgba(255, 255, 255, 0.1);
-            transform: translateX(5px);
+            transform: translate3d(5px, 0, 0);
             text-shadow: 
         0px 1px 0px rgba(255, 255, 255, 0.4),
         0px -1px 0px rgba(0, 0, 0, 0.3),
@@ -1356,7 +1473,7 @@
         }
     
         .theme-toggle:hover {
-            transform: scale(1.1);
+            transform: scale3d(1.1, 1.1, 1);
             text-shadow: 
         0px 1px 0px rgba(255, 255, 255, 0.4),
         0px -1px 0px rgba(0, 0, 0, 0.3),
@@ -1553,7 +1670,7 @@
         .nav-icon.active {
             color: white;
             box-shadow: 0 0 20px currentColor;
-            transform: scale(1.1);
+            transform: scale3d(1.1, 1.1, 1);
             border-color: currentColor;
             background: rgba(255, 255, 255, 0.2);
             text-shadow: 
@@ -1582,7 +1699,7 @@
         }
         
         .nav-icon:hover {
-            transform: scale(1.05);
+    transform: scale3d(1.05, 1.05, 1);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             text-shadow: 
         0px 1px 0px rgba(255, 255, 255, 0.4),
@@ -2579,7 +2696,7 @@
 </head>
 <body>
     <div id="backgroundCanvas"></div>
-    <div class="content-container" style="opacity:0;visibility:hidden;">
+    <div class="content-container etch" style="opacity:0;visibility:hidden;">
     <!-- Parallax Background Container -->
     <div class="parallax-container">
         <svg class="parallax" viewBox="0 0 750 500" preserveAspectRatio="xMidYMax slice">
@@ -2969,17 +3086,33 @@
                     <input class="search-box-inner" type="text" placeholder="Search projects..." id="searchInput">
                 </div>
             </div>
-            <p class="description">Software Engineer</p>
+            <p class="description">Lead Developer | Intelligent Platforms & AI-Augmented Delivery</p>
         </header>
 
-        <!-- Skills Overview Section -->
-        <section class="skills-overview glass-panel">
-            <h2 class="panel-title"><i class="fas fa-chart-line"></i>Skills Overview</h2>
-
-        </section>
+        
         
         <div class="dashboard-content">
             <div class="left-panel" id="leftPanel">
+                <div class="glass-panel fade-in animated-element lead-snapshot">
+                    <div class="panel-title">
+                        <i class="fas fa-user-tie"></i>
+                        <span>Lead Developer Snapshot</span>
+                    </div>
+                    <div class="snapshot-body">
+                    <p>
+                        I help organisations ship dependable digital products by combining deep full-stack engineering with product-minded leadership. 
+                        From architecting AI-enabled platforms to stabilising legacy estates, I turn complex requirements into scalable systems that measurably move the business forward.
+                    </p>
+                    <ul style="margin:12px 0 16px 18px; line-height:1.55;">
+                        <li><strong>Product Leadership:</strong> Directed cross-functional squads delivering multi-channel customer platforms, orchestrating roadmaps from discovery to launch.</li>
+                        <li><strong>Engineering Excellence:</strong> Built cloud-ready, security-first architectures that cut operational toil while elevating developer velocity.</li>
+                        <li><strong>Governance & Mentorship:</strong> Established engineering playbooks, code review frameworks, and AI accelerators adopted across internal teams and partner ecosystems.</li>
+                    </ul>
+                    <p>
+                        I partner best with organisations that need a builder who can clarify strategy, lead engineers, and land production-grade software that clients love.
+                    </p>
+                    </div>
+                </div>
 
             
             <div class="right-panel">
@@ -3003,7 +3136,7 @@
                     </div>
                     <div class="project-detail">
                         <div class="detail-label-paused">Impact:</div>
-                        <div class="detail-value-paused">Revenue Generation</div>
+                        <div class="detail-value-paused">Expanded sales pipeline through AI-guided engagement journeys</div>
                     </div>
                     <div class="project-detail">
                         <div class="detail-label-paused">Status:</div>
@@ -3030,7 +3163,7 @@
                     </div>
                     <div class="project-detail">
                         <div class="detail-label-launched">Impact:</div>
-                        <div class="detail-value-launched">Revenue Generation</div>
+                        <div class="detail-value-launched">Unlocked digital revenue channels for underserved SMEs</div>
                     </div>
                     <div class="project-detail">
                         <div class="detail-label-launched">Status:</div>
@@ -3057,7 +3190,7 @@
                     </div>
                     <div class="project-detail">
                         <div class="detail-label-launched">Impact:</div>
-                        <div class="detail-value-launched">Revenue Generation</div>
+                        <div class="detail-value-launched">Automated 24/7 customer support with conversational AI</div>
                     </div>
                     <div class="project-detail">
                         <div class="detail-label-launched">Status:</div>
@@ -3084,7 +3217,7 @@
                     </div>
                     <div class="project-detail">
                         <div class="detail-label-async">Impact:</div>
-                        <div class="detail-value-async">Service Improvement / Revenue Generation</div>
+                        <div class="detail-value-async">Centralised PMO governance and live portfolio insights</div>
                     </div>
                     <div class="project-detail">
                         <div class="detail-label-async">Status:</div>
@@ -3111,7 +3244,7 @@
                     </div>
                     <div class="project-detail">
                         <div class="detail-label-completed">Impact:</div>
-                        <div class="detail-value-completed">Revenue Generation</div>
+                        <div class="detail-value-completed">Digitised asset lifecycle oversight and compliance reporting</div>
                     </div>
                     <div class="project-detail">
                         <div class="detail-label-completed">Status:</div>
@@ -3138,7 +3271,7 @@
                     </div>
                     <div class="project-detail">
                         <div class="detail-label-completed">Impact:</div>
-                        <div class="detail-value-completed">Revenue Generation</div>
+                        <div class="detail-value-completed">Accelerated hiring cycle with automated candidate workflows</div>
                     </div>
                     <div class="project-detail">
                         <div class="detail-label-completed">Status:</div>
@@ -3165,7 +3298,7 @@
                     </div>
                     <div class="project-detail">
                         <div class="detail-label-inprogress">Impact:</div>
-                        <div class="detail-value-inprogress">Revenue Generation</div>
+                        <div class="detail-value-inprogress">Unified academic administration, billing, and analytics</div>
                     </div>
                     <div class="project-detail">
                         <div class="detail-label-inprogress">Status:</div>
@@ -3192,7 +3325,7 @@
                     </div>
                     <div class="project-detail">
                         <div class="detail-label-async">Impact:</div>
-                        <div class="detail-value-async">Service Improvement</div>
+                        <div class="detail-value-async">Launched blended learning journeys for enterprise teams</div>
                     </div>
                     <div class="project-detail">
                         <div class="detail-label-async">Status:</div>
@@ -3219,7 +3352,7 @@
                     </div>
                     <div class="project-detail">
                         <div class="detail-label-inprogress">Impact:</div>
-                        <div class="detail-value-inprogress">Revenue Generation</div>
+                        <div class="detail-value-inprogress">Prototyped client-facing GenAI experiences with guardrails</div>
                     </div>
                     <div class="project-detail">
                         <div class="detail-label-inprogress">Status:</div>
@@ -3246,7 +3379,7 @@
                     </div>
                     <div class="project-detail">
                         <div class="detail-label-async">Impact:</div>
-                        <div class="detail-value-async">Service Improvement</div>
+                        <div class="detail-value-async">Captured institutional knowledge with semantic search</div>
                     </div>
                     <div class="project-detail">
                         <div class="detail-label-async">Status:</div>
@@ -3280,9 +3413,9 @@
                 <span>Adaptability & Problem-solving</span>
             </div>
             <div class="info-section">
-                <p class="adaptability-section">I specialize in translating complex business requirements into scalable technical solutions across multiple industries. My collaborative approach has consistently delivered successful projects that drive measurable business value and operational efficiency.</p>
-                <p class="adaptability-section">Throughout my career, I've led both technical initiatives and cross-functional teams, continuously expanding my expertise in emerging technologies. This experience has strengthened my ability to architect solutions that scale effectively and deliver long-term value.</p>
-                <p class="adaptability-section">As a technical leader, I focus on mentoring development teams and establishing best practices that ensure code quality, maintainability, and performance. This approach has resulted in high-quality deliverables and improved team productivity across all projects.</p>
+                <p class="adaptability-section">I translate executive ambitions into precise delivery plans—framing the problem, prioritising the roadmap, and engineering the right product increments. Every engagement begins with stakeholder alignment and ends with shipped capability that earns trust.</p>
+                <p class="adaptability-section">Recent programmes span AI-enabled customer intelligence, omnichannel commerce, and operational automation. I balance pragmatism with technical curiosity, selecting cloud, data, and ML patterns that keep organisations ahead without over-engineering.</p>
+                <p class="adaptability-section">In every squad I lead, I champion code quality, observability, and continuous improvement. I mentor engineers, codify standards, and create feedback loops that elevate delivery velocity while safeguarding resilience and security.</p>
                 
                 <!-- Diagrams Section -->
                 <div class="diagrams-container">
@@ -3353,7 +3486,7 @@
                     </div>
                     
                 <div class="innovative-solutions-section">
-                <h3><i class="fas fa-cogs"></i> Innovative Solutions</h3>
+                <h3 class="body-font-heading"><i class="fas fa-cogs"></i> Innovative Solutions</h3>
                 <p class="courseProgressText">I specialize in developing cost-effective, robust solutions that scale effectively across various business domains. My recent work includes comprehensive system architecture blueprints for enterprise applications, with a focus on modern technologies and best practices that ensure long-term maintainability and performance.</p>
                 
                 <!-- Innovation Diagram -->
@@ -3371,7 +3504,7 @@
                 </div>
                 
                 <div class="team-mentoring-section">
-                <h3><i class="fas fa-users"></i> Team Development & Mentoring</h3>
+                <h3 class="body-font-heading"><i class="fas fa-users"></i> Team Development & Mentoring</h3>
                 <p class="vendor-desc">I've successfully mentored and developed teams of developers, focusing on knowledge transfer and skill development. Through structured mentoring programs, I've identified and nurtured emerging talent, with mentees consistently advancing their careers and contributing significantly to project success.</p>
                 
                 <!-- Knowledge Transfer Diagram -->
@@ -3399,7 +3532,7 @@
   <div class="info-section">
 
     <!-- Timeline Diagram -->
-    <h3><i class="fas fa-university"></i> Academic Background</h3>
+    <h3 class="body-font-heading"><i class="fas fa-university"></i> Academic Background</h3>
     <div class="timeline">
       <div class="timeline-item">
         <div class="timeline-year">2013</div>
@@ -3409,7 +3542,7 @@
         </div>
       </div>
       <div class="timeline-item">
-        <div class="timeline-year">2024</div>
+        <div class="timeline-year">2016</div>
         <div class="timeline-content-two">
           Professional development focus through industry certifications and practical experience
         </div>
@@ -3423,7 +3556,7 @@
     </div>
 
     <!-- Course Completion Chart -->
-    <h3><i class="fas fa-certificate"></i> Professional Qualifications</h3>
+    <h3 class="body-font-heading"><i class="fas fa-certificate"></i> Professional Qualifications</h3>
 <p id="courseProgressText">
   I have successfully completed <strong>10 advanced Udemy Business courses</strong> covering modern software development practices, plus 
   <strong>Diploma in Digital Transformation & Operational Excellence</strong> (MTF Institute, USA), and 
@@ -3472,7 +3605,7 @@
 
   <div class="info-section" style="display:grid;gap:14px;">
     <p style="margin:0;color:var(--text-secondary)">
-      Over the past 12 months, I have delivered mission-critical software solutions across multiple domains — launching production systems, exceeding professional development targets, and building advanced AI capabilities. Below are key metrics that demonstrate my technical expertise and business impact.
+      During the past 12 months I have been the accountable lead for high-visibility delivery streams—launching production systems, levelling up engineering teams, and embedding AI safely inside customer workflows. These are the metrics executives care about when moving from ambition to realised value.
     </p>
 
     <!-- KPI cards -->
@@ -3545,7 +3678,7 @@
     </div>
 
     <p style="margin:6px 0 0 0;color:var(--text-secondary)">
-      I am committed to delivering innovative solutions, mentoring development teams, and contributing to organizational success through technical excellence.
+      I’m ready to plug into a product organisation that needs a hands-on lead developer who can shape strategy, mobilise delivery teams, and keep critical platforms shipping with confidence.
     </p>
   </div>
 </div>
@@ -3627,6 +3760,7 @@
             backgroundColor: [gradU, gradPink],
             borderColor: [toRgba(colUdemy,1), 'rgba(255,255,255,0.12)'],
             borderWidth: 1.2
+          }]
         },
         options: {
           maintainAspectRatio: false,
@@ -6340,5 +6474,19 @@ new Chart(ctxHiring, {
             initVisualization();
         };
     </script>
+    <section class="glass-panel fade-in" id="skillsMatrixSection" data-section="SkillsMatrix">
+        <div class="panel-title">
+            <i class="fas fa-chart-line"></i>
+            <span>Skills Overview</span>
+        </div>
+        <div class="skills-matrix-embed" style="position: relative; padding-top: 56.25%; border-radius: var(--panel-radius, 18px); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05); background: transparent;">
+            <iframe src="tref_refactored.html"
+                    title="Skills Overview"
+                    loading="lazy"
+                    allowfullscreen
+                    allowtransparency="true"
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; background: transparent !important;"></iframe>
+        </div>
+    </section>
 </body>
 </html>
