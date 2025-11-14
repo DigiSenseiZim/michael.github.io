@@ -185,7 +185,7 @@
             --text-color: #ffffff;
             --node-glow: 0 0 15px var(--primary-color);
             --orbit-glow: 0 0 8px rgba(0, 255, 255, 0.5);
-            --font-body: 'Space Grotesk', 'Inter', sans-serif;
+            --font-body: 'Cherry Cream Soda', 'Space Grotesk', cursive;
             --font-display: 'Orbitron', 'Cherry Cream Soda', 'Space Grotesk', sans-serif;
             --font-accent: 'Cherry Cream Soda', 'Orbitron', cursive;
             --font-mono: 'JetBrains Mono', 'Space Grotesk', monospace;
@@ -394,7 +394,7 @@
     min-width: 100vw;
     background: var(--background);
     color: var(--text-primary);
-    font-family: 'Inter', sans-serif;
+    font-family: 'Cherry Cream Soda', 'Space Grotesk', cursive;
     line-height: 1.6;
     transition: var(--transition);
     padding: 0;
@@ -414,6 +414,11 @@ h1, h2, h3, h4, h5, h6,
 .tour-btn,
 .nav-icon label {
 font-family: var(--font-display);
+}
+
+.body-font-heading {
+font-family: var(--font-body);
+letter-spacing: 0.5px;
 }
 
 p,
@@ -3481,7 +3486,7 @@ transform: none !important;
                     </div>
                     
                 <div class="innovative-solutions-section">
-                <h3><i class="fas fa-cogs"></i> Innovative Solutions</h3>
+                <h3 class="body-font-heading"><i class="fas fa-cogs"></i> Innovative Solutions</h3>
                 <p class="courseProgressText">I specialize in developing cost-effective, robust solutions that scale effectively across various business domains. My recent work includes comprehensive system architecture blueprints for enterprise applications, with a focus on modern technologies and best practices that ensure long-term maintainability and performance.</p>
                 
                 <!-- Innovation Diagram -->
@@ -3499,7 +3504,7 @@ transform: none !important;
                 </div>
                 
                 <div class="team-mentoring-section">
-                <h3><i class="fas fa-users"></i> Team Development & Mentoring</h3>
+                <h3 class="body-font-heading"><i class="fas fa-users"></i> Team Development & Mentoring</h3>
                 <p class="vendor-desc">I've successfully mentored and developed teams of developers, focusing on knowledge transfer and skill development. Through structured mentoring programs, I've identified and nurtured emerging talent, with mentees consistently advancing their careers and contributing significantly to project success.</p>
                 
                 <!-- Knowledge Transfer Diagram -->
@@ -3527,7 +3532,7 @@ transform: none !important;
   <div class="info-section">
 
     <!-- Timeline Diagram -->
-    <h3><i class="fas fa-university"></i> Academic Background</h3>
+    <h3 class="body-font-heading"><i class="fas fa-university"></i> Academic Background</h3>
     <div class="timeline">
       <div class="timeline-item">
         <div class="timeline-year">2013</div>
@@ -3551,7 +3556,7 @@ transform: none !important;
     </div>
 
     <!-- Course Completion Chart -->
-    <h3><i class="fas fa-certificate"></i> Professional Qualifications</h3>
+    <h3 class="body-font-heading"><i class="fas fa-certificate"></i> Professional Qualifications</h3>
 <p id="courseProgressText">
   I have successfully completed <strong>10 advanced Udemy Business courses</strong> covering modern software development practices, plus 
   <strong>Diploma in Digital Transformation & Operational Excellence</strong> (MTF Institute, USA), and 
