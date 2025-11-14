@@ -9,8 +9,6 @@
     @font-face { font-family: 'Alamanca'; src: url('assets/fonts/AlamancaDemo-Wp8Mn.ttf'); font-display: swap; }
     @font-face { font-family: 'Cybera'; src: url('assets/fonts/CyberaFontDemo-m2oj5.otf'); font-display: swap; }
     @font-face { font-family: 'Moonstrike'; src: url('assets/fonts/Moonstrike-nRqzP.otf'); font-display: swap; }
-    @font-face { font-family: 'SolarSpace'; src: url('assets/fonts/SolarSpaceDemoRegular-JR9ao.ttf'); font-display: swap; }
-    @font-face { font-family: 'SolarSpaceAlt'; src: url('assets/fonts/SolarSpaceDemoRegular-VGpqx.otf'); font-display: swap; }
     @font-face { font-family: 'Venite'; src: url('assets/fonts/VeniteAdoremus-rgRBA.ttf'); font-display: swap; }
     @font-face { font-family: 'VeniteStraight'; src: url('assets/fonts/VeniteAdoremusStraight-Yzo6v.ttf'); font-display: swap; }
     @font-face { font-family: 'NebulaxAlt'; src: url('assets/fonts/Nebulax-Zp8d3.otf'); font-display: swap; }
@@ -23,7 +21,7 @@
       background: transparent !important;
       background-color: transparent !important;
       color: #f8fafc;
-      font-family: 'SolarSpace', 'Nebulax', sans-serif;
+      font-family: 'Nebulax', 'Cybera', sans-serif;
     }
     canvas {
       display: block;
@@ -48,7 +46,7 @@
     .loading-content {
       text-align: center;
       color: #f0f6ff;
-      font-family: 'SolarSpace', sans-serif;
+      font-family: 'Nebulax', sans-serif;
       letter-spacing: 0.08em;
       padding: 32px 40px;
       border: 1px solid rgba(139, 191, 255, 0.4);
@@ -89,7 +87,7 @@
       margin-bottom: 6px;
     }
     .loading-status {
-      font-family: 'SolarSpaceAlt', sans-serif;
+      font-family: 'Moonstrike', 'Cybera', sans-serif;
       font-size: 0.85em;
       opacity: 0.85;
       letter-spacing: 0.12em;
@@ -146,7 +144,7 @@
       transform: translate3d(-50%, 0, 0);
     }
     .mobile-modal-category {
-      font-family: 'SolarSpace', sans-serif;
+      font-family: 'NebulaxAlt', 'Cybera', sans-serif;
       font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.18em;
@@ -175,6 +173,209 @@
       .mobile-modal {
         display: none;
       }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .experience-selector {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      background: radial-gradient(circle at top, rgba(12, 18, 38, 0.92), rgba(4, 6, 15, 0.96));
+      z-index: 2500;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+    .experience-selector.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .experience-selector__panel {
+      max-width: 520px;
+      width: 100%;
+      border-radius: 24px;
+      padding: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(10, 16, 32, 0.8);
+      box-shadow: 0 25px 65px rgba(0, 0, 0, 0.45);
+      text-align: center;
+      backdrop-filter: blur(18px);
+    }
+    .experience-selector__panel h2 {
+      font-family: 'VeniteStraight', 'Moonstrike', serif;
+      font-size: 1.35rem;
+      letter-spacing: 0.16em;
+      margin: 0 0 10px 0;
+      text-transform: uppercase;
+    }
+    .experience-selector__panel p {
+      font-family: 'Cybera', 'Nebulax', sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.8);
+      margin: 0 0 24px 0;
+    }
+    .experience-selector__actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .experience-selector__actions button {
+      padding: 14px 18px;
+      border-radius: 999px;
+      font-family: 'Cybera', 'NebulaxAlt', sans-serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .experience-selector__actions button.primary {
+      background: linear-gradient(120deg, #5bc0ff, #b48dff);
+      color: #050914;
+      box-shadow: 0 10px 25px rgba(91, 192, 255, 0.35);
+    }
+    .experience-selector__actions button.secondary {
+      background: transparent;
+      border-color: rgba(255, 255, 255, 0.4);
+      color: #f8fbff;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
+    }
+    .experience-selector__actions button:hover {
+      transform: translateY(-2px);
+    }
+
+    .qualification-marquee {
+      position: fixed;
+      inset: 0;
+      background: transparent;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 0;
+      gap: 24px;
+      overflow: hidden;
+      z-index: 1200;
+    }
+    .qualification-marquee.visible {
+      display: flex;
+    }
+    .qualification-marquee h3 {
+      font-family: 'VeniteStraight', serif;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.75);
+    }
+    .marquee-track {
+      --marquee-duration: 120s;
+      display: flex;
+      gap: 18px;
+      width: max-content;
+      animation: marquee-slide var(--marquee-duration) linear infinite;
+      will-change: transform;
+      touch-action: pan-y;
+    }
+    .marquee-track.paused {
+      animation-play-state: paused;
+    }
+    .qualification-card {
+      --card-image: linear-gradient(140deg, rgba(12, 18, 35, 0.85), rgba(7, 12, 24, 0.65));
+      width: clamp(220px, 22vw, 280px);
+      aspect-ratio: 1 / 1;
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: #f8fbff;
+      background-image:
+        linear-gradient(140deg, rgba(4, 6, 15, 0.9), rgba(4, 10, 24, 0.6)),
+        var(--card-image);
+      background-size: cover;
+      background-position: center;
+      backdrop-filter: blur(8px);
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+        0 25px 45px rgba(0, 0, 0, 0.35);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .qualification-category {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.55);
+      margin-bottom: 8px;
+    }
+    .qualification-title {
+      font-size: 0.98rem;
+      line-height: 1.4;
+      font-family: 'VeniteStraight', 'Cybera', sans-serif;
+      white-space: normal;
+      word-break: break-word;
+      display: -webkit-box;
+      -webkit-line-clamp: 5;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .qualification-card > * {
+      position: relative;
+      z-index: 2;
+    }
+    .qualification-card::before {
+      content: '';
+      position: absolute;
+      inset: 1px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .qualification-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(120deg, rgba(255, 255, 255, 0.08), transparent 55%);
+      mix-blend-mode: screen;
+      opacity: 0.35;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .qualification-card:hover {
+      transform: translateY(-6px);
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+        0 35px 65px rgba(0, 0, 0, 0.45);
+    }
+    .qualification-card.emphasis {
+      border-color: var(--card-accent, rgba(91, 192, 255, 0.8));
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.15),
+        0 25px 55px rgba(69, 154, 255, 0.35);
+    }
+
+    @keyframes marquee-slide {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-50%, 0, 0); }
+    }
+
+    body.marquee-mode {
+      overflow: auto;
+      background: transparent !important;
     }
 
     /* Tooltip text styles (etched effect) */
@@ -251,7 +452,7 @@
     }
     .holographic-tooltip .tooltip-title,
     .holographic-tooltip .title {
-      font-family: 'VeniteStraight', 'SolarSpace', serif;
+      font-family: 'VeniteStraight', 'Moonstrike', serif;
       letter-spacing: 0.06em;
       font-size: 1rem;
       margin-bottom: 10px;
@@ -328,16 +529,16 @@
 
     /* Category-specific tooltip text colors and shadows */
     .planet-web { font-family: 'Cybera', 'Nebulax', sans-serif; }
-    .planet-design { font-family: 'Alamanca', 'SolarSpace', serif; }
+    .planet-design { font-family: 'Alamanca', 'Venite', serif; }
     .planet-security { font-family: 'Moonstrike', 'NebulaxAlt', sans-serif; }
     .planet-programming { font-family: 'VeniteStraight', 'Cybera', serif; }
-    .planet-ai { font-family: 'SolarSpace', 'Moonstrike', sans-serif; }
-    .planet-cloud { font-family: 'SolarSpaceAlt', 'Nebulax', sans-serif; }
+    .planet-ai { font-family: 'Moonstrike', 'NebulaxAlt', sans-serif; }
+    .planet-cloud { font-family: 'NebulaxAlt', 'Nebulax', sans-serif; }
     .planet-devops { font-family: 'NebulaxAlt', 'Cybera', sans-serif; }
     .planet-data { font-family: 'Venite', 'Alamanca', serif; }
-    .planet-database { font-family: 'Nebulax', 'SolarSpaceAlt', sans-serif; }
+    .planet-database { font-family: 'Nebulax', 'VeniteStraight', sans-serif; }
     .planet-softskills { font-family: 'Alamanca', 'Venite', serif; }
-    .planet-business { font-family: 'Moonstrike', 'SolarSpace', sans-serif; }
+    .planet-business { font-family: 'Moonstrike', 'NebulaxAlt', sans-serif; }
   </style>
 </head>
 <body>
@@ -357,6 +558,20 @@
     <div class="mobile-modal-title" id="mobile-modal-title"></div>
     <button id="mobile-modal-close" class="mobile-modal-close" type="button">Dismiss</button>
   </div>
+  <div id="experienceSelector" class="experience-selector" aria-live="polite">
+    <div class="experience-selector__panel">
+      <h2>Choose Your View</h2>
+      <p>Select the immersive galaxy to explore interactive planets, or switch to a minimalist marquee to skim qualifications quickly.</p>
+      <div class="experience-selector__actions">
+        <button id="launchGalaxyBtn" class="primary" type="button">Explore Galaxy</button>
+        <button id="launchMarqueeBtn" class="secondary" type="button">View Marquee</button>
+      </div>
+    </div>
+  </div>
+  <section id="marqueeExperience" class="qualification-marquee" aria-hidden="true">
+    <h3>Qualification Spotlight</h3>
+    <div class="marquee-track" id="marqueeTrack"></div>
+  </section>
   <script type="importmap">
   {
     "imports": {
@@ -385,6 +600,13 @@
     const progressBarFill = document.getElementById('loading-bar-fill');
     const progressPercent = document.getElementById('loading-percentage');
     const progressStatus = document.getElementById('loading-status');
+    const experienceSelector = document.getElementById('experienceSelector');
+    const galaxyButton = document.getElementById('launchGalaxyBtn');
+    const marqueeButton = document.getElementById('launchMarqueeBtn');
+    const marqueeSection = document.getElementById('marqueeExperience');
+    const marqueeTrack = document.getElementById('marqueeTrack');
+    let marqueeInitialized = false;
+    let experienceMode = 'pending';
 
     const updateProgress = (itemsLoaded, itemsTotal) => {
       if (!progressBarFill || !progressPercent) return;
@@ -769,6 +991,96 @@
       return CATEGORY_VALUE_SNIPPETS.default;
     };
 
+    const MARQUEE_CARD_BACKGROUNDS = [
+      'assets/marquee/_019f6995-d349-4446-9c22-30005aded41f.jpeg',
+      'assets/marquee/_09f94942-67e1-4afb-8bde-6d1d42f94af4.jpeg',
+      'assets/marquee/_0b5ba23f-1d84-487b-80f4-6c790f888ac5.jpg',
+      'assets/marquee/_0f0c9c0e-c3d0-4370-8f4e-a7b40322b0b3.jpg',
+      'assets/marquee/_0fc6f604-bd14-40cf-bf3f-6799e3987d52.jpeg',
+      'assets/marquee/_14c37f7e-1ba7-4188-ad27-5b580cf3ec88.jpeg',
+      'assets/marquee/_228c4515-1bc8-4340-bc4c-9798522ad724.jpg',
+      'assets/marquee/_236c9d6d-c0ea-463f-a9bd-948b216a70cd.jpeg',
+      'assets/marquee/_32f6bb03-3e43-4740-8cb6-9c54dc04d1b7.jpeg',
+      'assets/marquee/_4b3d606a-3ab3-4e94-ade3-2ab1b9019014.jpeg',
+      'assets/marquee/_4d5d0abf-802c-4372-8966-41e3dac8cba6.jpg',
+      'assets/marquee/_5c98f43f-40d5-4997-aefd-aa88b5e58c93.jpg',
+      'assets/marquee/_5ecfc6f4-87c0-403f-bd45-ba290ac43fc3.jpeg',
+      'assets/marquee/_69dbda07-5e00-41cc-b61a-927d7d268589.jpeg',
+      'assets/marquee/_7b6c9807-84a7-4c17-8377-d2d4a5ddc309.jpeg',
+      'assets/marquee/_7e4f5523-b089-410e-b472-3f8f23c142ab.jpeg',
+      'assets/marquee/_87c6b5da-1f6b-4346-bbb9-d2e2d36d0471.jpeg',
+      'assets/marquee/_87da02be-c660-40de-a7e0-fc17c660d96c.jpeg',
+      'assets/marquee/_8ce7d9f8-0cb0-4cd4-85b3-0385ae21346d.jpeg',
+      'assets/marquee/_91e23ea5-b89b-4851-802a-faeb13b5be00.jpeg',
+      'assets/marquee/_9b6bb584-8152-4771-b914-e4f707c5d4ac.jpeg',
+      'assets/marquee/_9ff703d7-2da5-4fd4-8003-344b611542f2.jpg'
+    ];
+
+    const getMarqueeBackgroundForIndex = index => {
+      if (!MARQUEE_CARD_BACKGROUNDS.length) return '';
+      return MARQUEE_CARD_BACKGROUNDS[index % MARQUEE_CARD_BACKGROUNDS.length];
+    };
+
+    let marqueePauseTimeoutId = null;
+    let marqueeInteractionsAttached = false;
+
+    const pauseMarqueeFor = (durationMs = 5000) => {
+      if (!marqueeTrack) return;
+      marqueeTrack.classList.add('paused');
+      if (marqueePauseTimeoutId) {
+        clearTimeout(marqueePauseTimeoutId);
+      }
+      marqueePauseTimeoutId = setTimeout(() => {
+        marqueeTrack.classList.remove('paused');
+      }, durationMs);
+    };
+
+    const attachMarqueeInteractions = () => {
+      if (!marqueeTrack || marqueeInteractionsAttached) return;
+      const pauseHandler = () => pauseMarqueeFor(5000);
+      ['pointerenter', 'touchstart'].forEach(eventName => {
+        marqueeTrack.addEventListener(eventName, pauseHandler, { passive: true });
+      });
+      marqueeInteractionsAttached = true;
+    };
+
+    const buildMarqueeCards = () => {
+      if (!marqueeTrack || marqueeInitialized) return;
+      const cards = [];
+      categories.forEach(cat => {
+        const colorHex = `#${new THREE.Color(cat.color).getHexString()}`;
+        (cat.certifications || []).forEach(cert => {
+          const background = getMarqueeBackgroundForIndex(cards.length);
+          cards.push({
+            title: cert.title,
+            category: cat.name,
+            color: colorHex,
+            background
+          });
+        });
+      });
+      const looped = cards.concat(cards);
+      marqueeTrack.innerHTML = '';
+      looped.forEach(entry => {
+        const card = document.createElement('article');
+        card.className = 'qualification-card';
+        if (Math.random() > 0.7) {
+          card.classList.add('emphasis');
+        }
+        card.style.setProperty('--card-accent', entry.color);
+        card.innerHTML = `
+          <p class="qualification-category">${escapeHtml(entry.category)}</p>
+          <p class="qualification-title">${escapeHtml(entry.title)}</p>
+        `;
+        if (entry.background) {
+          card.style.setProperty('--card-image', `url('${entry.background}')`);
+        }
+        marqueeTrack.appendChild(card);
+      });
+      attachMarqueeInteractions();
+      marqueeInitialized = true;
+    };
+
     const triPlanarNoise = (x, y, z, seed, frequency = 2.4, contrast = 1) => {
       const nx = x * frequency + seed * 0.137;
       const ny = y * frequency * 1.18 - seed * 0.071;
@@ -1144,10 +1456,13 @@
       simulatedHoverActive = false;
     };
 
-    const shouldDisplayMobileModal = () => (coarsePointerQuery.matches || narrowScreenQuery.matches) && !document.hidden;
+    const shouldDisplayMobileModal = () =>
+      experienceMode === 'galaxy' &&
+      (coarsePointerQuery.matches || narrowScreenQuery.matches) &&
+      !document.hidden;
 
     const showRandomMobileModal = () => {
-      if (!mobileModal || !mobileCoursePool.length) return;
+      if (experienceMode !== 'galaxy' || !mobileModal || !mobileCoursePool.length) return;
       const randomIndex = Math.floor(Math.random() * mobileCoursePool.length);
       const selected = mobileCoursePool[randomIndex];
       if (mobileModalCategory) {
@@ -1188,7 +1503,7 @@
     };
 
     const showSimulatedHover = () => {
-      if (!tooltip || !mobileCoursePool.length || document.hidden) return;
+      if (experienceMode !== 'galaxy' || !tooltip || !mobileCoursePool.length || document.hidden) return;
       if (tooltipHideTimeout) {
         clearTimeout(tooltipHideTimeout);
         tooltipHideTimeout = null;
@@ -1231,7 +1546,7 @@
     };
 
     const beginSimulatedHoverLoop = () => {
-      if (simulatedHoverLoopHandle || !mobileCoursePool.length) return;
+      if (experienceMode !== 'galaxy' || simulatedHoverLoopHandle || !mobileCoursePool.length) return;
       const kickoffDelay = 600 + Math.random() * 800;
       simulatedHoverLoopHandle = setInterval(() => {
         if (!simulatedHoverActive) {
@@ -1246,7 +1561,7 @@
     };
 
     const manageSimulatedHoverLoop = () => {
-      if (document.hidden) {
+      if (document.hidden || experienceMode !== 'galaxy') {
         stopSimulatedHoverLoop();
       } else {
         beginSimulatedHoverLoop();
@@ -1283,16 +1598,22 @@
       }
     };
     attachMediaListener(coarsePointerQuery, () => {
-      updateMobileModalLoop();
-      manageSimulatedHoverLoop();
+      if (experienceMode === 'galaxy') {
+        updateMobileModalLoop();
+        manageSimulatedHoverLoop();
+      }
     });
     attachMediaListener(narrowScreenQuery, () => {
-      updateMobileModalLoop();
-      manageSimulatedHoverLoop();
+      if (experienceMode === 'galaxy') {
+        updateMobileModalLoop();
+        manageSimulatedHoverLoop();
+      }
     });
     document.addEventListener('visibilitychange', () => {
+      if (experienceMode === 'galaxy') {
       updateMobileModalLoop();
-      manageSimulatedHoverLoop();
+        manageSimulatedHoverLoop();
+      }
     });
     maybeShowInitialMobileModal();
 
@@ -1596,6 +1917,7 @@
     };
 
     const performHoverRaycast = pointer => {
+      if (experienceMode !== 'galaxy') return;
       if (simulatedHoverActive) {
         hideSimulatedHover();
       }
@@ -1694,6 +2016,7 @@
     };
 
     const queuePointerEvent = event => {
+      if (experienceMode !== 'galaxy') return;
       if (simulatedHoverActive) {
         hideSimulatedHover();
       }
@@ -1747,8 +2070,55 @@
       }
     });
 
+    const hideExperienceSelector = () => {
+      if (!experienceSelector) return;
+      experienceSelector.classList.remove('visible');
+      experienceSelector.classList.add('hidden');
+    };
+
+    const activateGalaxyExperience = () => {
+      experienceMode = 'galaxy';
+      hideExperienceSelector();
+      marqueeSection?.classList.remove('visible');
+      marqueeSection?.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('marquee-mode');
+      const canvas = document.querySelector('canvas');
+      if (canvas) canvas.style.display = '';
     updateMobileModalLoop();
-    manageSimulatedHoverLoop();
+      manageSimulatedHoverLoop();
+      maybeShowInitialMobileModal();
+    };
+
+    const activateMarqueeExperience = () => {
+      experienceMode = 'marquee';
+      hideExperienceSelector();
+      if (!marqueeInitialized) buildMarqueeCards();
+      marqueeSection?.classList.add('visible');
+      marqueeSection?.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('marquee-mode');
+      overlay?.classList.add('hidden');
+      hideMobileModal();
+      hideSimulatedHover();
+      stopSimulatedHoverLoop();
+      stopMobileModalLoop();
+      const tooltipEl = document.getElementById('tooltip');
+      if (tooltipEl) {
+        tooltipEl.classList.remove('visible');
+        tooltipEl.style.transform = 'translate3d(-9999px, -9999px, 0)';
+      }
+      const canvas = document.querySelector('canvas');
+      if (canvas) canvas.style.display = 'none';
+    };
+
+    const initializeExperienceSelector = () => {
+      requestAnimationFrame(() => {
+        experienceSelector?.classList.add('visible');
+      });
+      galaxyButton?.addEventListener('click', activateGalaxyExperience, { once: true });
+      marqueeButton?.addEventListener('click', activateMarqueeExperience, { once: true });
+    };
+
+    initializeExperienceSelector();
 
     // Animation loop: orbit systems (unless paused)
     const clock = new THREE.Clock();
