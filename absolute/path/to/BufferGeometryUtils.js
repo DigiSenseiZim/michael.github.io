@@ -1,0 +1,1 @@
+import { InstancedBufferAttribute } from '../../../src/core/InstancedBufferAttribute.js';

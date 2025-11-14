@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Skills Visualization - Michael</title>
+    <style>
+        body { 
+            margin: 0; 
+            overflow: hidden; 
+            font-family: Arial, sans-serif;
+            background: linear-gradient(-45deg, #111122, #1a1a2e, #16213e, #0f3460);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: white;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        canvas { 
+            display: block; 
+        }
+        #tooltip {
+            position: absolute;
+            background: rgba(15, 23, 42, 0.95);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid;
+            pointer-events: none;
+            opacity: 0;
+            transition: all 0.3s ease;
+            max-width: 300px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            font-size: 15px;
+            line-height: 1.6;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            transform: perspective(500px) translateZ(20px);
+        }
+        
+        #tooltip strong {
+            font-size: 18px;
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        #tooltip.visible {
+            opacity: 1;
+            transform: translateY(-5px);
+        }
+        #tooltip.visible {
+            opacity: 1;
+        }
+        #title {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+            font-family: 'Arial', sans-serif;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #4fc3f7, #ba68c8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        #title:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 15px rgba(255,255,255,0.7);
+        }
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div id="title">Michael's Skills Portfolio</div>
+    <div id="loading">Loading 3D Visualization...</div>
+    <div id="tooltip"></div>
+
+    <!-- Use compatible versions that work together -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+
+    <script>
+        // Skills data structure
+        const skillsData = {
+            name: "Michael",
+            children: [
+                {
+                    name: "Frontend",
+                    color: "#4fc3f7",
+                    children: [
+                        { name: "React", value: 90, experience: "4 years", projects: ["E-commerce Platform","Dashboard App"] },
+                        { name: "Vue.js", value: 80, experience: "3 years", projects: ["Admin Panel","Real-time Chat"] },
+                        { name: "Angular", value: 70, experience: "2 years", projects: ["Enterprise App"] },
+                        { name: "JavaScript", value: 95, experience: "6 years", projects: ["All Frontend Projects"] },
+                        { name: "TypeScript", value: 85, experience: "3 years", projects: ["Large-scale Applications"] },
+                        { name: "HTML/CSS", value: 95, experience: "6 years", projects: ["All Web Projects"] }
+                    ]
+                },
+                {
+                    name: "Backend",
+                    color: "#ff8a65",
+                    children: [
+                        { name: "Node.js", value: 90, experience: "4 years", projects:["REST APIs","Microservices"] },
+                        { name: "Python", value: 85, experience: "5 years", projects:["Data Processing","ML Integration"] },
+                        { name: "Java", value: 75, experience: "3 years", projects:["Enterprise Systems"] },
+                        { name: "C#", value: 70, experience: "2 years", projects:["Desktop Applications"] },
+                        { name: "SQL", value: 85, experience: "5 years", projects:["Database Design"] },
+                        { name: "MongoDB", value: 80, experience: "3 years", projects:["NoSQL Solutions"] }
+                    ]
+                },
+                {
+                    name: "AI/ML",
+                    color: "#ba68c8",
+                    children: [
+                        { name:"TensorFlow", value:80, experience:"3 years", projects:["Image Recognition"] },
+                        { name:"PyTorch", value:75, experience:"2 years", projects:["NLP Models"] },
+                        { name:"Scikit-learn", value:85, experience:"4 years", projects:["Predictive Models"] },
+                        { name:"OpenCV", value:70, experience:"2 years", projects:["Computer Vision"] }
+                    ]
+                },
+                {
+                    name: "Cloud",
+                    color: "#4db6ac",
+                    children:[
+                        {name:"AWS", value:85, experience:"4 years", projects:["Scalable Infrastructure"]},
+                        {name:"Azure", value:75, experience:"3 years", projects:["Enterprise Solutions"]},
+                        {name:"Docker", value:80, experience:"3 years", projects:["Containerization"]},
+                        {name:"Kubernetes", value:70, experience:"2 years", projects:["Orchestration"]}
+                    ]
+                },
+                {
+                    name:"Security",
+                    color:"#ffd54f",
+                    children:[
+                        {name:"OAuth", value:80, experience:"3 years", projects:["Authentication Systems"]},
+                        {name:"JWT", value:85, experience:"3 years", projects:["Secure APIs"]},
+                        {name:"Pen Testing", value:70, experience:"2 years", projects:["Vulnerability Assessment"]}
+                    ]
+                },
+                {
+                    name:"DevOps",
+                    color:"#a1887f",
+                    children:[
+                        {name:"Git", value:90, experience:"5 years", projects:["All Projects"]},
+                        {name:"Jenkins", value:75, experience:"3 years", projects:["CI/CD Pipelines"]},
+                        {name:"Terraform", value:70, experience:"2 years", projects:["Infrastructure as Code"]}
+                    ]
+                }
+            ]
+        };
+
+        // Wait for everything to load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Three.js Scene Setup 
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x111122);
+            
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 5, 15);
+            camera.lookAt(0, 0, 0);
+            
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.2;
+            document.body.appendChild(renderer.domElement);
+
+            // Lighting setup 
+            // Enhanced lighting setup
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+            scene.add(ambientLight);
+            
+            // Main directional light with shadow
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
+            directionalLight.position.set(5, 15, 10);
+            directionalLight.castShadow = true;
+            directionalLight.shadow.mapSize.width = 2048;
+            directionalLight.shadow.mapSize.height = 2048;
+            scene.add(directionalLight);
+            
+            // Add point lights for each category color
+            skillsData.children.forEach((category, i) => {
+                const pointLight = new THREE.PointLight(category.color, 1.5, 20);
+                const angle = (i / skillsData.children.length) * Math.PI * 2;
+                pointLight.position.set(
+                    Math.cos(angle) * 15,
+                    5,
+                    Math.sin(angle) * 15
+                );
+                scene.add(pointLight);
+            });
+            
+            // Add subtle fog effect
+            scene.fog = new THREE.FogExp2(0x111122, 0.02);
+
+            // Add a simple test cube to verify the scene is working
+            const testGeometry = new THREE.BoxGeometry(1, 1, 1);
+            const testMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+            const testCube = new THREE.Mesh(testGeometry, testMaterial);
+            testCube.position.set(0, 2, 0);
+            scene.add(testCube);
+
+            // Try to initialize OrbitControls with error handling
+            let controls;
+            try {
+                if (typeof THREE.OrbitControls !== 'undefined') {
+                    controls = new THREE.OrbitControls(camera, renderer.domElement);
+                    controls.enableDamping = true;
+                    controls.dampingFactor = 0.05;
+                    console.log("OrbitControls loaded successfully");
+                } else {
+                    console.warn("OrbitControls not available, using basic camera");
+                }
+            } catch (error) {
+                console.warn("OrbitControls failed to initialize:", error);
+            }
+
+            // Tooltip element
+            const tooltip = document.getElementById('tooltip');
+            const loading = document.getElementById('loading');
+
+            // Create 3D visualization from skills data
+            const categoryGroups = [];
+            const allBars = [];
+
+            function createVisualization() {
+                const radius = 12; // Radius for circular layout
+                
+                skillsData.children.forEach((category, categoryIndex) => {
+                    const categoryGroup = new THREE.Group();
+                    const angle = (categoryIndex / skillsData.children.length) * Math.PI * 2;
+                    
+                    // Position category group in a circle
+                    categoryGroup.position.set(
+                        Math.cos(angle) * radius,
+                        0,
+                        Math.sin(angle) * radius
+                    );
+                    
+                    // Create bars for each skill
+                    category.children.forEach((skill, skillIndex) => {
+                        const barHeight = skill.value / 7.5; // Adjusted height for better visibility
+                        const barWidth = 1.2;
+            const barDepth = 1.2;
+                        
+                        const geometry = new THREE.BoxGeometry(barWidth, barHeight, barDepth);
+                        const material = new THREE.MeshPhongMaterial({ 
+                            color: new THREE.Color(category.color),
+                            shininess: 100,
+                            emissive: new THREE.Color(category.color).offsetHSL(0, 0, 0.2),
+                            emissiveIntensity: 0.3,
+                            specular: new THREE.Color(0xffffff)
+                        });
+                        
+                        const bar = new THREE.Mesh(geometry, material);
+                        
+                        // Position bars in a grid within category
+                        const row = Math.floor(skillIndex / 3);
+                        const col = skillIndex % 3;
+                        
+                        bar.position.set(
+                            (col - 1) * 2,
+                            barHeight / 2, // Position so bottom is at y=0
+                            (row - 1) * 2
+                        );
+                        
+                        // Store skill data for hover interactions
+                        bar.userData = {
+                            type: 'skill',
+                            name: skill.name,
+                            value: skill.value,
+                            experience: skill.experience,
+                            projects: skill.projects,
+                            category: category.name,
+                            categoryColor: category.color
+                        };
+                        
+                        categoryGroup.add(bar);
+                        allBars.push(bar);
+                    });
+                    
+                    scene.add(categoryGroup);
+                    categoryGroups.push(categoryGroup);
+                });
+
+                // Remove test cube once real visualization is created
+                scene.remove(testCube);
+            }
+
+            // GSAP Animations 
+            function setupAnimations() {
+                // Animate bars growing up
+                allBars.forEach((bar, index) => {
+                    const targetHeight = bar.scale.y;
+                    bar.scale.y = 0;
+                    bar.position.y = 0;
+                    
+                    gsap.to(bar.scale, {
+                        y: targetHeight,
+                        duration: 1.5,
+                        delay: index * 0.1,
+                        ease: "bounce.out",
+                        onUpdate: function() {
+                            bar.position.y = (bar.scale.y * bar.userData.value / 5) / 2;
+                        }
+                    });
+                });
+
+                // Gentle rotation animation for categories
+                categoryGroups.forEach((group, index) => {
+                    gsap.to(group.rotation, {
+                        y: Math.PI * 2,
+                        duration: 20 + index * 5,
+                        repeat: -1,
+                        ease: "none"
+                    });
+                });
+
+                // Camera animation on load
+                gsap.from(camera.position, {
+                    z: 50,
+                    duration: 2,
+                    ease: "power3.out"
+                });
+
+                // Hide loading text
+                gsap.to(loading, {
+                    opacity: 0,
+                    duration: 0.5,
+                    delay: 1,
+                    onComplete: () => loading.style.display = 'none'
+                });
+            }
+
+            // Mouse move handler for hover effects 
+            function onMouseMove(event) {
+                // Calculate mouse position in normalized device coordinates
+                const mouse = new THREE.Vector2();
+                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+                
+                // Update the picking ray with the camera and mouse position
+                const raycaster = new THREE.Raycaster();
+                raycaster.setFromCamera(mouse, camera);
+                
+                // Calculate objects intersecting the picking ray
+                const intersects = raycaster.intersectObjects(allBars);
+                
+                if (intersects.length > 0) {
+                    const intersect = intersects[0];
+                    const skillData = intersect.object.userData;
+                    
+                    // Show tooltip
+                    tooltip.innerHTML = `
+                        <strong>${skillData.name}</strong><br>
+                        Level: ${skillData.value}/100<br>
+                        Experience: ${skillData.experience}<br>
+                        Projects: ${skillData.projects.join(', ')}
+                    `;
+                    tooltip.style.borderLeftColor = skillData.categoryColor;
+                    tooltip.style.left = (event.clientX + 15) + 'px';
+                    tooltip.style.top = (event.clientY + 15) + 'px';
+                    tooltip.classList.add('visible');
+                } else {
+                    tooltip.classList.remove('visible');
+                }
+            }
+
+            // Window resize handler
+            function onWindowResize() {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+
+            // Animation loop 
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                if (controls) {
+                    controls.update(); // Required when damping is enabled
+                }
+                
+                // Gentle floating animation
+                const time = Date.now() * 0.001;
+                categoryGroups.forEach((group, index) => {
+                    group.position.y = Math.sin(time * 0.5 + index) * 0.5;
+                });
+                
+                renderer.render(scene, camera);
+            }
+
+            // Initialize everything
+            function init() {
+                createVisualization();
+                setupAnimations();
+                
+                // Event listeners
+                window.addEventListener('mousemove', onMouseMove, false);
+                window.addEventListener('resize', onWindowResize, false);
+                
+                // Start animation loop
+                animate();
+            }
+
+            // Start the application
+            init();
+        });
+    </script>
+</body>
+</html>

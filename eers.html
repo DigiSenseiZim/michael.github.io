@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>3D Skills Network — Orange Peel & Glass Etch</title>
+<style>
+  html,body { height:100%; margin:0; background: linear-gradient(-45deg,#0f0c29,#302b63,#24243e); background-size:400% 400%; animation:bg 12s linear infinite; overflow:hidden; }
+  @keyframes bg { 0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%} }
+  #title { position:absolute; left:24px; top:20px; z-index:5; font-family: "Segoe UI", system-ui, sans-serif; font-weight:800; font-size:26px; color:transparent; background:linear-gradient(135deg,#667eea,#764ba2); background-clip:text; -webkit-background-clip:text; padding:8px 14px; border-radius:10px; }
+  #tooltip { position:absolute; pointer-events:none; transform:translate(-50%,-140%); padding:10px 14px; border-radius:10px; background:rgba(8,10,18,0.7); border-left:4px solid #fff; opacity:0; transition:opacity .22s, transform .22s; color:#fff; font-family:Inter,Segoe UI,system-ui; font-size:13px; z-index:10; backdrop-filter: blur(8px); }
+  #tooltip.visible { opacity:1; transform:translate(-50%,-160%); }
+  #controls { position:absolute; left:20px; bottom:20px; z-index:5; background:rgba(0,0,0,0.35); padding:10px; border-radius:10px; backdrop-filter: blur(6px); }
+  #controls button { background:linear-gradient(135deg,#667eea,#764ba2); color:white; border:none; padding:8px 10px; margin-right:8px; border-radius:6px; cursor:pointer; }
+  #loading { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); background:rgba(0,0,0,0.6); color:#fff; padding:12px 18px; border-radius:10px; z-index:4; }
+  canvas { display:block; }
+</style>
+</head>
+<body>
+  <div id="title">Michael's Skills Network</div>
+  <div id="loading">🌀 Initializing...</div>
+  <div id="tooltip"></div>
+  <div id="controls">
+    <button onclick="toggleRotation()">Toggle Rotation</button>
+    <button onclick="resetView()">Reset View</button>
+  </div>
+
+  <!-- Non-module Three, GSAP and OrbitControls (keeps your existing environment) -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+
+<script>
+/* -----------------------
+   Data (unchanged)
+   ----------------------- */
+const skillsData = {
+  name: "Michael",
+  children: [
+    { name: "Frontend", color: "#FF8A50", children: [
+      { name: "React", value: 90, experience: "4 years", projects: ["E-commerce","Dashboard"] },
+      { name: "Vue.js", value: 80, experience: "3 years", projects: ["Admin Panel","Chat"] },
+      { name: "Angular", value: 70, experience: "2 years", projects: ["Enterprise"] }
+    ]},
+    { name: "Backend", color: "#FFB86B", children: [
+      { name: "Node.js", value: 90, experience: "4 years", projects: ["REST APIs"] },
+      { name: "Python", value: 85, experience: "5 years", projects: ["ML Integration"] }
+    ]},
+    { name: "AI/ML", color: "#D98CF2", children: [
+      { name:"TensorFlow", value:80, experience:"3 years", projects:["Image Recognition"] },
+      { name:"PyTorch", value:75, experience:"2 years", projects:["NLP Models"] }
+    ]}
+    // ... keep rest of your data if wanted
+  ]
+};
+
+/* -----------------------
+   Helpers: generate orange-peel style canvas texture + normal map
+   - We build a small canvas with speckles and light/dark spots
+   - We compute a simple normal map with gradient sampling (sobel-like)
+   ----------------------- */
+function createPeelCanvas(textLines=[], width=512, height=256, baseColor="#ff8a2b") {
+  const c = document.createElement('canvas');
+  c.width = width; c.height = height;
+  const ctx = c.getContext('2d');
+
+  // base
+  ctx.fillStyle = baseColor;
+  ctx.fillRect(0,0,width,height);
+
+  // subtle radial shading
+  const grad = ctx.createRadialGradient(width*0.3, height*0.2, 10, width*0.5, height*0.6, Math.max(width,height));
+  grad.addColorStop(0, 'rgba(255,255,255,0.06)');
+  grad.addColorStop(1, 'rgba(0,0,0,0.06)');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0,0,width,height);
+
+  // orange peel: lots of tiny speckles
+  for (let i=0;i<6000;i++){
+    const x = Math.random()*width;
+    const y = Math.random()*height;
+    const r = Math.random()*1.6;
+    const alpha = 0.05 + Math.random()*0.12;
+    ctx.fillStyle = `rgba(0,0,0,${alpha})`;
+    ctx.beginPath(); ctx.ellipse(x,y,r,r,0,0,Math.PI*2); ctx.fill();
+  }
+
+  // highlight dots
+  for (let i=0;i<1200;i++){
+    if(Math.random()<0.35) continue;
+    const x = Math.random()*width;
+    const y = Math.random()*height;
+    const r = Math.random()*0.9;
+    ctx.fillStyle = `rgba(255,255,255,${0.02 + Math.random()*0.06})`;
+    ctx.beginPath(); ctx.ellipse(x,y,r,r,0,0,Math.PI*2); ctx.fill();
+  }
+
+  // draw peel text laid out nicely (wrap)
+  ctx.fillStyle = 'rgba(10,10,10,0.9)';
+  ctx.font = '18px "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  // lighten behind text for legibility (subtle)
+  const lineCount = textLines.length;
+  textLines.forEach((line, i) => {
+    const y = height*0.45 + (i - (lineCount-1)/2) * 22;
+    // subtle shadow ring
+    ctx.fillStyle = 'rgba(255,255,255,0.06)';
+    ctx.beginPath(); ctx.ellipse(width/2, y, 220, 14, 0, 0, Math.PI*2); ctx.fill();
+
+    ctx.fillStyle = 'rgba(20,12,8,0.95)';
+    ctx.fillText(line, width/2, y);
+  });
+
+  return c;
+}
+
+// Create a normal map (RGB) from the height map (canvas). Simple gradient sampling.
+function heightToNormalData(canvas, strength=1.0) {
+  const w = canvas.width, h = canvas.height;
+  const ctx = canvas.getContext('2d');
+  const src = ctx.getImageData(0,0,w,h).data;
+  const dst = new Uint8Array(w*h*3);
+
+  function getGray(x,y){
+    x = Math.max(0, Math.min(w-1, x));
+    y = Math.max(0, Math.min(h-1, y));
+    const idx = (y*w + x)*4;
+    // luminance
+    return (src[idx]*0.299 + src[idx+1]*0.587 + src[idx+2]*0.114)/255;
+  }
+
+  for(let y=0;y<h;y++){
+    for(let x=0;x<w;x++){
+      // sample neighbors
+      const l = getGray(x-1,y);
+      const r = getGray(x+1,y);
+      const u = getGray(x,y-1);
+      const d = getGray(x,y+1);
+      // sobel-ish
+      const dx = (r - l) * strength;
+      const dy = (d - u) * strength;
+      const dz = 1.0;
+      // normalize
+      const len = Math.sqrt(dx*dx + dy*dy + dz*dz);
+      const nx = dx/len, ny = dy/len, nz = dz/len;
+      const idx = (y*w + x)*3;
+      dst[idx]   = Math.floor( (nx*0.5 + 0.5) * 255 );
+      dst[idx+1] = Math.floor( (ny*0.5 + 0.5) * 255 );
+      dst[idx+2] = Math.floor( (nz*0.5 + 0.5) * 255 );
+    }
+  }
+  return {data: dst, width:w, height:h};
+}
+function createSkillNode(skill, categoryColor, hubPos) {
+    // Pastel ball
+    const pastelColor = new THREE.Color(categoryColor).offsetHSL(Math.random() * 0.05, 0.2, 0.1);
+    const ballGeometry = new THREE.SphereGeometry(0.5 + skill.value / 50, 32, 32);
+    const ballMaterial = new THREE.MeshPhongMaterial({
+        color: pastelColor,
+        emissive: pastelColor,
+        emissiveIntensity: 0.2,
+        shininess: 50
+    });
+    const ball = new THREE.Mesh(ballGeometry, ballMaterial);
+
+    // Position around hub
+    const angle = Math.random() * Math.PI * 2;
+    const radius = 4 + skill.value / 25;
+    ball.position.set(
+        hubPos.x + Math.cos(angle) * radius,
+        Math.sin(Math.random() * Math.PI) * 2,
+        hubPos.z + Math.sin(angle) * radius
+    );
+
+    // Orange-like peel texture
+    const peelCanvas = document.createElement('canvas');
+    peelCanvas.width = 256;
+    peelCanvas.height = 256;
+    const ctx = peelCanvas.getContext('2d');
+    ctx.fillStyle = "#FFA500";
+    ctx.fillRect(0, 0, 256, 256);
+    ctx.globalAlpha = 0.3;
+    ctx.fillStyle = "#ffcc80";
+    for(let i=0;i<1000;i++){
+        ctx.fillRect(Math.random()*256, Math.random()*256, 2,2);
+    }
+    ctx.fillStyle = "white";
+    ctx.font = "bold 28px sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(skill.name, 128, 128);
+    const peelTexture = new THREE.CanvasTexture(peelCanvas);
+    const peelMaterial = new THREE.MeshPhongMaterial({
+        map: peelTexture,
+        transparent: true,
+        opacity: 0.6,
+        shininess: 30
+    });
+    const peelSphere = new THREE.Mesh(ballGeometry.clone(), peelMaterial);
+    peelSphere.scale.multiplyScalar(1.15);
+    ball.add(peelSphere);
+
+    // Glass text for hover (etched effect)
+    const glassCanvas = document.createElement('canvas');
+    glassCanvas.width = 512;
+    glassCanvas.height = 128;
+    const gctx = glassCanvas.getContext('2d');
+    gctx.fillStyle = "rgba(255,255,255,0.05)";
+    gctx.fillRect(0,0,512,128);
+    gctx.font = "bold 48px sans-serif";
+    gctx.fillStyle = "white";
+    gctx.textAlign = "center";
+    gctx.textBaseline = "middle";
+    gctx.fillText(skill.name, 256, 64);
+    const glassTexture = new THREE.CanvasTexture(glassCanvas);
+    const glassMaterial = new THREE.MeshPhongMaterial({
+        map: glassTexture,
+        transparent: true,
+        opacity: 0,
+        shininess: 100,
+        side: THREE.DoubleSide
+    });
+    const glassPlane = new THREE.PlaneGeometry(2.5, 0.6);
+    const glassMesh = new THREE.Mesh(glassPlane, glassMaterial);
+    glassMesh.position.set(0, 0.6, 0);
+    ball.add(glassMesh);
+
+    // Hover logic
+    ball.userData = { peel: peelMaterial, glass: glassMaterial };
+    ball.onHover = () => {
+        gsap.to(ball.userData.peel, { opacity: 0, duration: 0.5 });
+        gsap.to(ball.userData.glass, { opacity: 1, duration: 0.5 });
+    };
+    ball.onHoverOut = () => {
+        gsap.to(ball.userData.peel, { opacity: 0.6, duration: 0.5 });
+        gsap.to(ball.userData.glass, { opacity: 0, duration: 0.5 });
+    };
+
+    scene.add(ball);
+    skillNodes.push(ball);
+}
+
+/* -----------------------
+   Three.js scene
+   ----------------------- */
+let scene, camera, renderer, controls;
+let skillNodes = [];    // each entry: { group, topPeel, bottomPeel, innerSprite, data }
+let raycaster = new THREE.Raycaster();
+let mouse = new THREE.Vector2();
+let isRotating = true;
+
+const tooltipEl = document.getElementById('tooltip');
+
+function init() {
+  // renderer
+  renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  // scene
+  scene = new THREE.Scene();
+
+  // camera
+  camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.set(0, 10, 28);
+
+  // lights
+  const amb = new THREE.AmbientLight(0xffffff, 0.6);
+  scene.add(amb);
+  const dir = new THREE.DirectionalLight(0xffffff, 0.5);
+  dir.position.set(8, 12, 6);
+  scene.add(dir);
+
+  // OrbitControls
+  try {
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+  } catch(e){
+    console.warn('OrbitControls not available', e);
+  }
+
+  // ground grid (subtle)
+  const grid = new THREE.GridHelper(80, 80, 0x111225, 0x0b0b12);
+  grid.material.opacity = 0.08; grid.material.transparent = true;
+  scene.add(grid);
+
+  // Build network (categories -> skills as spheres)
+  buildNetwork();
+
+  // interactions
+  window.addEventListener('mousemove', onMouseMove, false);
+  window.addEventListener('resize', onResize, false);
+
+  // animate
+  gsap.to(document.getElementById('loading'), {opacity:0, duration:0.8, delay:1.2, onComplete:()=>{ document.getElementById('loading').style.display='none'; }});
+  animate();
+}
+
+/* Build the network with peel & inner text */
+function buildNetwork() {
+  const categoryRadius = 12;
+  skillsData.children.forEach((category, catIndex) => {
+    const angle = (catIndex / skillsData.children.length) * Math.PI*2;
+    const cx = Math.cos(angle) * categoryRadius;
+    const cz = Math.sin(angle) * categoryRadius;
+
+    // category hub visual (small)
+    const hub = new THREE.Mesh(
+      new THREE.SphereGeometry(1.6, 32, 32),
+      new THREE.MeshStandardMaterial({ color: category.color, metalness:0.1, roughness:0.6 })
+    );
+    hub.position.set(cx, 0, cz);
+    scene.add(hub);
+
+    // create skill nodes around hub
+    const nodes = category.children;
+    nodes.forEach((skill, i) => {
+      const theta = (i / nodes.length) * Math.PI*2;
+      const dist = 4 + (skill.value / 25);
+      const sx = cx + Math.cos(theta) * dist;
+      const sz = cz + Math.sin(theta) * dist;
+      const sy = Math.sin(i*0.5) * 1.2;
+
+      createPeelBall(skill, category, {x:sx,y:sy,z:sz});
+    });
+  });
+}
+
+/* Create a peel ball with two hemispheres and an inner etched sprite.
+   Steps:
+   - Make two hemisphere geometries (thetaStart / thetaLength) and materials using a canvas texture that contains the tooltip text
+   - Create inner sprite (transparent text) placed just slightly above center; will be shown when unpeel
+*/
+function createPeelBall(skill, category, pos) {
+  const R = 1.0 + (skill.value / 70); // radius
+  const segments = 48;
+
+  // Create peel canvas (text + speckles)
+  const lines = [
+    skill.name,
+    `${category.name} • ${skill.value}/100`,
+    `${skill.experience}`,
+    skill.projects.slice(0,2).join(' • ')
+  ];
+  const peelCanvas = createPeelCanvas(lines, 512, 256, category.color);
+  const peelTexture = new THREE.CanvasTexture(peelCanvas);
+  peelTexture.wrapS = peelTexture.wrapT = THREE.RepeatWrapping;
+  peelTexture.repeat.set(1,1);
+  peelTexture.encoding = THREE.sRGBEncoding;
+
+  // normal map from height
+  const normalData = heightToNormalData(peelCanvas, 1.2);
+  const normalTex = new THREE.DataTexture(normalData.data, normalData.width, normalData.height, THREE.RGBFormat);
+  normalTex.needsUpdate = true;
+  normalTex.flipY = true;
+
+  // materials for peel hemispheres (slightly rough, specular)
+  const peelMatTop = new THREE.MeshStandardMaterial({
+    map: peelTexture,
+    normalMap: normalTex,
+    metalness: 0.02,
+    roughness: 0.6,
+    displacementScale: 0.02,
+    transparent: false,
+  });
+  const peelMatBottom = peelMatTop.clone();
+
+  // hemisphere geometries:
+  // SphereGeometry(radius, widthSeg, heightSeg, phiStart, phiLength, thetaStart, thetaLength)
+  // thetaStart=0 top -> thetaLength=Math.PI/2 for top hemisphere
+  const topGeo = new THREE.SphereGeometry(R, segments, segments, 0, Math.PI*2, 0, Math.PI/2);
+  const botGeo = new THREE.SphereGeometry(R, segments, segments, 0, Math.PI*2, Math.PI/2, Math.PI/2);
+
+  const topMesh = new THREE.Mesh(topGeo, peelMatTop);
+  const botMesh = new THREE.Mesh(botGeo, peelMatBottom);
+
+  // slight inner offset so inner etched sprite is visible
+  topMesh.position.set(pos.x, pos.y, pos.z);
+  botMesh.position.set(pos.x, pos.y, pos.z);
+
+  // inner etched text sprite (canvas texture) — transparent background
+  const textCanvas = document.createElement('canvas');
+  textCanvas.width = 512; textCanvas.height = 256;
+  const tctx = textCanvas.getContext('2d');
+  tctx.clearRect(0,0,512,256);
+  // draw etched-style text (white with inner blur & stroke)
+  tctx.font = 'bold 44px "Segoe UI", system-ui, sans-serif';
+  tctx.textAlign = 'center';
+  tctx.textBaseline = 'middle';
+  // glow / blur layers
+  tctx.fillStyle = 'rgba(255,255,255,0.06)';
+  tctx.fillText(skill.name, 256, 80);
+  tctx.fillStyle = 'rgba(255,255,255,0.15)';
+  tctx.fillText(`${skill.value}/100 • ${skill.experience}`, 256, 130);
+  // main etched line (alpha)
+  tctx.fillStyle = 'rgba(255,255,255,1)';
+  tctx.fillText(skill.name, 256, 80);
+  tctx.fillText(`${skill.value}/100`, 256, 140);
+
+  const textTex = new THREE.CanvasTexture(textCanvas);
+  textTex.needsUpdate = true;
+  textTex.encoding = THREE.sRGBEncoding;
+
+  // sprite material: make it look like etched glass by using low opacity with multiplicative blending
+  const spriteMat = new THREE.SpriteMaterial({
+    map: textTex,
+    transparent: true,
+    opacity: 0.0,
+    depthWrite: false,
+    blending: THREE.CustomBlending,
+    blendEquation: THREE.AddEquation,
+    blendSrc: THREE.SrcAlphaFactor,
+    blendDst: THREE.OneMinusSrcAlphaFactor,
+  });
+  const sprite = new THREE.Sprite(spriteMat);
+  sprite.scale.set(R*2.2, R*1.0, 1);
+  sprite.position.set(pos.x, pos.y, pos.z + 0.01); // slightly in front to avoid z-fighting
+
+  // group to hold everything for this node
+  const group = new THREE.Group();
+  group.add(topMesh);
+  group.add(botMesh);
+  group.add(sprite);
+  scene.add(group);
+
+  // Save node entry
+  skillNodes.push({
+    group, topMesh, botMesh, sprite, skill, category, peelTexture
+  });
+
+  // initial subtle animation: tiny bob & rotation
+  gsap.from(group.scale, { x:0.001, y:0.001, z:0.001, duration: 0.8, ease: 'back.out(1.3)', delay: Math.random()*0.6 });
+}
+
+/* Raycast + hover interactions:
+   - On hover: animate topMesh upward & rotate outward, animate botMesh downward,
+     animate sprite opacity to 1 and scale slightly for "etched reveal".
+   - On leave: reverse animation.
+*/
+let lastHovered = null;
+function onMouseMove(e){
+  const rect = renderer.domElement.getBoundingClientRect();
+  mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+  raycaster.setFromCamera(mouse, camera);
+  const candidates = skillNodes.map(n => n.topMesh).concat(skillNodes.map(n => n.botMesh));
+  const intersections = raycaster.intersectObjects(candidates, true);
+
+  if (intersections.length > 0) {
+    const hit = intersections[0].object;
+    // find node by matching top or bottom
+    const node = skillNodes.find(n => n.topMesh === hit || n.botMesh === hit);
+    if (node && lastHovered !== node) {
+      // unpeel this node
+      unpeelNode(node);
+      // re-peel lastHovered
+      if (lastHovered && lastHovered !== node) rePeelNode(lastHovered);
+      lastHovered = node;
+
+      // show tooltip positioned near mouse
+      const t = document.getElementById('tooltip');
+      t.innerHTML = `<strong>${node.skill.name}</strong><div style="font-size:12px;opacity:0.85;margin-top:6px">${node.category.name} • ${node.skill.value}/100</div>
+        <div style="margin-top:8px;font-size:12px">Experience: ${node.skill.experience}</div>
+        <div style="margin-top:6px;font-size:12px">Projects: ${node.skill.projects.join(', ')}</div>`;
+      t.style.left = (e.clientX + 12) + 'px';
+      t.style.top = (e.clientY + 6) + 'px';
+      t.classList.add('visible');
+    } else {
+      // update tooltip position if still hovered
+      if (lastHovered) {
+        const t = document.getElementById('tooltip');
+        t.style.left = (e.clientX + 12) + 'px';
+        t.style.top = (e.clientY + 6) + 'px';
+      }
+    }
+  } else {
+    // no intersections -> hide tooltip and re-peel lastHovered
+    if (lastHovered) {
+      rePeelNode(lastHovered);
+      lastHovered = null;
+    }
+    tooltipEl.classList.remove('visible');
+  }
+}
+
+/* Unpeel animation (separate hemispheres + reveal etched text) */
+function unpeelNode(node) {
+  const { topMesh, botMesh, sprite } = node;
+  // move top up & rotate out
+  gsap.killTweensOf([topMesh.position, topMesh.rotation, botMesh.position, botMesh.rotation, sprite.material]);
+  gsap.to(topMesh.position, { y: topMesh.position.y + 1.2, duration: 0.45, ease: 'power2.out' });
+  gsap.to(topMesh.rotation, { x: -0.8, z: 0.4, duration: 0.45, ease: 'power2.out' });
+  // move bottom down & rotate
+  gsap.to(botMesh.position, { y: botMesh.position.y - 1.2, duration: 0.45, ease: 'power2.out' });
+  gsap.to(botMesh.rotation, { x: 0.8, z: -0.3, duration: 0.45, ease: 'power2.out' });
+  // sprite fade in with slight scale and shimmer
+  gsap.to(sprite.material, { opacity: 1.0, duration: 0.45, ease: 'power2.out' });
+  gsap.fromTo(sprite.scale, { x: sprite.scale.x*0.85, y: sprite.scale.y*0.85 }, { x: sprite.scale.x*1.06, y: sprite.scale.y*1.06, duration: 0.6, ease: 'elastic.out(1,0.6)' });
+
+  // tooltip style show
+  tooltipEl.classList.add('visible');
+}
+
+/* Re-peel animation */
+function rePeelNode(node) {
+  const { topMesh, botMesh, sprite } = node;
+  gsap.killTweensOf([topMesh.position, topMesh.rotation, botMesh.position, botMesh.rotation, sprite.material]);
+  // restore positions (they were created with correct absolute positions; we animate to those)
+  gsap.to(topMesh.position, { y: node.topMesh.position.y, duration: 0.5, ease: 'power3.out' });
+  gsap.to(topMesh.rotation, { x: 0, y: 0, z: 0, duration: 0.5, ease: 'power3.out' });
+  gsap.to(botMesh.position, { y: node.botMesh.position.y, duration: 0.5, ease: 'power3.out' });
+  gsap.to(botMesh.rotation, { x: 0, y: 0, z: 0, duration: 0.5, ease: 'power3.out' });
+
+  // sprite fade out
+  gsap.to(sprite.material, { opacity: 0.0, duration: 0.35, ease: 'power2.out' });
+
+  tooltipEl.classList.remove('visible');
+}
+
+/* Resize */
+function onResize(){
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+/* Animation loop */
+function animate(){
+  requestAnimationFrame(animate);
+  if (controls) controls.update();
+
+  // maybe rotate whole scene slowly
+  if (isRotating) scene.rotation.y += 0.0008;
+
+  // subtle bob for each group
+  const t = performance.now() * 0.001;
+  skillNodes.forEach((n, idx) => {
+    const bob = Math.sin(t*1.1 + idx) * 0.06;
+    n.group.position.y = n.group.position.y * 0 + bob; // small floating (we use group local)
+    // slight individual spin for realism
+    n.group.rotation.y += 0.0006 * (1 + idx%3);
+  });
+
+  renderer.render(scene, camera);
+}
+
+/* Controls (exposed to UI) */
+function toggleRotation(){ isRotating = !isRotating; }
+function resetView(){ if (controls) controls.reset(); camera.position.set(0,10,28); camera.lookAt(0,0,0); }
+
+/* Initialization */
+init();
+
+/* remove loading after scene is ready */
+setTimeout(()=>{ document.getElementById('loading').style.display = 'none'; }, 1800);
+
+</script>
+</body>
+</html>

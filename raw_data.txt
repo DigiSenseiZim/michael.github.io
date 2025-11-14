@@ -1,0 +1,705 @@
+DIAGRAM 1
+```flowchart TD
+    subgraph Frontend_Canopy[“🌳 Frontend Canopy - UI/UX”]
+        direction TB
+        A1[“<b>Design Foundation</b><br>DESIGN RULES”]
+        A2[“<b>React Ecosystem</b><br>Material UI, Redux”]
+        A3[“<b>Production Testing</b><br>Cypress E2E”]
+        A1 --> A2 --> A3
+    end
+
+    subgraph Backend_Roots[“🌊 Backend Roots - Server & Logic”]
+        direction TB
+        B1[“<b>Node.js Runtime</b><br>Just Express”]
+        B2[“<b>Enterprise Language</b><br>C# Fundamentals”]
+        B3[“<b>Integration</b><br>MuleSoft 4.X”]
+        B1 --> B2 --> B3
+    end
+
+    Frontend_Canopy -- “RESTful API” --> Backend_Roots
+
+    subgraph Security_Bark[“🛡️ Security Bark - Resilience”]
+        C[“<b>Secure Development Lifecycle</b>”]
+        C1[“<b>Application Hardening</b>”]
+        C2[“<b>Safe Deployment</b>”]
+        C --> C1 --> C2
+    end
+
+    Backend_Roots -- “Hardened By” --> Security_Bark
+
+    style Frontend_Canopy fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style Backend_Roots fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style Security_Bark fill:#fff3e0,stroke:#ef6c00,stroke-width:3px
+```
+
+
+DIAGRAM 2
+```quadrantChartac
+    title AI & Machine Learning Competency Matrix
+    x-axis "Foundational Theory" --> "Hands-On Engineering"
+    y-axis "General Concepts" --> "Specialized Systems"
+    "Executive Briefing: AI + ChatGPT": [0.15, 0.1]
+    "Generative AI for Beginners": [0.6, 0.25]
+    "AI for Business": [0.2, 0.3]
+    "Reinforcement Learning": [0.9, 0.9]
+    "LLM Engineering": [0.85, 0.8]
+    "Data Science Bootcamp": [0.7, 0.5]
+    "Complete MLOps Bootcamp": [0.95, 0.7]
+    "Artificial Intelligence A-Z 2025": [0.8, 0.85]
+```
+
+DIAGRAM 3
+```mindmap
+  root((“<b>Learning Velocity</b><br>Strategic Depth”))
+    (“<b>Full-Stack Immersion</b><br>74% Complete<br>Dr. Angela Yu Bootcamp”)
+      (“<b>JavaScript Mastery</b><br>29% Deep Dive<br>‘Understanding the Weird Parts’”)
+      (“<b>React Production Ready</b><br>30 Real World Projects<br>Advanced Patterns”)
+      (“<b>Web Fundamentals</b><br>20 Vanilla JS Projects”)
+    (“<b>AI Engineering Pipeline</b><br>11 Skills in Progress”)
+      (“<b>Data Science</b><br>Bootcamp 2025”)
+      (“<b>MLOps & Production</b><br>10+ End-to-End Projects”)
+      (“<b>Python Power</b><br>100 Days of Code”)
+    (“<b>Enterprise Expansion</b>”)
+      (“<b>Java Ecosystem</b><br>130+ Hour Masterclass”)
+      (“<b>Integration</b><br>MuleSoft 4.X”)
+```
+
+DIAGRAM 4
+```flowchart LR
+    subgraph Core[“🟢 Solid Core - Certified Proficiency”]
+        A1[“Frontend<br>React/Redux/MUI”]
+        A2[“Backend<br>Node.js/Express/C#”]
+        A3[“Security<br>SDLC & DevSecOps”]
+    end
+
+    subgraph Growth[“🟠 Explosive Growth - In Progress”]
+        direction TB
+        B1[“<b>Advanced Full-Stack</b><br>74% Complete”]
+        B2[“<b>AI Engineering</b><br>LLMs, MLOps, GenAI”]
+        B3[“<b>Enterprise Foundation</b><br>Java, MuleSoft”]
+        B4[“<b>JavaScript Mastery</b><br>Deep Dive”]
+        B1 --> B2
+        B1 --> B3
+        B4 -.-> B1
+    end
+
+    Core -- “Foundation For” --> Growth
+
+    D[“<b>Business Strategy</b><br>Digital Transformation”] -- “Guides & Aligns” --> Growth
+    E[“<b>AI Intelligence</b><br>Reinforcement Learning”] -- “Augments & Informs” --> Growth
+
+    style Core fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style Growth fill:#fff3e0,stroke:#ff9800,stroke-width:3px
+    style D fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    style E fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+```
+
+            <div class="glass-panel slide-in-left animated-element panel-expanded" id="certsPanel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <i class="fas fa-certificate"></i>
+                            <span>Certifications</span>
+                        </div>
+                        <div>
+                            <i class="fas fa-grip-lines drag-handle"></i>
+                            <i class="fas fa-chevron-up toggle-panel"></i>
+                        </div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="side-profile-details">
+                            <div class="side-project-detail">
+                                <div class="side-detail-label">Oracle Cloud:</div>
+                                <div class="side-detail-value">Generative AI Specialist Certification</div>
+                            </div>
+                            <div class="side-project-detail">
+                                <div class="side-detail-label">Professional Development:</div>
+                                <div class="side-detail-value">10+ Advanced Technical Courses</div>
+                            </div>
+                            <div class="side-project-detail">
+                                <div class="side-detail-label">Continuous Learning:</div>
+                                <div class="side-detail-value">360+ Hours Industry Training</div>
+                            </div>
+                            <div class="side-project-detail">
+                                <div class="side-detail-label">Formal Education:</div>
+                                <div class="side-detail-value">Digital Transformation & Operational Excellence</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+                            <div class="glass-panel slide-in-left animated-element panel-expanded slide-blur-in" id="profilePanel" data-section="Profile">
+                    <div class="panel-header sticky-2025">
+                        <div class="panel-title heading-2025 neon-underline blend-text">
+                            <i class="fas fa-user-astronaut"></i>
+                            <span>Professional Profile</span>
+                        </div>
+                        <div>
+                            <i class="fas fa-grip-lines drag-handle"></i>
+                            <i class="fas fa-chevron-up toggle-panel"></i>
+                        </div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="profile-details blend-text">
+                            <div class="project-detail">
+                                <div class="detail-label">Current Role:</div>
+                                <div class="detail-value">Senior Software Architect & Technical Lead</div>
+                            </div>
+                            <div class="project-detail">
+                                <div class="detail-label">Experience:</div>
+                                <div class="detail-value">7+ Years Full-Stack Development</div>
+                            </div>
+                            <div class="project-detail">
+                                <div class="detail-label">Specializations:</div>
+                                <div class="detail-value">AI/ML Integration | Enterprise Solutions | Cloud Architecture | Mobile Development</div>
+                            </div>
+                            <div class="project-detail">
+                                <div class="detail-label">Leadership:</div>
+                                <div class="detail-value"><p>Technical Team Lead | Code Review & Mentoring | Cross-functional Collaboration</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+
+
+                <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud & AI Engineering Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --tech-blue: #2962FF;
+            --ai-purple: #9C27B0;
+            --data-green: #00C853;
+            --cloud-orange: #FF6D00;
+            --dev-cyan: #00B8D4;
+            --dark-bg: #121212;
+            --card-bg: #1E1E1E;
+            --text-light: #E0E0E0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dashboard-header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--tech-blue), var(--ai-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .dashboard-header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            color: rgba(224, 224, 224, 0.8);
+        }
+
+        .stats-highlight {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            min-width: 180px;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-left: 4px solid var(--tech-blue);
+        }
+
+        .stat-card.ai {
+            border-left-color: var(--ai-purple);
+        }
+
+        .stat-card.data {
+            border-left-color: var(--data-green);
+        }
+
+        .stat-card.cloud {
+            border-left-color: var(--cloud-orange);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .chart-container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--tech-blue), var(--ai-purple));
+        }
+
+        .chart-container:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .chart-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chart-title i {
+            font-size: 1.8rem;
+        }
+
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .legend-color {
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
+
+        .footnote {
+            text-align: center;
+            font-size: 0.9rem;
+            color: rgba(224, 224, 224, 0.6);
+            margin-top: 40px;
+            font-style: italic;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chart-container {
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .chart-container:nth-child(1) { animation-delay: 0.1s; }
+        .chart-container:nth-child(2) { animation-delay: 0.2s; }
+        .chart-container:nth-child(3) { animation-delay: 0.3s; }
+        .chart-container:nth-child(4) { animation-delay: 0.4s; }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-highlight {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .dashboard-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <h1>Cloud & AI Engineering Dashboard</h1>
+            <p>Visualizing expertise in cloud platforms, artificial intelligence, and data engineering technologies</p>
+            
+            <div class="stats-highlight">
+                <div class="stat-card">
+                    <div class="stat-number">60+</div>
+                    <div class="stat-label">Certifications</div>
+                </div>
+                <div class="stat-card ai">
+                    <div class="stat-number">25+</div>
+                    <div class="stat-label">AI/ML Courses</div>
+                </div>
+                <div class="stat-card data">
+                    <div class="stat-number">15+</div>
+                    <div class="stat-label">Data Engineering</div>
+                </div>
+                <div class="stat-card cloud">
+                    <div class="stat-number">12+</div>
+                    <div class="stat-label">Cloud Technologies</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="chart-grid">
+            <div class="chart-container">
+                <h2 class="chart-title">Technology Stack Distribution</h2>
+                <canvas id="techStackChart"></canvas>
+                <div class="chart-legend">
+                    <div class="legend-item"><span class="legend-color" style="background-color: #2962FF;"></span> Cloud Platforms</div>
+                    <div class="legend-item"><span class="legend-color" style="background-color: #9C27B0;"></span> AI & Machine Learning</div>
+                    <div class="legend-item"><span class="legend-color" style="background-color: #00C853;"></span> Data Engineering</div>
+                    <div class="legend-item"><span class="legend-color" style="background-color: #00B8D4;"></span> Development</div>
+                    <div class="legend-item"><span class="legend-color" style="background-color: #FF6D00;"></span> Business & Strategy</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h2 class="chart-title">Certification Timeline</h2>
+                <canvas id="timelineChart"></canvas>
+                <div class="chart-legend">
+                    <div class="legend-item"><span class="legend-color" style="background-color: #2962FF;"></span> Cloud Certifications</div>
+                    <div class="legend-item"><span class="legend-color" style="background-color: #9C27B0;"></span> AI/ML Certifications</div>
+                    <div class="legend-item"><span class="legend-color" style="background-color: #00C853;"></span> Data Engineering</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h2 class="chart-title">Skill Proficiency Matrix</h2>
+                <canvas id="proficiencyChart"></canvas>
+                <div class="chart-legend">
+                    <div class="legend-item"><span class="legend-color" style="background-color: #2962FF;"></span> Foundational</div>
+                    <div class="legend-item"><span class="legend-color" style="background-color: #9C27B0;"></span> Intermediate</div>
+                    <div class="legend-item"><span class="legend-color" style="background-color: #00C853;"></span> Advanced</div>
+                    <div class="legend-item"><span class="legend-color" style="background-color: #FF6D00;"></span> Expert</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h2 class="chart-title">Learning Focus Areas</h2>
+                <canvas id="focusChart"></canvas>
+                <div class="chart-legend">
+                    <div class="legend-item"><span class="legend-color" style="background-color: #2962FF;"></span> Cloud Engineering</div>
+                    <div class="legend-item"><span class="legend-color" style="background-color: #9C27B0;"></span> AI Engineering</div>
+                    <div class="legend-item"><span class="legend-color" style="background-color: #00C853;"></span> Data Platforms</div>
+                    <div class="legend-item"><span class="legend-color" style="background-color: #00B8D4;"></span> Application Development</div>
+                </div>
+            </div>
+        </div>
+
+        <p class="footnote">Dashboard updated July 2025 | Professional development tracking</p>
+    </div>
+
+    <script>
+        // Technology Stack Distribution Chart
+        const techStackCtx = document.getElementById('techStackChart').getContext('2d');
+        const techStackChart = new Chart(techStackCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Cloud Platforms', 'AI & Machine Learning', 'Data Engineering', 'Development', 'Business & Strategy'],
+                datasets: [{
+                    data: [22, 28, 18, 20, 12],
+                    backgroundColor: [
+                        'rgba(41, 98, 255, 0.9)',
+                        'rgba(156, 39, 176, 0.9)',
+                        'rgba(0, 200, 83, 0.9)',
+                        'rgba(0, 184, 212, 0.9)',
+                        'rgba(255, 109, 0, 0.9)'
+                    ],
+                    borderColor: [
+                        'rgba(41, 98, 255, 1)',
+                        'rgba(156, 39, 176, 1)',
+                        'rgba(0, 200, 83, 1)',
+                        'rgba(0, 184, 212, 1)',
+                        'rgba(255, 109, 0, 1)'
+                    ],
+                    borderWidth: 2,
+                    hoverOffset: 20
+                }]
+            },
+            options: {
+                responsive: true,
+                cutout: '60%',
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label;
+                                const value = context.parsed;
+                                const total = context.dataset.data.reduce((acc, data) => acc + data, 0);
+                                const percentage = Math.round((value / total) * 100);
+                                return `${label}: ${value}% of portfolio`;
+                            }
+                        }
+                    }
+                },
+                animation: {
+                    animateScale: true,
+                    animateRotate: true
+                }
+            }
+        });
+
+        // Certification Timeline Chart
+        const timelineCtx = document.getElementById('timelineChart').getContext('2d');
+        const timelineChart = new Chart(timelineCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan 2023', 'Apr 2023', 'Jul 2023', 'Oct 2023', 'Jan 2024', 'Apr 2024', 'Jul 2024', 'Oct 2024', 'Jan 2025', 'Apr 2025', 'Jul 2025'],
+                datasets: [
+                    {
+                        label: 'Cloud Certifications',
+                        data: [2, 3, 5, 6, 8, 10, 12, 14, 16, 18, 22],
+                        borderColor: 'rgba(41, 98, 255, 1)',
+                        backgroundColor: 'rgba(41, 98, 255, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'AI/ML Certifications',
+                        data: [1, 2, 4, 7, 11, 15, 18, 20, 22, 24, 28],
+                        borderColor: 'rgba(156, 39, 176, 1)',
+                        backgroundColor: 'rgba(156, 39, 176, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Data Engineering',
+                        data: [0, 1, 3, 5, 8, 10, 12, 14, 15, 16, 18],
+                        borderColor: 'rgba(0, 200, 83, 1)',
+                        backgroundColor: 'rgba(0, 200, 83, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Cumulative Certifications'
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'nearest'
+                }
+            }
+        });
+
+        // Skill Proficiency Matrix
+        const proficiencyCtx = document.getElementById('proficiencyChart').getContext('2d');
+        const proficiencyChart = new Chart(proficiencyCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Cloud Architecture', 'AI Engineering', 'Data Pipelines', 'ML Operations', 'Data Visualization', 'System Design'],
+                datasets: [
+                    {
+                        label: 'Current Proficiency',
+                        data: [85, 80, 75, 70, 85, 80],
+                        backgroundColor: 'rgba(41, 98, 255, 0.2)',
+                        borderColor: 'rgba(41, 98, 255, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(41, 98, 255, 1)'
+                    },
+                    {
+                        label: 'Industry Benchmark',
+                        data: [75, 70, 65, 60, 70, 75],
+                        backgroundColor: 'rgba(156, 39, 176, 0.2)',
+                        borderColor: 'rgba(156, 39, 176, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(156, 39, 176, 1)'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    r: {
+                        angleLines: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        pointLabels: {
+                            color: 'rgba(255, 255, 255, 0.8)',
+                            font: {
+                                size: 12
+                            }
+                        },
+                        min: 0,
+                        max: 100,
+                        ticks: {
+                            backdropColor: 'transparent',
+                            color: 'rgba(255, 255, 255, 0.6)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Learning Focus Areas
+        const focusCtx = document.getElementById('focusChart').getContext('2d');
+        const focusChart = new Chart(focusCtx, {
+            type: 'bar',
+            data: {
+                labels: ['AWS Data Engineering', 'Agentic AI Systems', 'Cloud AI Services', 'MLOps & Pipeline', 'Data Analytics', 'Generative AI'],
+                datasets: [{
+                    label: 'Learning Intensity',
+                    data: [95, 90, 85, 80, 75, 90],
+                    backgroundColor: [
+                        'rgba(41, 98, 255, 0.8)',
+                        'rgba(156, 39, 176, 0.8)',
+                        'rgba(0, 200, 83, 0.8)',
+                        'rgba(0, 184, 212, 0.8)',
+                        'rgba(255, 109, 0, 0.8)',
+                        'rgba(156, 39, 176, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(41, 98, 255, 1)',
+                        'rgba(156, 39, 176, 1)',
+                        'rgba(0, 200, 83, 1)',
+                        'rgba(0, 184, 212, 1)',
+                        'rgba(255, 109, 0, 1)',
+                        'rgba(156, 39, 176, 1)'
+                    ],
+                    borderWidth: 1,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    },
+                    y: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `Focus intensity: ${context.parsed.x}%`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Add resize event listener to maintain responsiveness
+        window.addEventListener('resize', function() {
+            techStackChart.resize();
+            timelineChart.resize();
+            proficiencyChart.resize();
+            focusChart.resize();
+        });
+    </script>
+</body>
+</html>

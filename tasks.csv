@@ -1,0 +1,21 @@
+ID,Area / Module,Task Summary,Key Deliverables,Dependencies / Notes
+1,Customer Interface,Add “subject” dropdown in Contact Business,Frontend dropdown + backend validation + DB migration,None
+2,Customer Interface,Replace favorite removal alert with toast + fallback; hide Search button when no favorites,Toast UI + undo logic; conditional hide Search,UI library / device detection
+3,Customer Interface,Share via SMS: modal, API + rate-limit,Share modal + API endpoint + rate limiter + SMS gateway integration,SMS gateway; `share_logs` table
+4,Database / Infra,Configure FDW for USSD DB access,Server/user mappings + foreign tables,Network access / credentials
+5,Database,Add `business_hours` & `province` to `directory_business_details`,Migration + model updates + UI fields,Schema update before UI use
+6,Database,Normalize `pincrypt` table + convert `created_at` to DATE,Migration + model updates,Downstream code adaptations
+7,Cross-layer,Propagate changes through models, services, controllers, UI,Updated code + tests,Depends on DB tasks 4,5,6
+8,Authentication UI,Use toast instead of alert for “PIN reset” + fallback,Toast UI + fallback banner/modal,UI library support
+9,Authentication UI,Change “business not found” message to include *679# onboarding redirect,Updated error message + UI display,Login logic path
+10,Business Owner UI,Change “Home” link to point to search page,Route change + nav update,Routing config
+11A,Reviews,Show only moderated (approved) reviews,Filter logic + `approved` flag,Schema change
+11B,Reviews,Reject flow: send SMS to reviewer with reason,SMS integration + logging,SMS gateway; MSISDN storage
+11C,Reviews,Accept flow: show owner comment under review,UI update + store `owner_comment`,Schema + backend support
+12,Business / Admin,Daily “Featured Business” selection per category,Scheduler + business logic + flag update,Review data availability
+13,Business Owner UI,Edit business — UI changes + validations,Header/button text changes + dropdown + field validations,Category API + validation logic
+14,Business Owner / Inquiries,Owner reply to inquiries via SMS,UI reply form + endpoint + SMS + persistence,SMS gateway; inquiry schema
+15,Cross-cutting,Logging, audit trails, monitoring,Logging hooks in key flows + error reporting,All flows in app
+16,Testing,Unit/integration/e2e tests for all new flows,Test suites + coverage,Depends on all new features
+17,Documentation / Migration Plan,API docs + migration scripts & rollback plan,Swagger updates + migration files,Based on all schema & API changes
+18,Accessibility / i18n,Ensure UI toasts, modals, forms are accessible & translatable,ARIA attributes + string files,After UI changes
