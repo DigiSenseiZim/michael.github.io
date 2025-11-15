@@ -211,6 +211,12 @@
             z-index: 10;
             backdrop-filter: blur(5px);
         }
+
+        @media (max-width: 768px) {
+            .tooltip {
+                display: none !important;
+            }
+        }
         
         .tooltip h3 {
             margin: 0 0 8px 0;
@@ -2690,6 +2696,73 @@ transform: none !important;
         0px -1px 0px rgba(0, 0, 0, 0.3),
         1px 0px 0px rgba(255, 255, 255, 0.3),
         -1px 0px 0px rgba(0, 0, 0, 0.4);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 1rem;
+                line-height: 1.6;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+                line-height: 1.25;
+            }
+
+            h2 {
+                font-size: 1.65rem;
+                line-height: 1.3;
+            }
+
+            h3 {
+                font-size: 1.3rem;
+            }
+
+            p,
+            li,
+            .description,
+            .panel-title,
+            .stat-label {
+                font-size: 1rem;
+                line-height: 1.5;
+            }
+
+            .stats-container,
+            .project-grid,
+            .chart-grid,
+            .dashboard-content,
+            .skills-grid,
+            .experience-grid,
+            .portfolio-grid,
+            .panel-grid,
+            .highlight-grid,
+            .gantt-header,
+            .gantt-row {
+                grid-template-columns: 1fr !important;
+            }
+
+            .gantt-bars,
+            .gantt-timeline {
+                grid-template-columns: 1fr;
+            }
+
+            .lead-snapshot,
+            .split-layout,
+            .dual-grid,
+            .content-row,
+            .comparison-panels,
+            .section-flex,
+            .project-showcase {
+                flex-direction: column;
+                gap: 1.25rem;
+            }
+
+            .glass-panel,
+            section,
+            .project-card,
+            .stat-card {
+                width: 100%;
             }
         }
     </style>
@@ -6014,6 +6087,7 @@ new Chart(ctxHiring, {
 
             const tooltip = d3.select(".tooltip");
             const backButton = d3.select(".back-button");
+            const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
             const g = svg.append("g")
                 .attr("transform", `translate(${width / 2}, ${height / 2})`);
@@ -6327,6 +6401,7 @@ new Chart(ctxHiring, {
 
             nodeGroups
                 .on("mouseover", function (event, d) {
+                    if (isMobile) return;
                     const connectedNodes = new Set();
                     const connectedLinks = [];
 
@@ -6385,6 +6460,7 @@ new Chart(ctxHiring, {
                     }
                 })
                 .on("mouseout", function (event, d) {
+                    if (isMobile) return;
                     nodeGroups
                         .style("opacity", 1)
                         .transition()
