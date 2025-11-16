@@ -6,7 +6,7 @@
     <meta name="HandheldFriendly" content="true">
     <meta name="MobileOptimized" content="width">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Michael Mukwekezeke | Software Developer & Architect</title>
+    <title>Michael N. Mukwekezeke | Software Developer & Architect</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/ScrollTrigger.min.js"></script>
@@ -177,6 +177,12 @@
 });
     </script>
     <style>
+        @font-face {
+            font-family: 'CaeliaDemoRegular';
+            src: url('assets/fonts/CaeliaDemoRegular-vnXz7.otf') format('opentype');
+            font-display: swap;
+        }
+        
         :root {
             --primary-color: #00ffff;
             --secondary-color: #ff00ff;
@@ -185,10 +191,10 @@
             --text-color: #ffffff;
             --node-glow: 0 0 15px var(--primary-color);
             --orbit-glow: 0 0 8px rgba(0, 255, 255, 0.5);
-            --font-body: 'Cherry Cream Soda', 'Space Grotesk', cursive;
-            --font-display: 'Cherry Cream Soda', 'Orbitron', 'Space Grotesk', sans-serif;
-            --font-accent: 'Cherry Cream Soda', 'Orbitron', cursive;
-            --font-mono: 'Cherry Cream Soda', 'JetBrains Mono', 'Space Grotesk', monospace;
+            --font-body: 'CaeliaDemoRegular', 'Space Grotesk', cursive;
+            --font-display: 'CaeliaDemoRegular', 'Orbitron', 'Space Grotesk', sans-serif;
+            --font-accent: 'CaeliaDemoRegular', 'Orbitron', cursive;
+            --font-mono: 'CaeliaDemoRegular', 'JetBrains Mono', 'Space Grotesk', monospace;
         }
         
         #skills-orbit {
@@ -313,10 +319,10 @@
             body { 
                 font-size: 0.85rem;
                 line-height: 1.5;
-                font-family: 'Cherry Cream Soda', 'Space Grotesk', cursive !important;
+                font-family: 'CaeliaDemoRegular', 'Space Grotesk', cursive !important;
             }
             h1, h2, h3, h4, h5, h6 {
-                font-family: 'Cherry Cream Soda', 'Orbitron', 'Space Grotesk', sans-serif !important;
+                font-family: 'CaeliaDemoRegular', 'Orbitron', 'Space Grotesk', sans-serif !important;
             }
             h1 { font-size: 2.3rem; line-height: 1.2; }
             h2 { font-size: 1.8rem; line-height: 1.3; }
@@ -325,7 +331,7 @@
             .project-title { 
                 font-size: 1.25rem; 
                 line-height: 1.4;
-                font-family: 'Cherry Cream Soda', 'Orbitron', 'Space Grotesk', sans-serif !important;
+                font-family: 'CaeliaDemoRegular', 'Orbitron', 'Space Grotesk', sans-serif !important;
             }
             p,
             li,
@@ -340,7 +346,7 @@
             .stat-label {
                 font-size: 0.85rem;
                 line-height: 1.55;
-                font-family: 'Cherry Cream Soda', 'Space Grotesk', cursive !important;
+                font-family: 'CaeliaDemoRegular', 'Space Grotesk', cursive !important;
             }
             .project-grid {
                 grid-template-columns: 1fr;
@@ -358,10 +364,10 @@
             body {
                 font-size: 0.8rem;
                 line-height: 1.5;
-                font-family: 'Cherry Cream Soda', 'Space Grotesk', cursive !important;
+                font-family: 'CaeliaDemoRegular', 'Space Grotesk', cursive !important;
             }
             h1, h2, h3, h4, h5, h6 {
-                font-family: 'Cherry Cream Soda', 'Orbitron', 'Space Grotesk', sans-serif !important;
+                font-family: 'CaeliaDemoRegular', 'Orbitron', 'Space Grotesk', sans-serif !important;
             }
             h1 { 
                 font-size: 2rem; 
@@ -379,7 +385,7 @@
             .project-title {
                 font-size: 1.15rem;
                 line-height: 1.4;
-                font-family: 'Cherry Cream Soda', 'Orbitron', 'Space Grotesk', sans-serif !important;
+                font-family: 'CaeliaDemoRegular', 'Orbitron', 'Space Grotesk', sans-serif !important;
             }
             p,
             li,
@@ -391,7 +397,7 @@
             .stat-label {
                 font-size: 0.8rem;
                 line-height: 1.55;
-                font-family: 'Cherry Cream Soda', 'Space Grotesk', cursive !important;
+                font-family: 'CaeliaDemoRegular', 'Space Grotesk', cursive !important;
             }
         }
         
@@ -481,7 +487,7 @@
     min-width: 100vw;
     background: var(--background);
     color: var(--text-primary);
-    font-family: 'Cherry Cream Soda', 'Space Grotesk', cursive;
+    font-family: 'CaeliaDemoRegular', 'Space Grotesk', cursive;
     line-height: 1.6;
     transition: var(--transition);
     padding: 0;
@@ -588,6 +594,10 @@ transform: none !important;
             margin: 0;
             text-shadow: var(--text-shadow-complete);
             line-height: 1.1;
+        }
+
+        .name-cherry-cream-soda {
+            font-family: 'Cherry Cream Soda', 'Space Grotesk', cursive !important;
         }
 
         /* Ensure dark, high-contrast text on translucent cards/sections before Innovative Solutions section */
@@ -2784,7 +2794,7 @@ transform: none !important;
             body {
                 font-size: 0.875rem;
                 line-height: 1.6;
-                font-family: 'Cherry Cream Soda', 'Space Grotesk', cursive !important;
+                font-family: 'CaeliaDemoRegular', 'Space Grotesk', cursive !important;
             }
 
             h1,
@@ -2793,7 +2803,7 @@ transform: none !important;
             h4,
             h5,
             h6 {
-                font-family: 'Cherry Cream Soda', 'Orbitron', 'Space Grotesk', sans-serif !important;
+                font-family: 'CaeliaDemoRegular', 'Orbitron', 'Space Grotesk', sans-serif !important;
             }
 
             h1 {
@@ -2817,7 +2827,7 @@ transform: none !important;
             .heading-2025 {
                 font-size: 1.35rem;
                 line-height: 1.4;
-                font-family: 'Cherry Cream Soda', 'Orbitron', 'Space Grotesk', sans-serif !important;
+                font-family: 'CaeliaDemoRegular', 'Orbitron', 'Space Grotesk', sans-serif !important;
             }
 
             p,
@@ -2830,7 +2840,7 @@ transform: none !important;
             .stat-label {
                 font-size: 0.875rem;
                 line-height: 1.55;
-                font-family: 'Cherry Cream Soda', 'Space Grotesk', cursive !important;
+                font-family: 'CaeliaDemoRegular', 'Space Grotesk', cursive !important;
             }
 
             .project-grid {
@@ -2852,7 +2862,8 @@ transform: none !important;
             .panel-grid,
             .highlight-grid,
             .gantt-header,
-            .gantt-row {
+            .gantt-row,
+            .achievements-grid {
                 grid-template-columns: 1fr !important;
             }
 
@@ -2867,9 +2878,14 @@ transform: none !important;
             .content-row,
             .comparison-panels,
             .section-flex,
-            .project-showcase {
+            .project-showcase,
+            .achievements-charts {
                 flex-direction: column;
                 gap: 1.25rem;
+            }
+
+            .achievements-visuals {
+                width: 100%;
             }
 
             .glass-panel,
@@ -3266,7 +3282,7 @@ transform: none !important;
         <div class="container etch">
         <header>
             <div class="header-top">
-                <h1 class="glitch-text" data-text="Michael Ngonidzashe Mukwekezeke">Michael Ngonidzashe Mukwekezeke</h1>
+                <h1 class="glitch-text name-cherry-cream-soda" data-text="Michael N. Mukwekezeke">Michael N. Mukwekezeke</h1>
                 <div class="search-box">
                     <i class="fas fa-search"></i>
                     <input class="search-box-inner" type="text" placeholder="Search projects..." id="searchInput">
@@ -3760,21 +3776,9 @@ transform: none !important;
     <h4 style="text-align:center; margin-bottom:10px;"><i class="fab fa-linkedin"></i> LinkedIn Learning Hours</h4>
     <canvas id="linkedinChart" style="max-height:260px;"></canvas>
   </div>
-</div>
-    <!-- Value Proposition with Industry Chart -->
-    <h3><i class="fas fa-chart-line"></i> Industry Value Proposition</h3>
-    <p>
-      Current industry trends demonstrate the increasing importance of <strong>practical skills and experience</strong> in technology roles:
-    </p>
-    <canvas id="hiringTrendsChart" style="max-height: 280px;"></canvas>
+    </div>
 
-    <p>
-      - <em>Future of Jobs Report 2025:</em> Skills and experience increasingly valued over traditional degrees in technology roles.<br>
-      - <em>Industry Research 2025:</em> AI and cloud-skilled professionals command premium compensation and flexible work arrangements.<br>
-      - <em>Global Hiring Trends:</em> 86% of technology managers prioritize skills-based hiring to address talent gaps.<br>
-    </p>
-
-    <!-- Oracle Cert -->
+    <!-- Cloud & AI Certifications -->
     <h3><i class="fas fa-database"></i> Cloud & AI Certifications</h3>
     <p>
       I hold the <strong>Oracle Cloud Infrastructure (OCI) Certification in Generative AI</strong>, demonstrating expertise in cutting-edge AI technologies and cloud infrastructure management.
@@ -3820,6 +3824,19 @@ transform: none !important;
         <p style="margin:0;font-size:0.92rem;">Status: <strong>Certified</strong></p>
       </article>
     </div>
+
+    <!-- Value Proposition with Industry Chart -->
+    <h3><i class="fas fa-chart-line"></i> Industry Value Proposition</h3>
+    <p>
+      Current industry trends demonstrate the increasing importance of <strong>practical skills and experience</strong> in technology roles:
+    </p>
+    <canvas id="hiringTrendsChart" style="max-height: 280px;"></canvas>
+
+    <p>
+      - <em>Future of Jobs Report 2025:</em> Skills and experience increasingly valued over traditional degrees in technology roles.<br>
+      - <em>Industry Research 2025:</em> AI and cloud-skilled professionals command premium compensation and flexible work arrangements.<br>
+      - <em>Global Hiring Trends:</em> 86% of technology managers prioritize skills-based hiring to address talent gaps.<br>
+    </p>
   </div>
 </div>
                 
@@ -3863,7 +3880,7 @@ transform: none !important;
     </div>
 
     <!-- Narrative + diagrams -->
-    <div style="display:grid;grid-template-columns:1fr 420px;gap:16px;align-items:start;">
+    <div class="achievements-grid" style="display:grid;grid-template-columns:1fr 420px;gap:16px;align-items:start;">
       <!-- Left: evidence bullets + ask -->
       <div>
         <h3 style="margin:6px 0 8px 0;font-size:1rem"><i class="fas fa-briefcase"></i> Key Achievements & Impact</h3>
@@ -3878,8 +3895,8 @@ transform: none !important;
       </div>
 
       <!-- Right: compact visuals (explicit heights ensure render) -->
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <div style="display:flex;gap:10px;align-items:stretch;">
+      <div class="achievements-visuals" style="display:flex;flex-direction:column;gap:10px;">
+        <div class="achievements-charts" style="display:flex;gap:10px;align-items:stretch;">
           <div style="flex:1;min-width:180px;">
             <div style="text-align:center;font-size:0.9rem;color:var(--text-secondary);margin-bottom:6px">Udemy (Courses)</div>
             <div class="chart-wrap" style="height:180px;">
