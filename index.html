@@ -857,31 +857,33 @@ transform: none !important;
         -1px 0px 0px rgba(0, 0, 0, 0.4);
         }
     
-        /* Beautiful bold blue icons with etched effect */
+        /* Beautiful striking regal blue icons with etched effect */
         i[class*="fa-"],
         .fas,
         .far,
         .fab,
         .fal {
-            color: #0077ff !important;
+            color: #0040ff !important;
             text-shadow: 
-                0px 1px 0px rgba(255, 255, 255, 0.5),
-                0px -1px 2px rgba(0, 0, 0, 0.6),
-                1px 0px 0px rgba(255, 255, 255, 0.4),
-                -1px 0px 0px rgba(0, 0, 0, 0.5),
-                0 0 8px rgba(0, 119, 255, 0.4);
+                0px 1px 0px rgba(255, 255, 255, 0.6),
+                0px -1px 3px rgba(0, 0, 0, 0.8),
+                1px 0px 0px rgba(255, 255, 255, 0.5),
+                -1px 0px 0px rgba(0, 0, 0, 0.6),
+                0 0 12px rgba(0, 64, 255, 0.6),
+                0 0 20px rgba(0, 64, 255, 0.3);
             font-weight: 900;
         }
 
         .panel-title i {
-            color: #0077ff !important;
+            color: #0040ff !important;
             font-size: 1.2rem;
             text-shadow: 
-                0px 1px 0px rgba(255, 255, 255, 0.5),
-                0px -1px 2px rgba(0, 0, 0, 0.6),
-                1px 0px 0px rgba(255, 255, 255, 0.4),
-                -1px 0px 0px rgba(0, 0, 0, 0.5),
-                0 0 8px rgba(0, 119, 255, 0.4);
+                0px 1px 0px rgba(255, 255, 255, 0.6),
+                0px -1px 3px rgba(0, 0, 0, 0.8),
+                1px 0px 0px rgba(255, 255, 255, 0.5),
+                -1px 0px 0px rgba(0, 0, 0, 0.6),
+                0 0 12px rgba(0, 64, 255, 0.6),
+                0 0 20px rgba(0, 64, 255, 0.3);
             font-weight: 900;
         }
     
@@ -2910,6 +2912,30 @@ transform: none !important;
             section,
             .stat-card {
                 width: 100%;
+            }
+
+            /* Skills Overview iframe responsive fix */
+            .skills-matrix-embed {
+                padding-top: 80% !important;
+                min-height: 700px !important;
+                overflow: visible !important;
+            }
+
+            .skills-matrix-embed iframe {
+                min-height: 700px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            /* Skills Overview iframe mobile fix */
+            .skills-matrix-embed {
+                padding-top: 100% !important;
+                min-height: 800px !important;
+                overflow: visible !important;
+            }
+
+            .skills-matrix-embed iframe {
+                min-height: 800px !important;
             }
         }
     </style>
@@ -6682,13 +6708,13 @@ new Chart(ctxHiring, {
             <i class="fas fa-chart-line"></i>
             <span>Skills Overview</span>
         </div>
-        <div class="skills-matrix-embed" style="position: relative; padding-top: 56.25%; border-radius: var(--panel-radius, 18px); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05); background: transparent;">
+        <div class="skills-matrix-embed" style="position: relative; padding-top: 56.25%; border-radius: var(--panel-radius, 18px); overflow: visible; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05); background: transparent; min-height: 600px;">
             <iframe src="tref_refactored.html"
                     title="Skills Overview"
                     loading="lazy"
                     allowfullscreen
                     allowtransparency="true"
-                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; background: transparent !important;"></iframe>
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; background: transparent !important; min-height: 600px;"></iframe>
         </div>
     </section>
 </body>
