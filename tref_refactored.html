@@ -118,62 +118,6 @@
       opacity: 1;
     }
 
-    .mobile-modal {
-      position: fixed;
-      left: 50%;
-      bottom: 16px;
-      transform: translate3d(-50%, 120%, 0);
-      width: min(92vw, 320px);
-      background: rgba(8, 15, 28, 0.92);
-      border: 1px solid rgba(110, 207, 246, 0.35);
-      border-radius: 14px;
-      box-shadow: 0 14px 30px rgba(8, 15, 28, 0.6);
-      padding: 14px 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      opacity: 0;
-      pointer-events: none;
-      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
-      z-index: 1500;
-      backdrop-filter: blur(12px);
-    }
-    .mobile-modal.visible {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translate3d(-50%, 0, 0);
-    }
-    .mobile-modal-category {
-      font-family: 'NebulaxAlt', 'Cybera', sans-serif;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      opacity: 0.7;
-    }
-    .mobile-modal-title {
-      font-family: 'VeniteStraight', sans-serif;
-      font-size: 1rem;
-      line-height: 1.36;
-    }
-    .mobile-modal-close {
-      align-self: flex-end;
-      background: transparent;
-      border: none;
-      color: rgba(255, 255, 255, 0.65);
-      font-size: 0.8rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 6px 0;
-      cursor: pointer;
-    }
-    .mobile-modal-close:active {
-      color: rgba(255, 255, 255, 0.95);
-    }
-    @media (pointer: fine) and (min-width: 769px) {
-      .mobile-modal {
-        display: none;
-      }
-    }
 
     .hidden {
       display: none !important;
@@ -553,11 +497,6 @@
     </div>
   </div>
   <div id="tooltip"></div>
-  <div id="mobile-modal" class="mobile-modal" aria-hidden="true">
-    <div class="mobile-modal-category" id="mobile-modal-category"></div>
-    <div class="mobile-modal-title" id="mobile-modal-title"></div>
-    <button id="mobile-modal-close" class="mobile-modal-close" type="button">Dismiss</button>
-  </div>
   <div id="experienceSelector" class="experience-selector" aria-live="polite">
     <div class="experience-selector__panel">
       <h2>Choose Your View</h2>
@@ -935,8 +874,6 @@
 
     const HOVER_HOLD_DURATION = 3000;
     const HOVER_TOOLTIP_OFFSET = 18;
-    const MOBILE_MODAL_INTERVAL = 6000;
-    const MOBILE_MODAL_VISIBLE_DURATION = 5000;
     let tooltipHideTimeout = null;
     let hoveredSystemGroup = null;
 
@@ -1364,10 +1301,6 @@
     raycaster.params.Line.threshold = 0.2;
     const mouse = new THREE.Vector2();
     const tooltip = document.getElementById('tooltip');
-    const mobileModal = document.getElementById('mobile-modal');
-    const mobileModalCategory = document.getElementById('mobile-modal-category');
-    const mobileModalTitle = document.getElementById('mobile-modal-title');
-    const mobileModalClose = document.getElementById('mobile-modal-close');
 
     // Mapping for planet models by club
     const clubPlanetModels = {
@@ -1391,9 +1324,6 @@
     const coarsePointerQuery = window.matchMedia('(pointer: coarse)');
     const narrowScreenQuery = window.matchMedia('(max-width: 768px)');
     let mobileCoursePool = [];
-    let mobileModalIntervalHandle = null;
-    let mobileModalHideHandle = null;
-    let mobileModalInitialDisplayDone = false;
 
     const SIMULATED_HOVER_VISIBLE_DURATION = 7000;
     const SIMULATED_HOVER_INTERVAL = 2000;
@@ -1434,16 +1364,6 @@
     };
     mobileCoursePool = buildMobileCoursePool();
 
-    const hideMobileModal = () => {
-      if (!mobileModal) return;
-      if (mobileModalHideHandle) {
-        clearTimeout(mobileModalHideHandle);
-        mobileModalHideHandle = null;
-      }
-      mobileModal.classList.remove('visible');
-      mobileModal.setAttribute('aria-hidden', 'true');
-    };
-
     const hideSimulatedHover = () => {
       if (simulatedHoverHideHandle) {
         clearTimeout(simulatedHoverHideHandle);
@@ -1454,52 +1374,6 @@
         tooltip.style.transform = 'translate3d(-9999px, -9999px, 0)';
       }
       simulatedHoverActive = false;
-    };
-
-    const shouldDisplayMobileModal = () =>
-      experienceMode === 'galaxy' &&
-      (coarsePointerQuery.matches || narrowScreenQuery.matches) &&
-      !document.hidden;
-
-    const showRandomMobileModal = () => {
-      if (experienceMode !== 'galaxy' || !mobileModal || !mobileCoursePool.length) return;
-      const randomIndex = Math.floor(Math.random() * mobileCoursePool.length);
-      const selected = mobileCoursePool[randomIndex];
-      if (mobileModalCategory) {
-        mobileModalCategory.textContent = selected.category;
-        mobileModalCategory.style.color = selected.color;
-      }
-      if (mobileModalTitle) {
-        mobileModalTitle.textContent = selected.title;
-      }
-      mobileModal.style.borderColor = selected.color;
-      mobileModal.classList.add('visible');
-      mobileModal.setAttribute('aria-hidden', 'false');
-      mobileModalInitialDisplayDone = true;
-      if (mobileModalHideHandle) clearTimeout(mobileModalHideHandle);
-      mobileModalHideHandle = setTimeout(() => hideMobileModal(), MOBILE_MODAL_VISIBLE_DURATION);
-    };
-
-    const maybeShowInitialMobileModal = () => {
-      if (mobileModalInitialDisplayDone) return;
-      if (!shouldDisplayMobileModal()) return;
-      showRandomMobileModal();
-    };
-
-    const startMobileModalLoop = () => {
-      if (!mobileModal) return;
-      maybeShowInitialMobileModal();
-      if (mobileModalIntervalHandle) return;
-      mobileModalIntervalHandle = setInterval(showRandomMobileModal, MOBILE_MODAL_INTERVAL);
-    };
-
-    const stopMobileModalLoop = () => {
-      if (mobileModalIntervalHandle) {
-        clearInterval(mobileModalIntervalHandle);
-        mobileModalIntervalHandle = null;
-      }
-      mobileModalInitialDisplayDone = false;
-      hideMobileModal();
     };
 
     const showSimulatedHover = () => {
@@ -1529,8 +1403,6 @@
       tooltip.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0)`;
       tooltip.classList.add('visible');
       simulatedHoverActive = true;
-
-      showRandomMobileModal();
 
       simulatedHoverHideHandle = setTimeout(() => {
         hideSimulatedHover();
@@ -1568,27 +1440,6 @@
       }
     };
 
-    const updateMobileModalLoop = () => {
-      if (shouldDisplayMobileModal()) {
-        startMobileModalLoop();
-      } else {
-        stopMobileModalLoop();
-      }
-    };
-
-    if (mobileModalClose) {
-      mobileModalClose.addEventListener('click', () => {
-        hideMobileModal();
-      });
-    }
-    if (mobileModal) {
-      mobileModal.addEventListener('click', event => {
-        if (event.target === mobileModal) {
-          hideMobileModal();
-        }
-      });
-    }
-
     const attachMediaListener = (query, handler) => {
       if (!query) return;
       if (typeof query.addEventListener === 'function') {
@@ -1599,23 +1450,19 @@
     };
     attachMediaListener(coarsePointerQuery, () => {
       if (experienceMode === 'galaxy') {
-        updateMobileModalLoop();
         manageSimulatedHoverLoop();
       }
     });
     attachMediaListener(narrowScreenQuery, () => {
       if (experienceMode === 'galaxy') {
-        updateMobileModalLoop();
         manageSimulatedHoverLoop();
       }
     });
     document.addEventListener('visibilitychange', () => {
       if (experienceMode === 'galaxy') {
-      updateMobileModalLoop();
         manageSimulatedHoverLoop();
       }
     });
-    maybeShowInitialMobileModal();
 
     // Create each star system
     categories.forEach(cat => {
@@ -2084,9 +1931,7 @@
       document.body.classList.remove('marquee-mode');
       const canvas = document.querySelector('canvas');
       if (canvas) canvas.style.display = '';
-    updateMobileModalLoop();
       manageSimulatedHoverLoop();
-      maybeShowInitialMobileModal();
     };
 
     const activateMarqueeExperience = () => {
@@ -2097,10 +1942,8 @@
       marqueeSection?.setAttribute('aria-hidden', 'false');
       document.body.classList.add('marquee-mode');
       overlay?.classList.add('hidden');
-      hideMobileModal();
       hideSimulatedHover();
       stopSimulatedHoverLoop();
-      stopMobileModalLoop();
       const tooltipEl = document.getElementById('tooltip');
       if (tooltipEl) {
         tooltipEl.classList.remove('visible');
