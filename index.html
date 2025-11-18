@@ -390,35 +390,37 @@
                 maskCtx.fillStyle = 'white';
                 maskCtx.fillRect(0, 0, maskCanvas.width, maskCanvas.height);
                 
-                // Calculate burn parameters
-                const burnRadius = Math.max(canvas.width, canvas.height) * burnProgress * 1.3;
+                // Use the irregular burn edge to create realistic mask (not a perfect circle)
                 const centerX = canvas.width * 0.1;
                 const centerY = canvas.height * 0.1;
-                const edgeWidth = Math.max(canvas.width, canvas.height) * 0.08;
+                const maxDist = Math.max(canvas.width, canvas.height) * burnProgress * 1.3;
                 
-                // Create radial gradient for burn hole
-                // This gradient will be used with destination-out to "cut out" the burned area
+                // Draw the burned area using the actual irregular burn edge shape
+                maskCtx.beginPath();
+                maskCtx.moveTo(burnEdge[0].x, burnEdge[0].y);
+                for (let i = 1; i < burnEdge.length; i++) {
+                    maskCtx.lineTo(burnEdge[i].x, burnEdge[i].y);
+                }
+                maskCtx.closePath();
+                
+                // Use destination-out to "cut out" the burned area following the irregular edge
+                maskCtx.globalCompositeOperation = 'destination-out';
+                
+                // Create gradient for smooth charred edge transition
                 const burnGradient = maskCtx.createRadialGradient(
                     centerX, centerY, 0,
-                    centerX, centerY, burnRadius
+                    centerX, centerY, maxDist * 1.15
                 );
                 
-                // Create gradient with high alpha in center (to erase more) and low alpha at edges (smooth transition)
-                const innerRadius = Math.max(0, burnRadius - edgeWidth);
-                const midRadius = Math.max(0, burnRadius - edgeWidth * 0.4);
+                // Smooth fade at edges for realistic charred paper effect
+                burnGradient.addColorStop(0, 'rgba(0, 0, 0, 1)'); // Fully erase center
+                burnGradient.addColorStop(0.8, 'rgba(0, 0, 0, 1)'); // Fully erase burned area
+                burnGradient.addColorStop(0.92, 'rgba(0, 0, 0, 0.7)'); // Charred edge
+                burnGradient.addColorStop(0.97, 'rgba(0, 0, 0, 0.3)'); // Fading edge
+                burnGradient.addColorStop(1, 'rgba(0, 0, 0, 0)'); // No erase outside
                 
-                // High alpha = more erasure (more transparent), low alpha = less erasure (more opaque)
-                burnGradient.addColorStop(0, 'rgba(0, 0, 0, 1)'); // Fully burned center - fully erase (transparent, reveals content)
-                burnGradient.addColorStop(Math.max(0, innerRadius / burnRadius), 'rgba(0, 0, 0, 1)'); // Burned area - fully erase
-                burnGradient.addColorStop(Math.max(0, midRadius / burnRadius), 'rgba(0, 0, 0, 0.7)'); // Charred edge - mostly erase
-                burnGradient.addColorStop(0.95, 'rgba(0, 0, 0, 0.3)'); // Fading edge - partial erase
-                burnGradient.addColorStop(1, 'rgba(0, 0, 0, 0)'); // Unburned area - no erase (stays white/opaque)
-                
-                // Use destination-out to "cut out" the burned area from the white mask
-                // This creates a transparent hole where the burn is, revealing content behind
-                maskCtx.globalCompositeOperation = 'destination-out';
                 maskCtx.fillStyle = burnGradient;
-                maskCtx.fillRect(0, 0, maskCanvas.width, maskCanvas.height);
+                maskCtx.fill();
                 
                 // Reset composite operation for next frame
                 maskCtx.globalCompositeOperation = 'source-over';
