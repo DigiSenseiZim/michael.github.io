@@ -468,7 +468,7 @@
                 // Draw charred edge and decay overlay on fire canvas for realism
                 const charGradient = ctx.createRadialGradient(
                     centerX, centerY, 0,
-                    centerX, centerY, burnRadius
+                    centerX, centerY, maxDist
                 );
                 charGradient.addColorStop(0, 'rgba(30, 20, 10, 0.9)');
                 charGradient.addColorStop(0.5, 'rgba(50, 35, 20, 0.7)');
