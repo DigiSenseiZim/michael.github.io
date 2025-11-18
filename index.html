@@ -302,33 +302,38 @@
                 maskCtx.fillStyle = 'white';
                 maskCtx.fillRect(0, 0, maskCanvas.width, maskCanvas.height);
                 
-                // Draw burned region as black (will be transparent, revealing content behind)
-                // Use radial gradient for smooth burn edge
+                // Calculate burn parameters
                 const burnRadius = Math.max(canvas.width, canvas.height) * burnProgress * 1.3;
                 const centerX = canvas.width * 0.1;
                 const centerY = canvas.height * 0.1;
                 const edgeWidth = Math.max(canvas.width, canvas.height) * 0.08;
                 
+                // Create radial gradient for burn hole
+                // This gradient will be used with destination-out to "cut out" the burned area
                 const burnGradient = maskCtx.createRadialGradient(
                     centerX, centerY, 0,
                     centerX, centerY, burnRadius
                 );
                 
-                // Create charred edge effect with smoother transition
-                // Black = transparent (reveals content), White = opaque (shows papyrus)
+                // Create gradient with high alpha in center (to erase more) and low alpha at edges (smooth transition)
                 const innerRadius = Math.max(0, burnRadius - edgeWidth);
                 const midRadius = Math.max(0, burnRadius - edgeWidth * 0.4);
                 
-                // Create gradient: black (transparent) in center, fading to white (opaque) at edges
-                burnGradient.addColorStop(0, 'rgba(0, 0, 0, 1)'); // Fully burned center - fully transparent (reveals content)
-                burnGradient.addColorStop(Math.max(0, innerRadius / burnRadius), 'rgba(0, 0, 0, 1)'); // Burned area - transparent
-                burnGradient.addColorStop(Math.max(0, midRadius / burnRadius), 'rgba(0, 0, 0, 0.4)'); // Charred edge - semi-transparent
-                burnGradient.addColorStop(0.95, 'rgba(128, 128, 128, 0.8)'); // Fading edge - mostly opaque
-                burnGradient.addColorStop(1, 'rgba(255, 255, 255, 1)'); // Unburned area - fully opaque (white = visible papyrus)
+                // High alpha = more erasure (more transparent), low alpha = less erasure (more opaque)
+                burnGradient.addColorStop(0, 'rgba(0, 0, 0, 1)'); // Fully burned center - fully erase (transparent, reveals content)
+                burnGradient.addColorStop(Math.max(0, innerRadius / burnRadius), 'rgba(0, 0, 0, 1)'); // Burned area - fully erase
+                burnGradient.addColorStop(Math.max(0, midRadius / burnRadius), 'rgba(0, 0, 0, 0.7)'); // Charred edge - mostly erase
+                burnGradient.addColorStop(0.95, 'rgba(0, 0, 0, 0.3)'); // Fading edge - partial erase
+                burnGradient.addColorStop(1, 'rgba(0, 0, 0, 0)'); // Unburned area - no erase (stays white/opaque)
                 
-                // Draw the gradient - black areas will be transparent in mask, revealing content behind
+                // Use destination-out to "cut out" the burned area from the white mask
+                // This creates a transparent hole where the burn is, revealing content behind
+                maskCtx.globalCompositeOperation = 'destination-out';
                 maskCtx.fillStyle = burnGradient;
                 maskCtx.fillRect(0, 0, maskCanvas.width, maskCanvas.height);
+                
+                // Reset composite operation for next frame
+                maskCtx.globalCompositeOperation = 'source-over';
                 
                 // Apply mask to overlay (black areas become transparent, revealing content behind)
                 // In CSS mask: white = visible, black = transparent
