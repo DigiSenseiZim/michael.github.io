@@ -607,6 +607,7 @@ transform: none !important;
         
         .diagram-title:not(:has(h3:contains("Innovative Solutions"))) {
             color: #1b2836;
+            font-family: var(--font-display);
             text-shadow: 
         0px 1px 0px rgba(255, 255, 255, 0.4),
         0px -1px 0px rgba(0, 0, 0, 0.3),
@@ -2263,6 +2264,7 @@ transform: none !important;
         .subtitle {
             font-size: 1.2rem;
             opacity: 0.8;
+            font-family: var(--font-display);
             text-shadow: 
         0px 1px 0px rgba(255, 255, 255, 0.4),
         0px -1px 0px rgba(0, 0, 0, 0.3),
@@ -2401,6 +2403,7 @@ transform: none !important;
             font-weight: 600;
             color: var(--text-primary-dark);
             font-size: 0.9rem;
+            font-family: var(--font-display);
             text-shadow: 
         0px 1px 0px rgba(255, 255, 255, 0.4),
         0px -1px 0px rgba(0, 0, 0, 0.3),
@@ -2424,6 +2427,7 @@ transform: none !important;
             font-size: 0.8rem;
             color: var(--text-secondary-dark);
             font-weight: 500;
+            font-family: var(--font-display);
             padding: 5px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 4px;
@@ -2462,6 +2466,7 @@ transform: none !important;
             font-size: 0.9rem;
             color: var(--text-primary-dark);
             font-weight: 500;
+            font-family: var(--font-display);
             padding: 8px;
             text-shadow: 
         0px 1px 0px rgba(255, 255, 255, 0.4),
@@ -3907,7 +3912,8 @@ transform: none !important;
               color: fg, 
               font: { 
                 size: 14,
-                weight: 'bold'
+                weight: 'bold',
+                family: 'Space Grotesk'
               },
               textShadow: textShadow
             },
@@ -3917,7 +3923,8 @@ transform: none !important;
               color: sub,
               font: { 
                 size: 10,
-                weight: 'bold'
+                weight: 'bold',
+                family: 'Space Grotesk'
               },
               textShadow: textShadow
             }
@@ -3985,14 +3992,14 @@ transform: none !important;
               display: true,
               text: 'Technical Mastery Spectrum',
               color: fg,
-              font: { size: 14, weight: 'bold' },
+              font: { size: 14, weight: 'bold', family: 'Space Grotesk' },
               textShadow: textShadow
             },
             subtitle: {
               display: true,
               text: 'Above 80% in all technical pillars',
               color: sub,
-              font: { size: 10, weight: 'bold' },
+              font: { size: 10, weight: 'bold', family: 'Space Grotesk' },
               textShadow: textShadow
             }
           }
@@ -4019,7 +4026,7 @@ transform: none !important;
           plugins: {
             legend: { display: false },
             tooltip: { callbacks: { label: (ctx)=> `${ctx.label}: ${ctx.raw} hrs` } },
-            title: { display: true, text: 'LinkedIn • 5×', color: sub, font: { size: 12 } }
+            title: { display: true, text: 'LinkedIn • 5×', color: sub, font: { size: 12, family: 'Space Grotesk' } }
           }
         }
       });
@@ -4085,7 +4092,7 @@ transform: none !important;
             y: {
               beginAtZero: false,
               ticks: { color: sub },
-              title: { display: true, text: 'Throughput Index', color: sub }
+              title: { display: true, text: 'Throughput Index', color: sub, font: { family: 'Space Grotesk' } }
             }
           }
         }
@@ -4284,7 +4291,8 @@ transform: none !important;
                     title: {
                         display: true,
                         text: 'Projects by Impact Type',
-                        color: '#f5f9ff'
+                        color: '#f5f9ff',
+                        font: { family: 'Space Grotesk' }
                     }
                 }
             }
@@ -5943,7 +5951,7 @@ window.udemyChartInstance = new Chart(ctxUdemy, {
         display: true,
         text: 'Udemy: 2.5× requirement',
         color: '#ccc',
-        font: { weight: '600' }
+        font: { weight: '600', family: 'Space Grotesk' }
       }
     }
   }
@@ -5978,7 +5986,7 @@ window.linkedinChartInstance = new Chart(ctxLinkedIn, {
         display: true,
         text: 'LinkedIn: 5× requirement',
         color: '#ccc',
-        font: { weight: '600' }
+        font: { weight: '600', family: 'Space Grotesk' }
       }
     }
   }
