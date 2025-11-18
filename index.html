@@ -33,28 +33,30 @@
         const embers = [];
         const smoke = [];
         let burnProgress = 0;
-        const maxBurnTime = 5000; // 5 seconds for smoother animation
-        let lastFrameTime = Date.now();
+        const maxBurnTime = 4500; // 4.5 seconds for smoother animation
 
-        // Create fire particles
+        // Create fire particles - more realistic flame-like
         class FireParticle {
             constructor(x, y) {
                 this.x = x;
                 this.y = y;
-                this.vx = (Math.random() - 0.5) * 2;
-                this.vy = -Math.random() * 3 - 1;
+                this.vx = (Math.random() - 0.5) * 1.5;
+                this.vy = -Math.random() * 4 - 2;
                 this.life = 1.0;
-                this.decay = Math.random() * 0.02 + 0.01;
-                this.size = Math.random() * 8 + 4;
+                this.decay = Math.random() * 0.015 + 0.008;
+                this.size = Math.random() * 12 + 6;
                 this.color = Math.random();
+                this.turbulence = Math.random() * 0.5;
             }
 
             update() {
+                // Add turbulence for flame-like movement
+                this.vx += (Math.random() - 0.5) * 0.3;
                 this.x += this.vx;
                 this.y += this.vy;
-                this.vy += 0.1; // gravity
+                this.vy += 0.05; // lighter gravity
                 this.life -= this.decay;
-                this.size *= 0.98;
+                this.size *= 0.99; // slower size decay
             }
 
             draw() {
@@ -63,34 +65,53 @@
                 const alpha = this.life;
                 let r, g, b;
                 
-                if (this.color < 0.3) {
+                // More realistic fire colors
+                if (this.color < 0.25) {
                     // White/yellow hot center
                     r = 255;
                     g = 255;
-                    b = 200;
-                } else if (this.color < 0.6) {
+                    b = 180;
+                } else if (this.color < 0.5) {
+                    // Bright orange/yellow
+                    r = 255;
+                    g = 200 + Math.random() * 55;
+                    b = 0;
+                } else if (this.color < 0.75) {
                     // Orange flame
                     r = 255;
-                    g = 140 + Math.random() * 50;
+                    g = 120 + Math.random() * 60;
                     b = 0;
                 } else {
-                    // Red/orange
+                    // Red/orange base
                     r = 255;
-                    g = 69 + Math.random() * 50;
+                    g = 60 + Math.random() * 40;
                     b = 0;
                 }
 
                 ctx.save();
                 ctx.globalAlpha = alpha;
-                ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+                
+                // Draw flame shape (elongated, not circular)
+                const gradient = ctx.createRadialGradient(
+                    this.x, this.y, 0,
+                    this.x, this.y, this.size
+                );
+                gradient.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${alpha})`);
+                gradient.addColorStop(0.5, `rgba(${r}, ${Math.floor(g * 0.8)}, ${b}, ${alpha * 0.8})`);
+                gradient.addColorStop(1, `rgba(${Math.floor(r * 0.6)}, ${Math.floor(g * 0.4)}, 0, 0)`);
+                
+                ctx.fillStyle = gradient;
+                
+                // Draw elongated flame shape
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.ellipse(this.x, this.y, this.size * 0.6, this.size, 0, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // Add glow
-                ctx.shadowBlur = 15;
+                // Add intense glow
+                ctx.shadowBlur = 20;
                 ctx.shadowColor = `rgba(${r}, ${g}, ${b}, ${alpha})`;
                 ctx.fill();
+                
                 ctx.restore();
             }
         }
@@ -204,25 +225,40 @@
             // Generate burn edge
             const burnEdge = generateBurnEdge(burnProgress);
             
-            // Create fire particles along burn edge (smoother, more particles)
+            // Create fire particles along burn edge - more realistic distribution
             if (burnProgress < 0.95) {
-                for (let i = 0; i < burnEdge.length; i++) {
-                    if (Math.random() < 0.4) {
-                        const point = burnEdge[i];
-                        particles.push(new FireParticle(point.x, point.y));
+                const burnRadius = Math.max(canvas.width, canvas.height) * burnProgress * 1.3;
+                const centerX = canvas.width * 0.1;
+                const centerY = canvas.height * 0.1;
+                
+                // Create fire particles in a ring along the burn edge
+                for (let i = 0; i < 20; i++) {
+                    const angle = (i / 20) * Math.PI * 2;
+                    const dist = burnRadius * (0.9 + Math.random() * 0.2);
+                    const x = centerX + Math.cos(angle) * dist;
+                    const y = centerY + Math.sin(angle) * dist;
+                    
+                    if (Math.random() < 0.6) {
+                        particles.push(new FireParticle(x, y));
                     }
                 }
                 
-                // Create embers (more frequent)
-                if (Math.random() < 0.15) {
-                    const point = burnEdge[Math.floor(Math.random() * burnEdge.length)];
-                    embers.push(new Ember(point.x, point.y));
+                // Create embers from burn edge
+                if (Math.random() < 0.2) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const dist = burnRadius * (0.95 + Math.random() * 0.1);
+                    const x = centerX + Math.cos(angle) * dist;
+                    const y = centerY + Math.sin(angle) * dist;
+                    embers.push(new Ember(x, y));
                 }
                 
-                // Create smoke (more frequent)
-                if (Math.random() < 0.2) {
-                    const point = burnEdge[Math.floor(Math.random() * burnEdge.length)];
-                    smoke.push(new SmokeParticle(point.x, point.y));
+                // Create smoke from burn edge
+                if (Math.random() < 0.25) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const dist = burnRadius * (0.9 + Math.random() * 0.15);
+                    const x = centerX + Math.cos(angle) * dist;
+                    const y = centerY + Math.sin(angle) * dist;
+                    smoke.push(new SmokeParticle(x, y));
                 }
             }
             
@@ -265,28 +301,25 @@
                 maskCtx.fillStyle = 'white';
                 maskCtx.fillRect(0, 0, maskCanvas.width, maskCanvas.height);
                 
-                // Draw black (transparent) area for burned region
-                maskCtx.fillStyle = 'black';
-                maskCtx.beginPath();
-                maskCtx.moveTo(burnEdge[0].x, burnEdge[0].y);
-                for (let i = 1; i < burnEdge.length; i++) {
-                    maskCtx.lineTo(burnEdge[i].x, burnEdge[i].y);
-                }
-                maskCtx.closePath();
-                
-                // Add soft edge for charred effect
-                const gradient = maskCtx.createRadialGradient(
+                // Draw burned region as black (will be transparent)
+                // Use radial gradient for smooth burn edge
+                const burnGradient = maskCtx.createRadialGradient(
                     canvas.width * 0.1, canvas.height * 0.1, 0,
                     canvas.width * 0.1, canvas.height * 0.1, 
-                    Math.max(canvas.width, canvas.height) * burnProgress * 1.2
+                    Math.max(canvas.width, canvas.height) * burnProgress * 1.3
                 );
-                gradient.addColorStop(0, 'rgba(0, 0, 0, 1)');
-                gradient.addColorStop(0.85, 'rgba(0, 0, 0, 0.8)');
-                gradient.addColorStop(0.95, 'rgba(0, 0, 0, 0.3)');
-                gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
                 
-                maskCtx.fillStyle = gradient;
-                maskCtx.fill();
+                // Create charred edge effect
+                const edgeWidth = Math.max(canvas.width, canvas.height) * 0.05;
+                const burnRadius = Math.max(canvas.width, canvas.height) * burnProgress * 1.3;
+                
+                burnGradient.addColorStop(0, 'rgba(0, 0, 0, 1)'); // Fully burned center
+                burnGradient.addColorStop(Math.max(0, (burnRadius - edgeWidth) / burnRadius), 'rgba(0, 0, 0, 1)'); // Burned area
+                burnGradient.addColorStop(Math.max(0, (burnRadius - edgeWidth * 0.5) / burnRadius), 'rgba(0, 0, 0, 0.7)'); // Charred edge
+                burnGradient.addColorStop(1, 'rgba(0, 0, 0, 0)'); // Unburned area
+                
+                maskCtx.fillStyle = burnGradient;
+                maskCtx.fillRect(0, 0, maskCanvas.width, maskCanvas.height);
                 
                 // Apply mask to overlay (black areas become transparent)
                 overlay.style.maskImage = `url(${maskCanvas.toDataURL()})`;
@@ -294,20 +327,20 @@
                 overlay.style.maskSize = '100% 100%';
                 overlay.style.webkitMaskSize = '100% 100%';
                 
-                // Add charred edge effect on fire canvas
+                // Draw charred edge overlay on fire canvas for realism
                 const charGradient = ctx.createRadialGradient(
                     canvas.width * 0.1, canvas.height * 0.1, 0,
                     canvas.width * 0.1, canvas.height * 0.1, 
-                    Math.max(canvas.width, canvas.height) * burnProgress * 1.2
+                    Math.max(canvas.width, canvas.height) * burnProgress * 1.3
                 );
-                charGradient.addColorStop(0, 'rgba(20, 20, 20, 0.6)');
-                charGradient.addColorStop(0.7, 'rgba(40, 30, 20, 0.3)');
-                charGradient.addColorStop(0.9, 'rgba(60, 40, 20, 0.1)');
+                charGradient.addColorStop(0, 'rgba(30, 20, 10, 0.8)');
+                charGradient.addColorStop(0.7, 'rgba(50, 35, 20, 0.5)');
+                charGradient.addColorStop(0.9, 'rgba(70, 50, 30, 0.2)');
                 charGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
                 
                 ctx.save();
                 ctx.globalCompositeOperation = 'multiply';
-                ctx.globalAlpha = 0.5;
+                ctx.globalAlpha = 0.6;
                 ctx.fillStyle = charGradient;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 ctx.restore();
@@ -1116,12 +1149,12 @@ transform: none !important;
         -1px 0px 0px rgba(0, 0, 0, 0.4);
         }
 
-        /* All icons - etched glass blue */
+        /* All icons - bold etched glass blue */
         i, .fa, .fas, .fab, .far, .fal, .fad, [class*="fa-"], 
         .icon, svg, .nav-icon i, .panel-title i,
         .project-card i, .stat-card i, .chart-title i {
-            color: var(--primary) !important;
-            filter: drop-shadow(0 0 3px rgba(0, 255, 255, 0.5));
+            color: #00d9ff !important;
+            filter: drop-shadow(0 0 4px rgba(0, 217, 255, 0.8)) drop-shadow(0 0 8px rgba(0, 217, 255, 0.4));
         }
     
         .lead-snapshot {
