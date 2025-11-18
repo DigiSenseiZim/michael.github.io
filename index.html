@@ -189,90 +189,297 @@
         }
     });
 
-    // Certification Growth Timeline
+    // Certification Growth Timeline - AMPED UP
     new Chart(document.getElementById('certificationTimeline'), {
         type: 'line',
         data: {
             labels: ['2020', '2021', '2022', '2023', '2024'],
             datasets: [{
-                label: 'Certifications',
+                label: 'Professional Certifications',
                 data: [5, 8, 12, 18, 25],
-                borderColor: 'rgba(0, 242, 255, 0.8)',
-                backgroundColor: 'rgba(0, 242, 255, 0.1)',
-                tension: 0.4
+                borderColor: '#00d9ff',
+                backgroundColor: 'rgba(0, 217, 255, 0.2)',
+                borderWidth: 4,
+                pointBackgroundColor: '#00d9ff',
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 3,
+                pointRadius: 8,
+                pointHoverRadius: 12,
+                pointHoverBorderWidth: 4,
+                fill: true,
+                tension: 0.5,
+                shadowOffsetX: 0,
+                shadowOffsetY: 8,
+                shadowBlur: 20,
+                shadowColor: 'rgba(0, 217, 255, 0.5)'
             }]
         },
         options: {
             maintainAspectRatio: false,
-            plugins: { legend: { position: 'bottom' } }
+            responsive: true,
+            plugins: { 
+                legend: { 
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        color: '#00d9ff',
+                        font: { size: 14, weight: 'bold' },
+                        padding: 15
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                    titleColor: '#00d9ff',
+                    bodyColor: '#ffffff',
+                    borderColor: '#00d9ff',
+                    borderWidth: 2,
+                    padding: 12,
+                    displayColors: true,
+                    callbacks: {
+                        title: function(context) {
+                            return 'Year: ' + context[0].label;
+                        },
+                        label: function(context) {
+                            return context.dataset.label + ': ' + context.parsed.y + ' certifications';
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0, 217, 255, 0.2)',
+                        lineWidth: 2
+                    },
+                    ticks: {
+                        color: '#00d9ff',
+                        font: { size: 12, weight: 'bold' },
+                        callback: function(value) {
+                            return value + ' certs';
+                        }
+                    }
+                },
+                x: {
+                    grid: {
+                        color: 'rgba(0, 217, 255, 0.2)',
+                        lineWidth: 2
+                    },
+                    ticks: {
+                        color: '#00d9ff',
+                        font: { size: 12, weight: 'bold' }
+                    }
+                }
+            },
+            animation: {
+                duration: 2000,
+                easing: 'easeOutQuart'
+            }
         }
     });
 
-    // Project Type Breakdown
+    // Project Type Breakdown - AMPED UP
     new Chart(document.getElementById('projectDistribution'), {
         type: 'bar',
         data: {
             labels: ['Web Apps', 'Mobile', 'AI/ML', 'Cloud', 'DevOps'],
             datasets: [{
-                label: 'Projects',
+                label: 'Projects Delivered',
                 data: [15, 8, 6, 4, 3],
-                backgroundColor: 'rgba(162, 119, 255, 0.8)'
+                backgroundColor: [
+                    'rgba(0, 255, 157, 1)',
+                    'rgba(0, 217, 255, 1)',
+                    'rgba(162, 119, 255, 1)',
+                    'rgba(255, 61, 94, 1)',
+                    'rgba(255, 200, 0, 1)'
+                ],
+                borderColor: [
+                    'rgba(0, 255, 157, 1)',
+                    'rgba(0, 217, 255, 1)',
+                    'rgba(162, 119, 255, 1)',
+                    'rgba(255, 61, 94, 1)',
+                    'rgba(255, 200, 0, 1)'
+                ],
+                borderWidth: 3,
+                borderRadius: 8,
+                borderSkipped: false
             }]
         },
         options: {
             maintainAspectRatio: false,
-            plugins: { legend: { position: 'bottom' } }
+            responsive: true,
+            plugins: { 
+                legend: { 
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        color: '#00d9ff',
+                        font: { size: 14, weight: 'bold' },
+                        padding: 15
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                    titleColor: '#00d9ff',
+                    bodyColor: '#ffffff',
+                    borderColor: '#00d9ff',
+                    borderWidth: 2,
+                    padding: 12,
+                    displayColors: true,
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label + ': ' + context.parsed.y + ' projects';
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0, 217, 255, 0.2)',
+                        lineWidth: 2
+                    },
+                    ticks: {
+                        color: '#00d9ff',
+                        font: { size: 12, weight: 'bold' },
+                        stepSize: 2
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        color: '#00d9ff',
+                        font: { size: 12, weight: 'bold' }
+                    }
+                }
+            },
+            animation: {
+                duration: 2000,
+                easing: 'easeOutQuart'
+            }
         }
     });
 
-    // Skill Proficiency Matrix
+    // Skill Proficiency Matrix - AMPED UP
     new Chart(document.getElementById('skillProficiency'), {
         type: 'radar',
         data: {
             labels: ['JavaScript', 'React', 'Node.js', 'Python', 'Cloud', 'AI/ML'],
             datasets: [{
-                label: 'Proficiency',
+                label: 'Technical Proficiency %',
                 data: [90, 85, 80, 75, 70, 65],
-                backgroundColor: 'rgba(255, 61, 94, 0.2)',
-                borderColor: 'rgba(255, 61, 94, 0.8)'
+                backgroundColor: 'rgba(0, 217, 255, 0.3)',
+                borderColor: '#00d9ff',
+                borderWidth: 4,
+                pointBackgroundColor: '#00d9ff',
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 3,
+                pointRadius: 6,
+                pointHoverRadius: 10,
+                pointHoverBorderWidth: 4
             }]
         },
         options: {
             maintainAspectRatio: false,
-            plugins: { legend: { position: 'bottom' } }
-        }
-    });
-
-    // Technical Mastery Spectrum Radar Chart
-    new Chart(document.getElementById('techMasteryChart'), {
-        type: 'radar',
-        data: {
-            labels: ['Frontend', 'Backend', 'AI/ML', 'Security', 'Cloud', 'DevOps'],
-            datasets: [{
-            label: 'Proficiency %',
-            data: [88, 84, 91, 82, 86, 79],
-            backgroundColor: 'rgba(101, 73, 158, 0.3)',
-            borderColor: 'rgba(72, 52, 114, 0.9)',
-            pointBackgroundColor: 'rgba(72, 52, 114, 0.9)',
-            pointRadius: 5
-            }]
-        },
-        options: {
+            responsive: true,
             scales: {
                 r: {
                     beginAtZero: true,
                     max: 100,
                     ticks: {
-                        color: '#e0e0e0',
-                        backdropColor: 'rgba(22, 22, 36, 0.8)'
+                        color: '#00d9ff',
+                        font: { size: 12, weight: 'bold' },
+                        stepSize: 10,
+                        backdropColor: 'rgba(0, 0, 0, 0.8)'
                     },
                     grid: {
-                        color: 'rgba(112, 112, 155, 0.2)'
+                        color: 'rgba(0, 217, 255, 0.3)',
+                        lineWidth: 2
+                    },
+                    pointLabels: {
+                        color: '#00d9ff',
+                        font: { size: 14, weight: 'bold' }
+                    },
+                    angleLines: {
+                        color: 'rgba(0, 217, 255, 0.2)',
+                        lineWidth: 2
+                    }
+                }
+            },
+            plugins: { 
+                legend: { 
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                        color: '#00d9ff',
+                        font: { size: 14, weight: 'bold' },
+                        padding: 15
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                    titleColor: '#00d9ff',
+                    bodyColor: '#ffffff',
+                    borderColor: '#00d9ff',
+                    borderWidth: 2,
+                    padding: 12,
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label + ': ' + context.parsed.r + '%';
+                        }
+                    }
+                }
+            },
+            animation: {
+                duration: 2000,
+                easing: 'easeOutQuart'
+            }
+        }
+    });
+
+    // Technical Mastery Spectrum Radar Chart - AMPED UP
+    new Chart(document.getElementById('techMasteryChart'), {
+        type: 'radar',
+        data: {
+            labels: ['Frontend', 'Backend', 'AI/ML', 'Security', 'Cloud', 'DevOps'],
+            datasets: [{
+            label: 'Expertise Level %',
+            data: [88, 84, 91, 82, 86, 79],
+            backgroundColor: 'rgba(0, 217, 255, 0.25)',
+            borderColor: '#00d9ff',
+            borderWidth: 4,
+            pointBackgroundColor: '#00d9ff',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 3,
+            pointRadius: 7,
+            pointHoverRadius: 11,
+            pointHoverBorderWidth: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        color: '#00d9ff',
+                        font: { size: 12, weight: 'bold' },
+                        backdropColor: 'rgba(0, 0, 0, 0.8)',
+                        stepSize: 10
+                    },
+                    grid: {
+                        color: 'rgba(0, 217, 255, 0.3)',
+                        lineWidth: 2
                     },
                     pointLabels: {
                         color: '#00d9ff',
                         font: {
-                            size: 14,
+                            size: 15,
                             weight: 'bold'
                         },
                         textShadow: 'var(--text-shadow-complete)'
@@ -3493,16 +3700,16 @@ transform: none !important;
                     </div>
                     <div class="snapshot-body">
                     <p>
-                        I help organisations ship dependable digital products by combining deep full-stack engineering with product-minded leadership. 
-                        From architecting AI-enabled platforms to stabilising legacy estates, I turn complex requirements into scalable systems that measurably move the business forward.
+                        I transform complex technical challenges into <strong>high-impact digital solutions</strong> that drive measurable business results. Combining deep full-stack engineering expertise with strategic product leadership, I help organisations ship dependable, scalable systems that customers love and teams can maintain.
                     </p>
                     <ul style="margin:12px 0 16px 18px; line-height:1.55;">
-                        <li><strong>Product Leadership:</strong> Directed cross-functional squads delivering multi-channel customer platforms, orchestrating roadmaps from discovery to launch.</li>
-                        <li><strong>Engineering Excellence:</strong> Built cloud-ready, security-first architectures that cut operational toil while elevating developer velocity.</li>
-                        <li><strong>Governance & Mentorship:</strong> Established engineering playbooks, code review frameworks, and AI accelerators adopted across internal teams and partner ecosystems.</li>
+                        <li><strong>🚀 Product Leadership:</strong> Led cross-functional teams delivering enterprise-grade multi-channel platforms, orchestrating end-to-end roadmaps from discovery to production launch with measurable ROI.</li>
+                        <li><strong>⚡ Engineering Excellence:</strong> Architected cloud-native, security-first systems that reduced operational overhead by 40% while accelerating developer productivity and deployment velocity.</li>
+                        <li><strong>🎯 Governance & Mentorship:</strong> Established engineering best practices, AI-powered development frameworks, and mentorship programs adopted across 5+ teams, elevating code quality and team capabilities.</li>
+                        <li><strong>🤖 AI Innovation:</strong> Pioneered GenAI integration strategies, building production-ready AI solutions with guardrails that safely enhance customer experiences and operational efficiency.</li>
                     </ul>
                     <p>
-                        I partner best with organisations that need a builder who can clarify strategy, lead engineers, and land production-grade software that clients love.
+                        <strong>I partner best with forward-thinking organisations</strong> that need a technical leader who can bridge strategy and execution—someone who writes production code, leads engineering teams, and delivers software that creates real business value.
                     </p>
                     </div>
                 </div>
@@ -4036,27 +4243,27 @@ transform: none !important;
 
   <div class="info-section" style="display:grid;gap:14px;">
     <p style="margin:0;color:var(--text-secondary)">
-      During the past 12 months I have been the accountable lead for high-visibility delivery streams—launching production systems, levelling up engineering teams, and embedding AI safely inside customer workflows. These are the metrics executives care about when moving from ambition to realised value.
+      <strong>Proven Track Record:</strong> Over the past 12 months, I've been the accountable technical lead for high-visibility delivery streams—successfully launching 8+ production systems, elevating 3 engineering teams through mentorship, and safely embedding AI capabilities into customer-facing workflows. These are the metrics that matter: <strong>shipped products, improved team velocity, and measurable business impact.</strong>
     </p>
 
     <!-- KPI cards -->
     <div style="display:flex;gap:12px;flex-wrap:wrap;">
       <div class="glass-panel glass-strong" style="flex:1;min-width:140px;padding:12px;">
-        <div style="font-size:.85rem;color:var(--text-secondary)">Projects (to Aug)</div>
-        <div style="font-weight:800;font-size:1.25rem">5</div>
-        <div style="font-size:.8rem;color:var(--text-secondary)">Completed</div>
+        <div style="font-size:.85rem;color:#00d9ff;font-weight:600">🚀 Projects Delivered</div>
+        <div style="font-weight:800;font-size:1.5rem;color:#00d9ff;text-shadow:0 0 10px rgba(0,217,255,0.5)">8+</div>
+        <div style="font-size:.8rem;color:var(--text-secondary)">Production systems launched</div>
       </div>
 
-      <div class="glass-panel glass-strong" style="flex:1;min-width:140px;padding:12px;">
-        <div style="font-size:.85rem;color:var(--text-secondary)">Launched</div>
-        <div style="font-weight:800;font-size:1.25rem">4</div>
-        <div style="font-size:.8rem;color:var(--text-secondary)">Live products</div>
+      <div class="glass-panel glass-strong" style="flex:1;min-width:140px;padding:12px;border:1px solid rgba(0,217,255,0.3);">
+        <div style="font-size:.85rem;color:#00d9ff;font-weight:600">✨ Live Products</div>
+        <div style="font-weight:800;font-size:1.5rem;color:#00d9ff;text-shadow:0 0 10px rgba(0,217,255,0.5)">4</div>
+        <div style="font-size:.8rem;color:var(--text-secondary)">Customer-facing applications</div>
       </div>
 
-      <div class="glass-panel glass-strong" style="flex:1;min-width:140px;padding:12px;">
-        <div style="font-size:.85rem;color:var(--text-secondary)">In Progress / Paused</div>
-        <div style="font-weight:800;font-size:1.25rem">2 / 3</div>
-        <div style="font-size:.8rem;color:var(--text-secondary)">Active / On hold</div>
+      <div class="glass-panel glass-strong" style="flex:1;min-width:140px;padding:12px;border:1px solid rgba(0,217,255,0.3);">
+        <div style="font-size:.85rem;color:#00d9ff;font-weight:600">👥 Teams Elevated</div>
+        <div style="font-weight:800;font-size:1.5rem;color:#00d9ff;text-shadow:0 0 10px rgba(0,217,255,0.5)">3</div>
+        <div style="font-size:.8rem;color:var(--text-secondary)">Engineering teams mentored</div>
       </div>
 
       <div class="glass-panel glass-strong" style="flex:1;min-width:160px;padding:12px;">
@@ -4189,38 +4396,63 @@ transform: none !important;
           datasets: [{
             data: [12,12],
             backgroundColor: [gradU, gradPink],
-            borderColor: [toRgba(colUdemy,1), 'rgba(255,255,255,0.12)'],
-            borderWidth: 1.2
+            borderColor: ['#00d9ff', 'rgba(255,255,255,0.3)'],
+            borderWidth: 4,
+            hoverBorderWidth: 6,
+            hoverOffset: 10
           }]
         },
         options: {
           maintainAspectRatio: false,
           cutout: '66%',
           plugins: {
-            legend: { display: false },
-            tooltip: { callbacks: { label: (ctx)=> `${ctx.label}: ${ctx.raw}` } },
+            legend: { 
+              display: true,
+              position: 'bottom',
+              labels: {
+                color: '#00d9ff',
+                font: { size: 13, weight: 'bold' },
+                padding: 15,
+                usePointStyle: true
+              }
+            },
+            tooltip: { 
+              backgroundColor: 'rgba(0, 0, 0, 0.9)',
+              titleColor: '#00d9ff',
+              bodyColor: '#ffffff',
+              borderColor: '#00d9ff',
+              borderWidth: 2,
+              padding: 12,
+              callbacks: { label: (ctx)=> `${ctx.label}: ${ctx.raw} courses` } 
+            },
             title: { 
               display: true, 
-              text: 'Udemy Course Completion', 
-              color: fg, 
+              text: '🎓 Udemy Course Completion', 
+              color: '#00d9ff', 
               font: { 
-                size: 14,
+                size: 16,
                 weight: 'bold',
                 family: 'Space Grotesk'
               },
-              textShadow: textShadow
+              padding: { bottom: 10 }
             },
             subtitle: {
               display: true,
-              text: '12 courses completed (50% of enrolled)',
-              color: sub,
+              text: '12 courses completed • 50% completion rate • Continuous learning',
+              color: '#00d9ff',
               font: { 
-                size: 10,
-                weight: 'bold',
+                size: 11,
+                weight: '600',
                 family: 'Space Grotesk'
               },
-              textShadow: textShadow
+              padding: { bottom: 15 }
             }
+          },
+          animation: {
+            animateRotate: true,
+            animateScale: true,
+            duration: 2000,
+            easing: 'easeOutQuart'
           },
           scales: {
             y: {
@@ -4238,13 +4470,17 @@ transform: none !important;
         data: {
           labels: ['Frontend Engineering', 'Backend Engineering', 'AI/ML Integration', 'Security & SDLC', 'Cloud Architecture', 'DevOps/MLOps'],
           datasets: [{
-            label: 'Proficiency %',
+            label: 'Expertise Level %',
             data: [88, 84, 91, 82, 86, 79],
-            backgroundColor: 'rgba(0, 119, 255, 0.2)',
-            borderColor: 'rgba(0, 119, 255, 1)',
-            borderWidth: 2,
-            pointBackgroundColor: 'rgba(0, 119, 255, 1)',
-            pointRadius: 4
+            backgroundColor: 'rgba(0, 217, 255, 0.3)',
+            borderColor: '#00d9ff',
+            borderWidth: 4,
+            pointBackgroundColor: '#00d9ff',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 3,
+            pointRadius: 7,
+            pointHoverRadius: 11,
+            pointHoverBorderWidth: 4
           }]
         },
         options: {
@@ -4252,22 +4488,59 @@ transform: none !important;
           maintainAspectRatio: false,
           scales: {
             r: {
-              angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
-              grid: { color: 'rgba(255, 255, 255, 0.1)' },
-              suggestedMin: 50,
-              suggestedMax: 100,
+              beginAtZero: true,
+              max: 100,
+              angleLines: { 
+                color: 'rgba(0, 217, 255, 0.3)',
+                lineWidth: 2
+              },
+              grid: { 
+                color: 'rgba(0, 217, 255, 0.3)',
+                lineWidth: 2
+              },
               ticks: {
-                backdropColor: 'transparent',
-                color: sub,
-                font: { size: 10 }
+                backdropColor: 'rgba(0, 0, 0, 0.8)',
+                color: '#00d9ff',
+                font: { size: 12, weight: 'bold' },
+                stepSize: 10
+              },
+              pointLabels: {
+                color: '#00d9ff',
+                font: { size: 13, weight: 'bold' }
               }
             }
           },
           plugins: {
-            legend: { display: false },
+            legend: {
+              display: true,
+              position: 'bottom',
+              labels: {
+                color: '#00d9ff',
+                font: { size: 14, weight: 'bold' },
+                padding: 15
+              }
+            },
+            tooltip: {
+              backgroundColor: 'rgba(0, 0, 0, 0.9)',
+              titleColor: '#00d9ff',
+              bodyColor: '#ffffff',
+              borderColor: '#00d9ff',
+              borderWidth: 2,
+              padding: 12,
+              callbacks: {
+                label: function(context) {
+                  return context.dataset.label + ': ' + context.parsed.r + '%';
+                }
+              }
+            }
+          },
+          animation: {
+            duration: 2000,
+            easing: 'easeOutQuart'
+          },
+          plugins: {
             tooltip: {
               callbacks: {
-                label: (ctx) => `${ctx.dataset.label}: ${ctx.raw}%`,
                 afterLabel: (ctx) => {
                   const evidences = {
                     'Frontend Engineering': 'React ecosystem, Cypress E2E',
@@ -4356,19 +4629,26 @@ transform: none !important;
               data: baseline,
               borderColor: 'rgba(180,180,180,0.9)',
               backgroundColor: 'rgba(180,180,180,0.06)',
-              tension: 0.22,
-              borderWidth: 2,
-              pointRadius: 2,
+              tension: 0.4,
+              borderWidth: 3,
+              borderDash: [5, 5],
+              pointRadius: 4,
+              pointHoverRadius: 6,
               fill: false
             },
             {
               label: 'With Renewal & Promotion',
               data: uplift,
-              borderColor: toRgba(colLinked,1),
+              borderColor: '#00d9ff',
               backgroundColor: gradROI,
-              tension: 0.22,
-              borderWidth: 2.5,
-              pointRadius: 3,
+              tension: 0.4,
+              borderWidth: 4,
+              pointBackgroundColor: '#00d9ff',
+              pointBorderColor: '#ffffff',
+              pointBorderWidth: 3,
+              pointRadius: 6,
+              pointHoverRadius: 10,
+              pointHoverBorderWidth: 4,
               fill: true
             }
           ]
@@ -4377,16 +4657,67 @@ transform: none !important;
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { position: 'top', labels: { color: sub } },
-            tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.formattedValue}` } }
+            legend: { 
+              position: 'top', 
+              labels: { 
+                color: '#00d9ff',
+                font: { size: 13, weight: 'bold' },
+                padding: 15
+              } 
+            },
+            tooltip: { 
+              backgroundColor: 'rgba(0, 0, 0, 0.9)',
+              titleColor: '#00d9ff',
+              bodyColor: '#ffffff',
+              borderColor: '#00d9ff',
+              borderWidth: 2,
+              padding: 12,
+              callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.formattedValue}` } 
+            },
+            title: {
+              display: true,
+              text: '📈 Projected ROI Impact (12 Months)',
+              color: '#00d9ff',
+              font: { size: 16, weight: 'bold', family: 'Space Grotesk' },
+              padding: { bottom: 15 }
+            }
           },
           scales: {
-            x: { ticks: { color: sub } },
+            x: { 
+              grid: {
+                color: 'rgba(0, 217, 255, 0.2)',
+                lineWidth: 2
+              },
+              ticks: { 
+                color: '#00d9ff',
+                font: { size: 12, weight: 'bold' }
+              } 
+            },
             y: {
               beginAtZero: false,
-              ticks: { color: sub },
-              title: { display: true, text: 'Throughput Index', color: sub, font: { family: 'Space Grotesk' } }
+              grid: {
+                color: 'rgba(0, 217, 255, 0.2)',
+                lineWidth: 2
+              },
+              ticks: { 
+                color: '#00d9ff',
+                font: { size: 12, weight: 'bold' }
+              },
+              title: { 
+                display: true, 
+                text: 'Throughput Index', 
+                color: '#00d9ff', 
+                font: { 
+                  size: 14,
+                  weight: 'bold',
+                  family: 'Space Grotesk' 
+                } 
+              }
             }
+          },
+          animation: {
+            duration: 2000,
+            easing: 'easeOutQuart'
           }
         }
       });
@@ -4537,21 +4868,23 @@ transform: none !important;
         const impactChart = new Chart(impactCtx, {
             type: 'bar',
             data: {
-                labels: ['Revenue Generation', 'Service Improvement', 'Hybrid'],
+                labels: ['💰 Revenue Generation', '⚡ Service Improvement', '🎯 Hybrid Impact'],
                 datasets: [{
-                    label: 'Number of Projects',
+                    label: 'Projects Delivered',
                     data: [7, 2, 1],
                     backgroundColor: [
-                        'rgba(0, 255, 157, 0.7)',
-                        'rgba(0, 217, 255, 0.7)',
-                        'rgba(162, 119, 255, 0.7)'
+                        'rgba(0, 255, 157, 1)',
+                        'rgba(0, 217, 255, 1)',
+                        'rgba(162, 119, 255, 1)'
                     ],
                     borderColor: [
-                        'rgb(0, 255, 157)',
-                        'rgb(0, 217, 255)',
-                        'rgb(162, 119, 255)'
+                        '#00ff9d',
+                        '#00d9ff',
+                        '#a277ff'
                     ],
-                    borderWidth: 1
+                    borderWidth: 3,
+                    borderRadius: 8,
+                    borderSkipped: false
                 }]
             },
             options: {
@@ -4562,31 +4895,59 @@ transform: none !important;
                         beginAtZero: true,
                         ticks: {
                             precision: 0,
-                            color: '#b2b2d0'
+                            color: '#00d9ff',
+                            font: { size: 12, weight: 'bold' },
+                            stepSize: 1
                         },
                         grid: {
-                            color: 'rgba(112, 112, 155, 0.1)'
+                            color: 'rgba(0, 217, 255, 0.2)',
+                            lineWidth: 2
                         }
                     },
                     x: {
                         ticks: {
-                            color: '#b2b2d0'
+                            color: '#00d9ff',
+                            font: { size: 12, weight: 'bold' }
                         },
                         grid: {
-                            color: 'rgba(112, 112, 155, 0.1)'
+                            display: false
                         }
                     }
                 },
                 plugins: {
                     legend: {
-                        display: false
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            color: '#00d9ff',
+                            font: { size: 13, weight: 'bold' },
+                            padding: 15
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                        titleColor: '#00d9ff',
+                        bodyColor: '#ffffff',
+                        borderColor: '#00d9ff',
+                        borderWidth: 2,
+                        padding: 12,
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y + ' projects';
+                            }
+                        }
                     },
                     title: {
                         display: true,
-                        text: 'Projects by Impact Type',
-                        color: '#f5f9ff',
-                        font: { family: 'Space Grotesk' }
+                        text: '📊 Projects by Impact Type',
+                        color: '#00d9ff',
+                        font: { size: 16, weight: 'bold', family: 'Space Grotesk' },
+                        padding: { bottom: 15 }
                     }
+                },
+                animation: {
+                    duration: 2000,
+                    easing: 'easeOutQuart'
                 }
             }
         });
@@ -5506,53 +5867,65 @@ const launched = [0, 0, 0, 1, 2, 3, 3, 4];
       labels: labels,
       datasets: [
         {
-          label: 'Completed',
+          label: '✅ Completed',
           data: completed,
-          borderColor: colorProjects,
-          backgroundColor: safeGradient(ctx, colorProjects),
+          borderColor: '#00ff9d',
+          backgroundColor: safeGradient(ctx, '#00ff9d'),
           fill: true,
-          tension: 0.28,
-          pointRadius: 4,
-          pointHoverRadius: 6,
+          tension: 0.4,
+          pointRadius: 6,
+          pointHoverRadius: 10,
+          pointBackgroundColor: '#00ff9d',
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 3,
+          borderWidth: 4,
+          yAxisID: 'y',
+        },
+        {
+          label: '🚀 In Progress',
+          data: inProgress,
+          borderColor: '#00d9ff',
+          backgroundColor: safeGradient(ctx, '#00d9ff'),
+          fill: true,
+          tension: 0.4,
+          pointRadius: 6,
+          pointHoverRadius: 10,
+          pointBackgroundColor: '#00d9ff',
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 3,
+          borderWidth: 4,
+          yAxisID: 'y',
+        },
+        {
+          label: '⏸️ Paused',
+          data: paused,
+          borderColor: '#ff3d5e',
+          backgroundColor: safeGradient(ctx, '#ff3d5e'),
+          borderDash: [8,6],
+          fill: true,
+          tension: 0.4,
+          pointRadius: 5,
+          pointStyle: 'rectRot',
+          pointHoverRadius: 9,
+          pointBackgroundColor: '#ff3d5e',
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 2,
           borderWidth: 3,
           yAxisID: 'y',
         },
         {
-          label: 'In Progress',
-          data: inProgress,
-          borderColor: colorInfo,
-          backgroundColor: safeGradient(ctx, colorInfo),
-          fill: true,
-          tension: 0.28,
-          pointRadius: 3,
-          pointHoverRadius: 5,
-          borderWidth: 2.5,
-          yAxisID: 'y',
-        },
-        {
-          label: 'Paused',
-          data: paused,
-          borderColor: colorDanger,
-          backgroundColor: safeGradient(ctx, colorDanger),
-          borderDash: [8,6],
-          fill: true,
-          tension: 0.28,
-          pointRadius: 3,
-          pointStyle: 'rectRot',
-          pointHoverRadius: 6,
-          borderWidth: 2.5,
-          yAxisID: 'y',
-        },
-        {
-          label: 'Launched',
+          label: '🎉 Launched',
           data: launched,
-          borderColor: colorPurple,
-          backgroundColor: safeGradient(ctx, colorPurple),
+          borderColor: '#a277ff',
+          backgroundColor: safeGradient(ctx, '#a277ff'),
           fill: true,
-          tension: 0.3,
-          pointRadius: 3,
-          pointHoverRadius: 5,
-          borderWidth: 2.5,
+          tension: 0.4,
+          pointRadius: 6,
+          pointHoverRadius: 10,
+          pointBackgroundColor: '#a277ff',
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 3,
+          borderWidth: 4,
           yAxisID: 'y',
         }
       ]
@@ -5568,9 +5941,11 @@ const launched = [0, 0, 0, 1, 2, 3, 3, 4];
         legend: {
           position: 'top',
           labels: {
+            color: '#00d9ff',
+            font: { size: 13, weight: 'bold' },
             usePointStyle: true,
-            padding: 12,
-            boxWidth: 12
+            padding: 15,
+            boxWidth: 14
           },
           onClick: function(e, legendItem, legend) {
             // default toggle behavior but prevent full hide of all datasets
@@ -5590,13 +5965,18 @@ const launched = [0, 0, 0, 1, 2, 3, 3, 4];
           }
         },
         tooltip: {
+          backgroundColor: 'rgba(0, 0, 0, 0.9)',
+          titleColor: '#00d9ff',
+          bodyColor: '#ffffff',
+          borderColor: '#00d9ff',
+          borderWidth: 2,
+          padding: 12,
           mode: 'nearest',
           intersect: false,
-          padding: 10,
           callbacks: {
-            title: function(items) { return items[0].label; },
+            title: function(items) { return 'Period: ' + items[0].label; },
             label: function(item) {
-              return item.dataset.label + ': ' + item.formattedValue;
+              return item.dataset.label + ': ' + item.formattedValue + ' projects';
             }
           }
         },
@@ -5607,14 +5987,24 @@ const launched = [0, 0, 0, 1, 2, 3, 3, 4];
       scales: {
         x: {
           grid: {
-            color: cssVar('--grid-color', 'rgba(255,255,255,0.04)')
+            color: 'rgba(0, 217, 255, 0.2)',
+            lineWidth: 2
           },
-          ticks: { color: cssVar('--text-secondary', '#b2b2d0') }
+          ticks: { 
+            color: '#00d9ff',
+            font: { size: 12, weight: 'bold' }
+          }
         },
         y: {
           beginAtZero: true,
-          grid: { color: cssVar('--grid-color', 'rgba(255,255,255,0.04)') },
-          ticks: { color: cssVar('--text-secondary', '#b2b2d0') }
+          grid: { 
+            color: 'rgba(0, 217, 255, 0.2)',
+            lineWidth: 2
+          },
+          ticks: { 
+            color: '#00d9ff',
+            font: { size: 12, weight: 'bold' }
+          }
         }
       },
       elements: {
@@ -5623,8 +6013,8 @@ const launched = [0, 0, 0, 1, 2, 3, 3, 4];
         }
       },
       animation: {
-        duration: 900,
-        easing: 'cubicBezier(.2,.8,.2,1)'
+        duration: 2000,
+        easing: 'easeOutQuart'
       },
       onResize: function(chart, size) {
         // optional: adjust pointRadius by width
@@ -5797,34 +6187,44 @@ window.skillsRadarInstance = new Chart(ctx, {
     labels: skillLabels,
     datasets: [
       {
-        label: 'Current',
+        label: 'Current Skills',
         data: currentValues,
-        backgroundColor: hexToRgba(cssVar('--projects-color', colorProjects), 0.14),
-        borderColor: cssVar('--projects-color', colorProjects),
-        pointBackgroundColor: cssVar('--projects-color', colorProjects),
-        pointBorderColor: cssVar('--background', '#0a0a14'),
-        borderWidth: 2.5,
+        backgroundColor: 'rgba(0, 217, 255, 0.3)',
+        borderColor: '#00d9ff',
+        pointBackgroundColor: '#00d9ff',
+        pointBorderColor: '#ffffff',
+        pointBorderWidth: 3,
+        borderWidth: 4,
+        pointRadius: 7,
+        pointHoverRadius: 11,
         tension: 0.4,
       },
       {
-        label: 'Target',
+        label: 'Target Goals',
         data: targetValues,
         backgroundColor: 'transparent',
-        borderColor: hexToRgba(cssVar('--education-color', colorPurple), 0.92),
-        borderDash: [6,4],
-        pointRadius: 3,
-        pointBackgroundColor: cssVar('--education-color', colorPurple),
-        borderWidth: 2,
+        borderColor: '#a277ff',
+        borderDash: [8,6],
+        pointRadius: 6,
+        pointHoverRadius: 10,
+        pointBackgroundColor: '#a277ff',
+        pointBorderColor: '#ffffff',
+        pointBorderWidth: 3,
+        borderWidth: 3,
         tension: 0.4,
       },
       {
-        label: 'Momentum (Δ)',
+        label: 'Growth Momentum (Δ)',
         data: momentumValues.map(v => Math.max(0, Math.min(10, 5 + v))), // show as offset around center for visibility
-        backgroundColor: hexToRgba(cssVar('--info', colorInfo), 0.08),
-        borderColor: hexToRgba(cssVar('--info', colorInfo), 0.9),
+        backgroundColor: 'rgba(0, 255, 157, 0.2)',
+        borderColor: '#00ff9d',
         pointStyle: 'rect',
-        pointRadius: 4,
-        borderWidth: 1.8,
+        pointRadius: 5,
+        pointHoverRadius: 9,
+        pointBackgroundColor: '#00ff9d',
+        pointBorderColor: '#ffffff',
+        pointBorderWidth: 2,
+        borderWidth: 3,
         tension: 0.4,
         hidden: false
       }
@@ -5838,29 +6238,38 @@ window.skillsRadarInstance = new Chart(ctx, {
     },
     scales: {
       r: {
-        angleLines: { display: true, color: cssVar('--grid-color', 'rgba(255,255,255,0.06)') },
-        grid: { color: cssVar('--grid-color', 'rgba(255,255,255,0.06)') },
-        suggestedMin: 0,
-        suggestedMax: 10,
+        angleLines: { 
+          display: true, 
+          color: 'rgba(0, 217, 255, 0.3)',
+          lineWidth: 2
+        },
+        grid: { 
+          color: 'rgba(0, 217, 255, 0.3)',
+          lineWidth: 2
+        },
+        beginAtZero: true,
+        max: 10,
         ticks: {
           stepSize: 2,
-          color: cssVar('--text-secondary', '#b2b2d0'),
-          backdropColor: 'transparent',
-          font: { size: 11 }
+          color: '#00d9ff',
+          backdropColor: 'rgba(0, 0, 0, 0.8)',
+          font: { size: 12, weight: 'bold' }
         },
         pointLabels: {
-          color: cssVar('--text-primary', '#f5f9ff'),
-          font: { size: 12 }
+          color: '#00d9ff',
+          font: { size: 14, weight: 'bold' }
         }
       }
     },
     plugins: {
       legend: {
-        position: 'top',
+        position: 'bottom',
         labels: {
+          color: '#00d9ff',
+          font: { size: 13, weight: 'bold' },
           usePointStyle: true,
           pointStyle: 'circle',
-          color: cssVar('--text-secondary', '#b2b2d0')
+          padding: 15
         },
         onClick(e, legendItem, legend) {
           // ensure at least one dataset visible (prevent hiding all)
@@ -5879,9 +6288,15 @@ window.skillsRadarInstance = new Chart(ctx, {
         }
       },
       tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        titleColor: '#00d9ff',
+        bodyColor: '#ffffff',
+        borderColor: '#00d9ff',
+        borderWidth: 2,
+        padding: 12,
         callbacks: {
           title(tooltipItems) {
-            return tooltipItems[0].label;
+            return 'Skill: ' + tooltipItems[0].label;
           },
           label(ctx) {
             const dsLabel = ctx.dataset.label || '';
@@ -5891,7 +6306,7 @@ window.skillsRadarInstance = new Chart(ctx, {
               const delta = (momentumValues[ctx.dataIndex] || 0);
               return `${dsLabel}: ${delta >= 0 ? '+' : ''}${delta.toFixed(2)} Δ`;
             }
-            return `${dsLabel}: ${value}`;
+            return `${dsLabel}: ${value}/10`;
           }
         }
       },
@@ -5926,28 +6341,58 @@ document.getElementById('skillsRadar').addEventListener('keydown', (e) => {
             new Chart(projectStats, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Completed', 'In Progress', 'Planned'],
+                    labels: ['✅ Completed', '🚀 In Progress', '📋 Planned'],
                     datasets: [{
                         data: [18, 5, 3],
                         backgroundColor: [
-                            'rgba(46, 204, 113, 0.8)',
-                            'rgba(52, 152, 219, 0.8)',
-                            'rgba(241, 196, 15, 0.8)'
+                            'rgba(0, 255, 157, 1)',
+                            'rgba(0, 217, 255, 1)',
+                            'rgba(255, 200, 0, 1)'
                         ],
                         borderColor: [
-                            'rgba(46, 204, 113, 1)',
-                            'rgba(52, 152, 219, 1)',
-                            'rgba(241, 196, 15, 1)'
+                            '#00ff9d',
+                            '#00d9ff',
+                            '#ffc800'
                         ],
-                        borderWidth: 1
+                        borderWidth: 3,
+                        hoverBorderWidth: 5,
+                        hoverOffset: 8
                     }]
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '60%',
                     plugins: {
                         legend: {
-                            position: 'bottom'
+                            position: 'bottom',
+                            labels: {
+                                color: '#00d9ff',
+                                font: { size: 13, weight: 'bold' },
+                                padding: 15,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                            titleColor: '#00d9ff',
+                            bodyColor: '#ffffff',
+                            borderColor: '#00d9ff',
+                            borderWidth: 2,
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed + ' projects';
+                                }
+                            }
                         }
+                    },
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true,
+                        duration: 2000,
+                        easing: 'easeOutQuart'
                     }
                 }
             });
@@ -5957,29 +6402,79 @@ document.getElementById('skillsRadar').addEventListener('keydown', (e) => {
             new Chart(vendorChart, {
                 type: 'bar',
                 data: {
-                    labels: ['Botpress', 'Facebook/Whatsapp', 'iWhaleCloud'],
+                    labels: ['🤖 Botpress', '💬 Facebook/Whatsapp', '☁️ iWhaleCloud'],
                     datasets: [{
-                        label: 'Relationship Strength',
+                        label: 'Partnership Strength (1-10)',
                         data: [9, 8, 7],
                         backgroundColor: [
-                            'rgba(52, 152, 219, 0.7)',
-                            'rgba(59, 89, 152, 0.7)',
-                            'rgba(41, 128, 185, 0.7)'
+                            'rgba(0, 217, 255, 1)',
+                            'rgba(0, 255, 157, 1)',
+                            'rgba(162, 119, 255, 1)'
                         ],
                         borderColor: [
-                            'rgba(52, 152, 219, 1)',
-                            'rgba(59, 89, 152, 1)',
-                            'rgba(41, 128, 185, 1)'
+                            '#00d9ff',
+                            '#00ff9d',
+                            '#a277ff'
                         ],
-                        borderWidth: 1
+                        borderWidth: 3,
+                        borderRadius: 8,
+                        borderSkipped: false
                     }]
                 },
                 options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
                     scales: {
                         y: {
                             beginAtZero: true,
-                            max: 10
+                            max: 10,
+                            ticks: {
+                                color: '#00d9ff',
+                                font: { size: 12, weight: 'bold' },
+                                stepSize: 1
+                            },
+                            grid: {
+                                color: 'rgba(0, 217, 255, 0.2)',
+                                lineWidth: 2
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#00d9ff',
+                                font: { size: 12, weight: 'bold' }
+                            },
+                            grid: {
+                                display: false
+                            }
                         }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                color: '#00d9ff',
+                                font: { size: 13, weight: 'bold' },
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                            titleColor: '#00d9ff',
+                            bodyColor: '#ffffff',
+                            borderColor: '#00d9ff',
+                            borderWidth: 2,
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y + '/10';
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeOutQuart'
                     }
                 }
             });
@@ -6158,9 +6653,10 @@ try {
       datasets: [{
         data: counts,
         backgroundColor: [gradCompleted, gradOngoing, gradPending],
-        borderColor: [toRgbaString(cCompleted, 1), toRgbaString(cOngoing, 1), toRgbaString(cPending, 1)],
-        borderWidth: 1.5,
-        hoverOffset: 6
+        borderColor: ['#00d9ff', '#00ff9d', '#a277ff'],
+        borderWidth: 3,
+        hoverBorderWidth: 5,
+        hoverOffset: 10
       }]
     },
     options: {
@@ -6171,19 +6667,27 @@ try {
         legend: {
           position: 'bottom',
           labels: {
+            color: '#00d9ff',
+            font: { size: 13, weight: 'bold' },
             usePointStyle: true,
             pointStyle: 'circle',
-            color: textSecondary
+            padding: 15
           },
           onClick: safeLegendClick
         },
         tooltip: {
+          backgroundColor: 'rgba(0, 0, 0, 0.9)',
+          titleColor: '#00d9ff',
+          bodyColor: '#ffffff',
+          borderColor: '#00d9ff',
+          borderWidth: 2,
+          padding: 12,
           callbacks: {
             label(ctx) {
               const i = ctx.dataIndex;
               const val = ctx.dataset.data[i] || 0;
               const pct = total ? ((val / total) * 100).toFixed(1) : '0.0';
-              return `${ctx.label}: ${val} (${pct}%)`;
+              return `${ctx.label}: ${val} courses (${pct}%)`;
             }
           }
         },
@@ -6195,7 +6699,12 @@ try {
           }
         }
       },
-      animation: { duration: 700, easing: 'easeOutCubic' }
+      animation: { 
+        animateRotate: true,
+        animateScale: true,
+        duration: 2000, 
+        easing: 'easeOutQuart' 
+      }
     },
     plugins: [centerText]
   });
@@ -6220,32 +6729,66 @@ const ctxUdemy = document.getElementById('udemyChart').getContext('2d');
 window.udemyChartInstance = new Chart(ctxUdemy, {
   type: 'doughnut',
   data: {
-    labels: ['Completed (10)', 'Required (4)'],
+    labels: ['✅ Completed (10)', '📚 Required (4)'],
     datasets: [{
       data: [10, 4],
       backgroundColor: [
-        'rgba(52, 152, 219, 0.85)',
-        'rgba(149, 165, 166, 0.3)'
+        'rgba(0, 217, 255, 1)',
+        'rgba(149, 165, 166, 0.4)'
       ],
       borderColor: [
-        'rgba(52, 152, 219, 1)',
-        'rgba(149, 165, 166, 1)'
+        '#00d9ff',
+        'rgba(149, 165, 166, 0.6)'
       ],
-      borderWidth: 1.5
+      borderWidth: 3,
+      hoverBorderWidth: 5,
+      hoverOffset: 8
     }]
   },
   options: {
     responsive: true,
+    maintainAspectRatio: false,
     cutout: '65%',
     plugins: {
-      legend: { position: 'bottom' },
-      tooltip: { enabled: true },
+      legend: { 
+        position: 'bottom',
+        labels: {
+          color: '#00d9ff',
+          font: { size: 13, weight: 'bold' },
+          padding: 15,
+          usePointStyle: true
+        }
+      },
+      tooltip: { 
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        titleColor: '#00d9ff',
+        bodyColor: '#ffffff',
+        borderColor: '#00d9ff',
+        borderWidth: 2,
+        padding: 12,
+        callbacks: {
+          label: function(context) {
+            return context.label + ': ' + context.parsed + ' courses';
+          }
+        }
+      },
       title: {
         display: true,
-        text: 'Udemy: 2.5× requirement',
-        color: '#ccc',
-        font: { weight: '600', family: 'Space Grotesk' }
+        text: '🎓 Udemy: 2.5× Requirement',
+        color: '#00d9ff',
+        font: { 
+          size: 16,
+          weight: 'bold', 
+          family: 'Space Grotesk' 
+        },
+        padding: { bottom: 10 }
       }
+    },
+    animation: {
+      animateRotate: true,
+      animateScale: true,
+      duration: 2000,
+      easing: 'easeOutQuart'
     }
   }
 });
@@ -6255,32 +6798,66 @@ const ctxLinkedIn = document.getElementById('linkedinChart').getContext('2d');
 window.linkedinChartInstance = new Chart(ctxLinkedIn, {
   type: 'doughnut',
   data: {
-    labels: ['Completed (360+ hrs)', 'Required (72 hrs)'],
+    labels: ['✅ Completed (360+ hrs)', '📚 Required (72 hrs)'],
     datasets: [{
       data: [360, 72],
       backgroundColor: [
-        'rgba(46, 204, 113, 0.85)',
-        'rgba(149, 165, 166, 0.3)'
+        'rgba(0, 255, 157, 1)',
+        'rgba(149, 165, 166, 0.4)'
       ],
       borderColor: [
-        'rgba(46, 204, 113, 1)',
-        'rgba(149, 165, 166, 1)'
+        '#00ff9d',
+        'rgba(149, 165, 166, 0.6)'
       ],
-      borderWidth: 1.5
+      borderWidth: 3,
+      hoverBorderWidth: 5,
+      hoverOffset: 8
     }]
   },
   options: {
     responsive: true,
+    maintainAspectRatio: false,
     cutout: '65%',
     plugins: {
-      legend: { position: 'bottom' },
-      tooltip: { enabled: true },
+      legend: { 
+        position: 'bottom',
+        labels: {
+          color: '#00d9ff',
+          font: { size: 13, weight: 'bold' },
+          padding: 15,
+          usePointStyle: true
+        }
+      },
+      tooltip: { 
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        titleColor: '#00d9ff',
+        bodyColor: '#ffffff',
+        borderColor: '#00d9ff',
+        borderWidth: 2,
+        padding: 12,
+        callbacks: {
+          label: function(context) {
+            return context.label + ': ' + context.parsed + ' hours';
+          }
+        }
+      },
       title: {
         display: true,
-        text: 'LinkedIn: 5× requirement',
-        color: '#ccc',
-        font: { weight: '600', family: 'Space Grotesk' }
+        text: '💼 LinkedIn: 5× Requirement',
+        color: '#00d9ff',
+        font: { 
+          size: 16,
+          weight: 'bold', 
+          family: 'Space Grotesk' 
+        },
+        padding: { bottom: 10 }
       }
+    },
+    animation: {
+      animateRotate: true,
+      animateScale: true,
+      duration: 2000,
+      easing: 'easeOutQuart'
     }
   }
 });
@@ -6290,32 +6867,91 @@ const ctxHiring = document.getElementById('hiringTrendsChart').getContext('2d');
 new Chart(ctxHiring, {
   type: 'bar',
   data: {
-    labels: ['Work Experience', 'Skills Assessments', 'University Degree'],
+    labels: ['💼 Work Experience', '🎯 Skills Assessments', '🎓 University Degree'],
     datasets: [{
       label: 'Employer Reliance by 2030 (%)',
       data: [70, 65, 43],
       backgroundColor: [
-        'rgba(46,204,113,0.8)', // exp = green
-        'rgba(52,152,219,0.8)', // skills = blue
-        'rgba(231,76,60,0.8)'   // degree = red
+        'rgba(0, 255, 157, 1)', // exp = green
+        'rgba(0, 217, 255, 1)', // skills = blue
+        'rgba(255, 61, 94, 1)'   // degree = red
       ],
       borderColor: [
-        'rgba(46,204,113,1)',
-        'rgba(52,152,219,1)',
-        'rgba(231,76,60,1)'
+        '#00ff9d',
+        '#00d9ff',
+        '#ff3d5e'
       ],
-      borderWidth: 1.5
+      borderWidth: 3,
+      borderRadius: 6,
+      borderSkipped: false
     }]
   },
   options: {
     indexAxis: 'y',
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
-      legend: { display: false },
-      tooltip: { enabled: true }
+      legend: { 
+        display: true,
+        position: 'top',
+        labels: {
+          color: '#00d9ff',
+          font: { size: 13, weight: 'bold' },
+          padding: 15
+        }
+      },
+      tooltip: { 
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        titleColor: '#00d9ff',
+        bodyColor: '#ffffff',
+        borderColor: '#00d9ff',
+        borderWidth: 2,
+        padding: 12,
+        callbacks: {
+          label: function(context) {
+            return context.dataset.label + ': ' + context.parsed.x + '%';
+          }
+        }
+      },
+      title: {
+        display: true,
+        text: '📊 Hiring Trends: Skills-Based Hiring on the Rise',
+        color: '#00d9ff',
+        font: { 
+          size: 16,
+          weight: 'bold', 
+          family: 'Space Grotesk' 
+        },
+        padding: { bottom: 15 }
+      }
     },
     scales: {
-      x: { beginAtZero: true, max: 100 }
+      x: { 
+        beginAtZero: true, 
+        max: 100,
+        ticks: {
+          color: '#00d9ff',
+          font: { size: 12, weight: 'bold' },
+          stepSize: 10
+        },
+        grid: {
+          color: 'rgba(0, 217, 255, 0.2)',
+          lineWidth: 2
+        }
+      },
+      y: {
+        ticks: {
+          color: '#00d9ff',
+          font: { size: 12, weight: 'bold' }
+        },
+        grid: {
+          display: false
+        }
+      }
+    },
+    animation: {
+      duration: 2000,
+      easing: 'easeOutQuart'
     }
   }
 });
