@@ -6,7 +6,7 @@
     <meta name="HandheldFriendly" content="true">
     <meta name="MobileOptimized" content="width">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Michael N. Mukwekezeke | Software Developer & Architect</title>
+    <title>Michael Mukwekezeke | Software Developer & Architect</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/ScrollTrigger.min.js"></script>
@@ -14,7 +14,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cherry+Cream+Soda&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -177,24 +176,18 @@
 });
     </script>
     <style>
-        @font-face {
-            font-family: 'CaeliaDemoRegular';
-            src: url('assets/fonts/CaeliaDemoRegular-vnXz7.otf') format('opentype');
-            font-display: swap;
-        }
-        
         :root {
             --primary-color: #00ffff;
             --secondary-color: #ff00ff;
             --tertiary-color: #00ffaa;
             --background-color: #0a0a1f;
-            --text-color: #ffffff;
+            --text-color: #f5f9ff;
             --node-glow: 0 0 15px var(--primary-color);
             --orbit-glow: 0 0 8px rgba(0, 255, 255, 0.5);
-            --font-body: 'CaeliaDemoRegular', 'Space Grotesk', cursive;
-            --font-display: 'CaeliaDemoRegular', 'Orbitron', 'Space Grotesk', sans-serif;
-            --font-accent: 'CaeliaDemoRegular', 'Orbitron', cursive;
-            --font-mono: 'CaeliaDemoRegular', 'JetBrains Mono', 'Space Grotesk', monospace;
+            --font-body: 'Space Grotesk', sans-serif;
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-accent: 'Space Grotesk', sans-serif;
+            --font-mono: 'Space Grotesk', sans-serif;
         }
         
         #skills-orbit {
@@ -277,6 +270,7 @@
             width: 100%;
             text-align: center;
             font-size: 2em;
+            font-family: var(--font-display);
             color: var(--text-color);
             text-shadow: 0 0 10px var(--primary-color);
             z-index: 10;
@@ -288,7 +282,7 @@
             width: 100%;
             text-align: center;
             font-size: 0.9em;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(245, 249, 255, 0.7);
             z-index: 10;
         }
 @media (min-width: 768px) {
@@ -313,92 +307,11 @@
             .chart-grid { grid-template-columns: 1fr; }
             .glass-panel { padding: 15px; }
         }
-
-        @media (max-width: 640px) {
-            html { font-size: 15px; }
-            body { 
-                font-size: 0.85rem;
-                line-height: 1.5;
-                font-family: 'CaeliaDemoRegular', 'Space Grotesk', cursive !important;
-            }
-            h1, h2, h3, h4, h5, h6 {
-                font-family: 'CaeliaDemoRegular', 'Orbitron', 'Space Grotesk', sans-serif !important;
-            }
-            h1 { font-size: 2.3rem; line-height: 1.2; }
-            h2 { font-size: 1.8rem; line-height: 1.3; }
-            h3 { font-size: 1.4rem; line-height: 1.35; }
-            .panel-title,
-            .project-title { 
-                font-size: 1.25rem; 
-                line-height: 1.4;
-                font-family: 'CaeliaDemoRegular', 'Orbitron', 'Space Grotesk', sans-serif !important;
-            }
-            p,
-            li,
-            .description,
-            .detail-label,
-            .detail-value,
-            .project-detail,
-            .vendor-desc,
-            .timeline-content,
-            .timeline-date,
-            .info-section p,
-            .stat-label {
-                font-size: 0.85rem;
-                line-height: 1.55;
-                font-family: 'CaeliaDemoRegular', 'Space Grotesk', cursive !important;
-            }
-            .project-grid {
-                grid-template-columns: 1fr;
-                gap: 1.25rem;
-            }
-            .project-card {
-                min-width: 0;
-                width: 100%;
-                padding: 1.25rem;
-            }
-        }
         
         @media (max-width: 480px) {
-            html { font-size: 14px; }
-            body {
-                font-size: 0.8rem;
-                line-height: 1.5;
-                font-family: 'CaeliaDemoRegular', 'Space Grotesk', cursive !important;
-            }
-            h1, h2, h3, h4, h5, h6 {
-                font-family: 'CaeliaDemoRegular', 'Orbitron', 'Space Grotesk', sans-serif !important;
-            }
-            h1 { 
-                font-size: 2rem; 
-                line-height: 1.2;
-            }
-            h2 {
-                font-size: 1.65rem;
-                line-height: 1.3;
-            }
-            h3 {
-                font-size: 1.3rem;
-                line-height: 1.35;
-            }
-            .panel-title,
-            .project-title {
-                font-size: 1.15rem;
-                line-height: 1.4;
-                font-family: 'CaeliaDemoRegular', 'Orbitron', 'Space Grotesk', sans-serif !important;
-            }
-            p,
-            li,
-            .description,
-            .info-section p,
-            .project-detail,
-            .detail-label,
-            .detail-value,
-            .stat-label {
-                font-size: 0.8rem;
-                line-height: 1.55;
-                font-family: 'CaeliaDemoRegular', 'Space Grotesk', cursive !important;
-            }
+            h1 { font-size: 2rem; }
+            .description { font-size: 0.9rem; }
+            .panel-title { font-size: 1rem; }
         }
         
         /* Fluid Typography */
@@ -446,7 +359,7 @@
             --purple: #a277ff;
             --background: #0a0a14;
             --card-bg: rgba(255, 255, 255, 0.15);
-            --text-primary: #ffffff;
+            --text-primary: #f5f9ff;
             --text-secondary: #e0e0e0;
             /* Dark text variants for WCAG contrast on light/translucent backgrounds */
             --text-primary-dark: #1f2d3d; /* ~#1F2D3D */
@@ -487,7 +400,7 @@
     min-width: 100vw;
     background: var(--background);
     color: var(--text-primary);
-    font-family: 'CaeliaDemoRegular', 'Space Grotesk', cursive;
+    font-family: var(--font-body);
     line-height: 1.6;
     transition: var(--transition);
     padding: 0;
@@ -510,7 +423,7 @@ font-family: var(--font-display);
 }
 
 .body-font-heading {
-font-family: var(--font-body);
+font-family: var(--font-display);
 letter-spacing: 0.5px;
 }
 
@@ -596,8 +509,8 @@ transform: none !important;
             line-height: 1.1;
         }
 
-        .name-cherry-cream-soda {
-            font-family: 'Cherry Cream Soda', 'Space Grotesk', cursive !important;
+        h2, h3, h4, h5, h6 {
+            font-family: var(--font-display);
         }
 
         /* Ensure dark, high-contrast text on translucent cards/sections before Innovative Solutions section */
@@ -625,6 +538,7 @@ transform: none !important;
 
 .project-title-paused {
     font-size: 1.5rem;
+    font-family: var(--font-display);
     color: #5a3f00;
     text-shadow: var(--text-shadow-complete);
 }
@@ -632,24 +546,28 @@ transform: none !important;
 .project-title-launched {
     color: #00390d;
     font-size: 1.5rem;
+    font-family: var(--font-display);
     text-shadow: var(--text-shadow-complete);
 }
 
 .project-title-completed {
     color: #03424c;
     font-size: 1.5rem;
+    font-family: var(--font-display);
     text-shadow: var(--text-shadow-complete);
 }
 
 .project-title-progress {
     color: #033265;
     font-size: 1.5rem;
+    font-family: var(--font-display);
     text-shadow: var(--text-shadow-complete);
 }
 
 .project-title-async {
     color: #3e007b;
     font-size: 1.5rem;
+    font-family: var(--font-display);
     text-shadow: var(--text-shadow-complete);
 }
         .left-panel p, .right-panel p,
@@ -781,6 +699,7 @@ transform: none !important;
     margin-top: 1rem;
     text-align: center;
     font-weight: 600;
+    font-family: var(--font-display);
     text-shadow: var(--text-shadow-complete);
 }
 
@@ -850,6 +769,7 @@ transform: none !important;
             align-items: center;
             gap: 10px;
             font-weight: 600;
+            font-family: var(--font-display);
             text-shadow: 
         0px 1px 0px rgba(255, 255, 255, 0.4),
         0px -1px 0px rgba(0, 0, 0, 0.3),
@@ -857,34 +777,14 @@ transform: none !important;
         -1px 0px 0px rgba(0, 0, 0, 0.4);
         }
     
-        /* Beautiful striking regal blue icons with etched effect */
-        i[class*="fa-"],
-        .fas,
-        .far,
-        .fab,
-        .fal {
-            color: #0040ff !important;
-            text-shadow: 
-                0px 1px 0px rgba(255, 255, 255, 0.6),
-                0px -1px 3px rgba(0, 0, 0, 0.8),
-                1px 0px 0px rgba(255, 255, 255, 0.5),
-                -1px 0px 0px rgba(0, 0, 0, 0.6),
-                0 0 12px rgba(0, 64, 255, 0.6),
-                0 0 20px rgba(0, 64, 255, 0.3);
-            font-weight: 900;
-        }
-
         .panel-title i {
-            color: #0040ff !important;
+            color: var(--primary);
             font-size: 1.2rem;
             text-shadow: 
-                0px 1px 0px rgba(255, 255, 255, 0.6),
-                0px -1px 3px rgba(0, 0, 0, 0.8),
-                1px 0px 0px rgba(255, 255, 255, 0.5),
-                -1px 0px 0px rgba(0, 0, 0, 0.6),
-                0 0 12px rgba(0, 64, 255, 0.6),
-                0 0 20px rgba(0, 64, 255, 0.3);
-            font-weight: 900;
+        0px 1px 0px rgba(255, 255, 255, 0.4),
+        0px -1px 0px rgba(0, 0, 0, 0.3),
+        1px 0px 0px rgba(255, 255, 255, 0.3),
+        -1px 0px 0px rgba(0, 0, 0, 0.4);
         }
     
         .lead-snapshot {
@@ -902,7 +802,7 @@ transform: none !important;
 
         .lead-snapshot .snapshot-body {
             mix-blend-mode: screen;
-            color: #ffffff;
+            color: #f5f9ff;
         }
 
         .lead-snapshot .snapshot-body p,
@@ -1226,7 +1126,7 @@ transform: none !important;
             position: relative;
             z-index: 1;
             mix-blend-mode: difference;
-            color: #ffffff;
+            color: #f5f9ff;
             text-shadow: 
         0px 1px 0px rgba(255, 255, 255, 0.4),
         0px -1px 0px rgba(0, 0, 0, 0.3),
@@ -1251,6 +1151,7 @@ transform: none !important;
         .project-title {
             font-size: 1.4rem;
             font-weight: 600;
+            font-family: var(--font-display);
             text-shadow: 
         0px 1px 0px rgba(255, 255, 255, 0.4),
         0px -1px 0px rgba(0, 0, 0, 0.3),
@@ -1307,7 +1208,7 @@ transform: none !important;
         
         .detail-label {
             font-weight: 600;
-            color: #ffffff;
+            color: #f5f9ff;
             text-shadow: 
         0px 1px 0px rgba(255, 255, 255, 0.4),
         0px -1px 0px rgba(0, 0, 0, 0.3),
@@ -1624,11 +1525,19 @@ transform: none !important;
             display: flex;
             align-items: center;
             gap: 8px;
+            font-family: var(--font-display);
             text-shadow: 
         0px 1px 0px rgba(255, 255, 255, 0.4),
         0px -1px 0px rgba(0, 0, 0, 0.3),
         1px 0px 0px rgba(255, 255, 255, 0.3),
         -1px 0px 0px rgba(0, 0, 0, 0.4);
+        }
+
+        #educationPanel h3,
+        #educationPanel h4,
+        #educationPanel h5,
+        #educationPanel h6 {
+            font-family: var(--font-display) !important;
         }
     
         .info-section p {
@@ -1740,7 +1649,7 @@ transform: none !important;
         }
         
         .section-indicator span {
-            color: #ffffff;
+            color: #f5f9ff;
             font-size: 0.9rem;
             font-weight: 500;
             white-space: nowrap;
@@ -1773,7 +1682,7 @@ transform: none !important;
             position: relative;
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid rgba(255, 255, 255, 0.3);
-            color: #ffffff;
+            color: #f5f9ff;
             font-size: 1.3rem;
             margin-bottom: 10px;
             backdrop-filter: blur(10px);
@@ -1785,7 +1694,7 @@ transform: none !important;
         }
     
         .nav-icon.active {
-            color: white;
+            color: #f5f9ff;
             box-shadow: 0 0 20px currentColor;
             transform: scale3d(1.1, 1.1, 1);
             border-color: currentColor;
@@ -1836,7 +1745,7 @@ transform: none !important;
             border-radius: 6px;
             font-size: 0.8rem;
             white-space: nowrap;
-            color: #ffffff;
+            color: #f5f9ff;
             border: 1px solid rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(10px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -2067,6 +1976,7 @@ transform: none !important;
             letter-spacing: 0.08em;
             font-weight: 600;
             font-size: 1rem;
+            font-family: var(--font-display);
             display: inline-flex;
             align-items: center;
             gap: 10px;
@@ -2107,7 +2017,7 @@ transform: none !important;
         /* Blend-mode text for high contrast over any bg */
         .blend-text {
             mix-blend-mode: difference;
-            color: #ffffff;
+            color: #f5f9ff;
             filter: drop-shadow(0 1px 1px rgba(0,0,0,0.6));
             text-shadow: 
         0px 1px 0px rgba(255, 255, 255, 0.4),
@@ -2200,6 +2110,7 @@ transform: none !important;
             position: relative;
             color: #0a0a14;
             display: inline-block;
+            font-family: var(--font-display);
             text-shadow: 
         0px 1px 0px rgba(255, 255, 255, 0.4),
         0px -1px 0px rgba(0, 0, 0, 0.3),
@@ -2583,7 +2494,7 @@ transform: none !important;
             justify-content: center;
             font-size: 0.7rem;
             font-weight: 600;
-            color: white;
+            color: #f5f9ff;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
             text-shadow: 
         0px 1px 0px rgba(255, 255, 255, 0.4),
@@ -2812,68 +2723,35 @@ transform: none !important;
 
         @media (max-width: 768px) {
             body {
-                font-size: 0.875rem;
+                font-size: 1rem;
                 line-height: 1.6;
-                font-family: 'CaeliaDemoRegular', 'Space Grotesk', cursive !important;
-            }
-
-            h1,
-            h2,
-            h3,
-            h4,
-            h5,
-            h6 {
-                font-family: 'CaeliaDemoRegular', 'Orbitron', 'Space Grotesk', sans-serif !important;
             }
 
             h1 {
-                font-size: 2.5rem;
-                line-height: 1.2;
+                font-size: 2.2rem;
+                line-height: 1.25;
             }
 
             h2 {
-                font-size: 1.9rem;
+                font-size: 1.65rem;
                 line-height: 1.3;
             }
 
             h3 {
-                font-size: 1.45rem;
-                line-height: 1.35;
-            }
-
-            .panel-title,
-            .project-title,
-            .stat-value,
-            .heading-2025 {
-                font-size: 1.35rem;
-                line-height: 1.4;
-                font-family: 'CaeliaDemoRegular', 'Orbitron', 'Space Grotesk', sans-serif !important;
+                font-size: 1.3rem;
             }
 
             p,
             li,
             .description,
-            .info-section p,
-            .project-detail,
-            .detail-label,
-            .detail-value,
+            .panel-title,
             .stat-label {
-                font-size: 0.875rem;
-                line-height: 1.55;
-                font-family: 'CaeliaDemoRegular', 'Space Grotesk', cursive !important;
-            }
-
-            .project-grid {
-                grid-template-columns: minmax(0, 1fr) !important;
-                gap: 1.25rem;
-            }
-
-            .project-card {
-                width: 100%;
-                max-width: 100%;
+                font-size: 1rem;
+                line-height: 1.5;
             }
 
             .stats-container,
+            .project-grid,
             .chart-grid,
             .dashboard-content,
             .skills-grid,
@@ -2882,8 +2760,7 @@ transform: none !important;
             .panel-grid,
             .highlight-grid,
             .gantt-header,
-            .gantt-row,
-            .achievements-grid {
+            .gantt-row {
                 grid-template-columns: 1fr !important;
             }
 
@@ -2898,44 +2775,16 @@ transform: none !important;
             .content-row,
             .comparison-panels,
             .section-flex,
-            .project-showcase,
-            .achievements-charts {
+            .project-showcase {
                 flex-direction: column;
                 gap: 1.25rem;
             }
 
-            .achievements-visuals {
-                width: 100%;
-            }
-
             .glass-panel,
             section,
+            .project-card,
             .stat-card {
                 width: 100%;
-            }
-
-            /* Skills Overview iframe responsive fix */
-            .skills-matrix-embed {
-                padding-top: 80% !important;
-                min-height: 700px !important;
-                overflow: visible !important;
-            }
-
-            .skills-matrix-embed iframe {
-                min-height: 700px !important;
-            }
-        }
-
-        @media (max-width: 480px) {
-            /* Skills Overview iframe mobile fix */
-            .skills-matrix-embed {
-                padding-top: 100% !important;
-                min-height: 800px !important;
-                overflow: visible !important;
-            }
-
-            .skills-matrix-embed iframe {
-                min-height: 800px !important;
             }
         }
     </style>
@@ -3326,7 +3175,7 @@ transform: none !important;
         <div class="container etch">
         <header>
             <div class="header-top">
-                <h1 class="glitch-text name-cherry-cream-soda" data-text="Michael N. Mukwekezeke">Michael N. Mukwekezeke</h1>
+                <h1 class="glitch-text" data-text="Michael Ngonidzashe Mukwekezeke">Michael Ngonidzashe Mukwekezeke</h1>
                 <div class="search-box">
                     <i class="fas fa-search"></i>
                     <input class="search-box-inner" type="text" placeholder="Search projects..." id="searchInput">
@@ -3777,6 +3626,27 @@ transform: none !important;
   </div>
   <div class="info-section">
 
+    <!-- Timeline Diagram -->
+    <h3 class="body-font-heading"><i class="fas fa-university"></i> Academic Background</h3>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-content-two">
+          <strong>Harare Polytechnical College</strong><br>
+          Electronic Communication Systems & Marketing (Dual qualification pursuit)
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-content-two">
+          Professional development focus through industry certifications and practical experience
+        </div>
+      </div>
+      <div class="timeline-item current">
+        <div class="timeline-content-two">
+          Pursuing <strong>Computer Science (AI Specialization)</strong> — advanced degree with industry experience credits
+        </div>
+      </div>
+    </div>
+
     <!-- Course Completion Chart -->
     <h3 class="body-font-heading"><i class="fas fa-certificate"></i> Professional Qualifications</h3>
 <p id="courseProgressText">
@@ -3796,17 +3666,7 @@ transform: none !important;
     <h4 style="text-align:center; margin-bottom:10px;"><i class="fab fa-linkedin"></i> LinkedIn Learning Hours</h4>
     <canvas id="linkedinChart" style="max-height:260px;"></canvas>
   </div>
-    </div>
-
-    <!-- Cloud & AI Certifications -->
-    <h3><i class="fas fa-database"></i> Cloud & AI Certifications</h3>
-    <ul style="margin:12px 0 20px 20px;line-height:1.8;color:var(--text-secondary);">
-      <li><strong>AWS Certified Cloud Practitioner</strong> – Enables strategic cloud architecture decisions and cost optimization across AWS services.</li>
-      <li><strong>Google Cloud Certified – Cloud Digital Leader</strong> – Translates business objectives into effective cloud strategies and governance frameworks.</li>
-      <li><strong>Microsoft Certified: Azure AI Fundamentals (AI-900)</strong> – Validates practical knowledge for integrating AI/ML solutions into enterprise workflows.</li>
-      <li><strong>Oracle Cloud Infrastructure (OCI) Certification in Generative AI</strong> – Demonstrates expertise in deploying and managing cutting-edge generative AI technologies at scale.</li>
-    </ul>
-
+</div>
     <!-- Value Proposition with Industry Chart -->
     <h3><i class="fas fa-chart-line"></i> Industry Value Proposition</h3>
     <p>
@@ -3819,6 +3679,53 @@ transform: none !important;
       - <em>Industry Research 2025:</em> AI and cloud-skilled professionals command premium compensation and flexible work arrangements.<br>
       - <em>Global Hiring Trends:</em> 86% of technology managers prioritize skills-based hiring to address talent gaps.<br>
     </p>
+
+    <!-- Oracle Cert -->
+    <h3><i class="fas fa-database"></i> Cloud & AI Certifications</h3>
+    <p>
+      I hold the <strong>Oracle Cloud Infrastructure (OCI) Certification in Generative AI</strong>, demonstrating expertise in cutting-edge AI technologies and cloud infrastructure management.
+    </p>
+    <div class="certification-grid" style="display:grid;gap:16px;">
+      <article class="glass-panel" style="padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,0.15);background:rgba(4,6,15,0.35);">
+        <h4 style="margin:0 0 6px;font-size:1.05rem;display:flex;align-items:center;gap:8px;">
+          <i class="fab fa-aws"></i> AWS Certified Cloud Practitioner
+        </h4>
+        <p style="margin:0 0 6px;font-size:0.95rem;line-height:1.45;">
+          Provides a foundational overview of the AWS platform, covering global infrastructure, core services, billing, and security posture.
+        </p>
+        <ul style="margin:0 0 6px 18px;line-height:1.45;">
+          <li><strong>Official Course:</strong> AWS Cloud Practitioner Essentials (free digital training on the AWS Training & Certification portal).</li>
+          <li><strong>Exam:</strong> CLF-C02, scheduled through the AWS Certification Account on Pearson VUE.</li>
+        </ul>
+        <p style="margin:0;font-size:0.92rem;">Status: <strong>Certified</strong></p>
+      </article>
+      <article class="glass-panel" style="padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,0.15);background:rgba(4,6,15,0.35);">
+        <h4 style="margin:0 0 6px;font-size:1.05rem;display:flex;align-items:center;gap:8px;">
+          <i class="fas fa-cloud"></i> Google Cloud Certified – Cloud Digital Leader
+        </h4>
+        <p style="margin:0 0 6px;font-size:0.95rem;line-height:1.45;">
+          Demonstrates fluency in Google Cloud products, pricing, and governance, and how they support business objectives.
+        </p>
+        <ul style="margin:0 0 6px 18px;line-height:1.45;">
+          <li><strong>Official Course:</strong> Google Cloud crash courses and learning resources on the Google Cloud Skills Boost platform.</li>
+          <li><strong>Exam:</strong> Scheduled via the official Google Cloud certification site (in test centers or online proctoring).</li>
+        </ul>
+        <p style="margin:0;font-size:0.92rem;">Status: <strong>Certified</strong></p>
+      </article>
+      <article class="glass-panel" style="padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,0.15);background:rgba(4,6,15,0.35);">
+        <h4 style="margin:0 0 6px;font-size:1.05rem;display:flex;align-items:center;gap:8px;">
+          <i class="fab fa-microsoft"></i> Microsoft Certified: Azure AI Fundamentals (AI-900)
+        </h4>
+        <p style="margin:0 0 6px;font-size:0.95rem;line-height:1.45;">
+          Validates core knowledge of AI and ML workloads, Azure Cognitive Services, and responsible AI principles across Microsoft Azure.
+        </p>
+        <ul style="margin:0 0 6px 18px;line-height:1.45;">
+          <li><strong>Official Course:</strong> Microsoft Learn self-paced content for the AI-900 exam.</li>
+          <li><strong>Exam:</strong> Booked through Pearson VUE via the Microsoft certification portal (online or at a test center).</li>
+        </ul>
+        <p style="margin:0;font-size:0.92rem;">Status: <strong>Certified</strong></p>
+      </article>
+    </div>
   </div>
 </div>
                 
@@ -3862,7 +3769,7 @@ transform: none !important;
     </div>
 
     <!-- Narrative + diagrams -->
-    <div class="achievements-grid" style="display:grid;grid-template-columns:1fr 420px;gap:16px;align-items:start;">
+    <div style="display:grid;grid-template-columns:1fr 420px;gap:16px;align-items:start;">
       <!-- Left: evidence bullets + ask -->
       <div>
         <h3 style="margin:6px 0 8px 0;font-size:1rem"><i class="fas fa-briefcase"></i> Key Achievements & Impact</h3>
@@ -3877,8 +3784,8 @@ transform: none !important;
       </div>
 
       <!-- Right: compact visuals (explicit heights ensure render) -->
-      <div class="achievements-visuals" style="display:flex;flex-direction:column;gap:10px;">
-        <div class="achievements-charts" style="display:flex;gap:10px;align-items:stretch;">
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;gap:10px;align-items:stretch;">
           <div style="flex:1;min-width:180px;">
             <div style="text-align:center;font-size:0.9rem;color:var(--text-secondary);margin-bottom:6px">Udemy (Courses)</div>
             <div class="chart-wrap" style="height:180px;">
@@ -4377,7 +4284,7 @@ transform: none !important;
                     title: {
                         display: true,
                         text: 'Projects by Impact Type',
-                        color: '#ffffff'
+                        color: '#f5f9ff'
                     }
                 }
             }
@@ -5641,7 +5548,7 @@ window.skillsRadarInstance = new Chart(ctx, {
           font: { size: 11 }
         },
         pointLabels: {
-          color: cssVar('--text-primary', '#fff'),
+          color: cssVar('--text-primary', '#f5f9ff'),
           font: { size: 12 }
         }
       }
@@ -6708,13 +6615,13 @@ new Chart(ctxHiring, {
             <i class="fas fa-chart-line"></i>
             <span>Skills Overview</span>
         </div>
-        <div class="skills-matrix-embed" style="position: relative; padding-top: 56.25%; border-radius: var(--panel-radius, 18px); overflow: visible; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05); background: transparent; min-height: 600px;">
+        <div class="skills-matrix-embed" style="position: relative; padding-top: 56.25%; border-radius: var(--panel-radius, 18px); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05); background: transparent;">
             <iframe src="tref_refactored.html"
                     title="Skills Overview"
                     loading="lazy"
                     allowfullscreen
                     allowtransparency="true"
-                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; background: transparent !important; min-height: 600px;"></iframe>
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; background: transparent !important;"></iframe>
         </div>
     </section>
 </body>
