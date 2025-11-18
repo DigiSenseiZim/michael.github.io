@@ -18,508 +18,32 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-    // Realistic Fire Burn Effect
+    // Optimized CSS-only burn effect (CodePen style - smooth mask animation)
     function initFireBurn() {
-        const canvas = document.getElementById('fire-canvas');
         const overlay = document.getElementById('papyrus-overlay');
-        if (!canvas || !overlay) return;
+        if (!overlay) return;
 
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        // Fire particles
-        const particles = [];
-        const embers = [];
-        const smoke = [];
-        const cinders = []; // Paper turning into cinders/ash
-        let burnProgress = 0;
-        const maxBurnTime = 4500; // 4.5 seconds for smoother animation
-
-        // Create fire particles - more realistic flame-like
-        class FireParticle {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.vx = (Math.random() - 0.5) * 1.5;
-                this.vy = -Math.random() * 4 - 2;
-                this.life = 1.0;
-                this.decay = Math.random() * 0.015 + 0.008;
-                this.size = Math.random() * 12 + 6;
-                this.color = Math.random();
-                this.turbulence = Math.random() * 0.5;
-            }
-
-            update() {
-                // Add turbulence for flame-like movement
-                this.vx += (Math.random() - 0.5) * 0.3;
-                this.x += this.vx;
-                this.y += this.vy;
-                this.vy += 0.05; // lighter gravity
-                this.life -= this.decay;
-                this.size *= 0.99; // slower size decay
-            }
-
-            draw() {
-                if (this.life <= 0) return;
-                
-                const alpha = this.life;
-                let r, g, b;
-                
-                // More realistic fire colors with RED burning edges
-                if (this.color < 0.2) {
-                    // White/yellow hot center
-                    r = 255;
-                    g = 255;
-                    b = 200;
-                } else if (this.color < 0.4) {
-                    // Bright red/orange - burning edge
-                    r = 255;
-                    g = 50 + Math.random() * 50;
-                    b = 0;
-                } else if (this.color < 0.6) {
-                    // Bright orange/yellow
-                    r = 255;
-                    g = 150 + Math.random() * 80;
-                    b = 0;
-                } else if (this.color < 0.8) {
-                    // Orange flame
-                    r = 255;
-                    g = 100 + Math.random() * 60;
-                    b = 0;
-                } else {
-                    // Red/orange base - more red
-                    r = 255;
-                    g = 40 + Math.random() * 40;
-                    b = 0;
-                }
-
-                ctx.save();
-                ctx.globalAlpha = alpha;
-                
-                // Draw flame shape (elongated, not circular)
-                const gradient = ctx.createRadialGradient(
-                    this.x, this.y, 0,
-                    this.x, this.y, this.size
-                );
-                gradient.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${alpha})`);
-                gradient.addColorStop(0.5, `rgba(${r}, ${Math.floor(g * 0.8)}, ${b}, ${alpha * 0.8})`);
-                gradient.addColorStop(1, `rgba(${Math.floor(r * 0.6)}, ${Math.floor(g * 0.4)}, 0, 0)`);
-                
-                ctx.fillStyle = gradient;
-                
-                // Draw elongated flame shape
-                ctx.beginPath();
-                ctx.ellipse(this.x, this.y, this.size * 0.6, this.size, 0, 0, Math.PI * 2);
-                ctx.fill();
-                
-                // Add intense glow
-                ctx.shadowBlur = 20;
-                ctx.shadowColor = `rgba(${r}, ${g}, ${b}, ${alpha})`;
-                ctx.fill();
-                
-                ctx.restore();
-            }
-        }
-
-        // Create ember particles
-        class Ember {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.vx = (Math.random() - 0.5) * 4;
-                this.vy = -Math.random() * 5 - 2;
-                this.life = 1.0;
-                this.decay = Math.random() * 0.01 + 0.005;
-                this.size = Math.random() * 3 + 2;
-                this.brightness = Math.random();
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                this.vy += 0.15;
-                this.vx *= 0.98;
-                this.life -= this.decay;
-            }
-
-            draw() {
-                if (this.life <= 0) return;
-                
-                const alpha = this.life * 0.8;
-                const brightness = 200 + this.brightness * 55;
-                
-                ctx.save();
-                ctx.globalAlpha = alpha;
-                ctx.fillStyle = `rgba(${brightness}, ${brightness * 0.6}, 0, ${alpha})`;
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = `rgba(${brightness}, ${brightness * 0.6}, 0, ${alpha})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
-            }
-        }
-
-        // Create smoke particles
-        class SmokeParticle {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.vx = (Math.random() - 0.5) * 1.5;
-                this.vy = -Math.random() * 2 - 1;
-                this.life = 1.0;
-                this.decay = Math.random() * 0.008 + 0.005;
-                this.size = Math.random() * 20 + 15;
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                this.vy *= 0.98;
-                this.life -= this.decay;
-                this.size += 0.5;
-            }
-
-            draw() {
-                if (this.life <= 0) return;
-                
-                const alpha = this.life * 0.4;
-                ctx.save();
-                ctx.globalAlpha = alpha;
-                ctx.fillStyle = `rgba(50, 50, 50, ${alpha})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
-            }
-        }
-
-        // Create cinder/ash particles - paper turning into cinders
-        class Cinder {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.vx = (Math.random() - 0.5) * 2;
-                this.vy = Math.random() * 2 + 1; // Falls down
-                this.life = 1.0;
-                this.decay = Math.random() * 0.003 + 0.002;
-                this.size = Math.random() * 4 + 2;
-                this.rotation = Math.random() * Math.PI * 2;
-                this.rotationSpeed = (Math.random() - 0.5) * 0.1;
-                this.grayness = Math.random() * 0.3 + 0.2; // Dark gray to black
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                this.vy += 0.1; // Gravity
-                this.vx *= 0.95; // Air resistance
-                this.life -= this.decay;
-                this.rotation += this.rotationSpeed;
-                this.size *= 0.998; // Slight shrinking
-            }
-
-            draw() {
-                if (this.life <= 0) return;
-                
-                const alpha = this.life;
-                const gray = Math.floor(255 * this.grayness);
-                
-                ctx.save();
-                ctx.globalAlpha = alpha;
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.rotation);
-                
-                // Draw irregular cinder shape (not perfectly round)
-                ctx.fillStyle = `rgba(${gray}, ${gray}, ${gray}, ${alpha})`;
-                ctx.beginPath();
-                // Create slightly irregular shape
-                for (let i = 0; i < 6; i++) {
-                    const angle = (i / 6) * Math.PI * 2;
-                    const radius = this.size * (0.8 + Math.random() * 0.4);
-                    const x = Math.cos(angle) * radius;
-                    const y = Math.sin(angle) * radius;
-                    if (i === 0) {
-                        ctx.moveTo(x, y);
-                    } else {
-                        ctx.lineTo(x, y);
-                    }
-                }
-                ctx.closePath();
-                ctx.fill();
-                
-                ctx.restore();
-            }
-        }
-
-        // Generate burn edge points (irregular, organic shape - realistic paper burn)
-        function generateBurnEdge(progress) {
-            const edgePoints = [];
-            const numPoints = 120; // More points for detailed edge
-            const baseSpread = progress * Math.max(canvas.width, canvas.height) * 1.3;
-            const centerX = canvas.width * 0.1;
-            const centerY = canvas.height * 0.1;
-            
-            // Create multiple "burn zones" that progress at different rates (uneven burning)
-            const burnZones = 8; // Number of different burn zones
-            const zoneSpeeds = [];
-            for (let z = 0; z < burnZones; z++) {
-                zoneSpeeds.push(0.7 + Math.random() * 0.6); // Each zone burns at different speed
-            }
-            
-            for (let i = 0; i < numPoints; i++) {
-                const angle = (i / numPoints) * Math.PI * 2;
-                const zoneIndex = Math.floor((angle / (Math.PI * 2)) * burnZones);
-                const zoneSpeed = zoneSpeeds[zoneIndex];
-                
-                // Base distance varies by zone (uneven burning)
-                const baseDist = baseSpread * zoneSpeed;
-                
-                // Multiple layers of variation for organic, irregular edge
-                const variation1 = Math.sin(angle * 3) * (baseSpread * 0.3); // Large waves
-                const variation2 = Math.cos(angle * 7) * (baseSpread * 0.2); // Medium waves
-                const variation3 = Math.sin(angle * 13) * (baseSpread * 0.15); // Small waves
-                const variation4 = (Math.random() - 0.5) * (baseSpread * 0.2); // Random noise
-                
-                // Add "burn fingers" - areas that burn faster (like paper fibers)
-                const burnFinger = Math.sin(angle * 5 + progress * 10) > 0.7 ? baseSpread * 0.15 : 0;
-                
-                const dist = baseDist + variation1 + variation2 + variation3 + variation4 + burnFinger;
-                
-                const x = centerX + Math.cos(angle) * dist;
-                const y = centerY + Math.sin(angle) * dist;
-                edgePoints.push({ x, y });
-            }
-            return edgePoints;
-        }
-
-        // Animation loop
-        let startTime = Date.now();
+        // Animate mask-size using requestAnimationFrame for smooth burn
+        let startTime = null;
+        const duration = 4500; // 4.5 seconds
+        const startSize = 0;
+        const endSize = 200; // 200% to cover entire screen
         
-        function animate() {
-            const elapsed = Date.now() - startTime;
-            burnProgress = Math.min(elapsed / maxBurnTime, 1);
+        function animateMask(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const elapsed = timestamp - startTime;
+            const progress = Math.min(elapsed / duration, 1);
             
-            // Clear canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Ease-out function for smooth deceleration
+            const easeOut = 1 - Math.pow(1 - progress, 3);
+            const currentSize = startSize + (endSize - startSize) * easeOut;
             
-            // Generate burn edge
-            const burnEdge = generateBurnEdge(burnProgress);
+            overlay.style.setProperty('--mask-size', `${currentSize}%`);
             
-            // Create fire particles along burn edge - more realistic distribution
-            if (burnProgress < 0.95) {
-                const burnRadius = Math.max(canvas.width, canvas.height) * burnProgress * 1.3;
-                const centerX = canvas.width * 0.1;
-                const centerY = canvas.height * 0.1;
-                
-                // Create fire particles along the irregular burn edge (not just a ring)
-                for (let i = 0; i < burnEdge.length; i += 6) {
-                    const point = burnEdge[i];
-                    if (Math.random() < 0.5) {
-                        particles.push(new FireParticle(point.x, point.y));
-                    }
-                }
-                
-                // Create embers from burn edge
-                if (Math.random() < 0.25) {
-                    const edgePoint = burnEdge[Math.floor(Math.random() * burnEdge.length)];
-                    embers.push(new Ember(edgePoint.x, edgePoint.y));
-                }
-                
-                // Create smoke from burn edge
-                if (Math.random() < 0.3) {
-                    const edgePoint = burnEdge[Math.floor(Math.random() * burnEdge.length)];
-                    smoke.push(new SmokeParticle(edgePoint.x, edgePoint.y));
-                }
-                
-                // Create cinders - paper turning into ash (more as burn progresses)
-                if (burnProgress > 0.2 && Math.random() < (0.15 + burnProgress * 0.2)) {
-                    const edgePoint = burnEdge[Math.floor(Math.random() * burnEdge.length)];
-                    // Create multiple cinders at once
-                    for (let c = 0; c < 2 + Math.floor(Math.random() * 3); c++) {
-                        cinders.push(new Cinder(
-                            edgePoint.x + (Math.random() - 0.5) * 10,
-                            edgePoint.y + (Math.random() - 0.5) * 10
-                        ));
-                    }
-                }
-            }
-            
-            // Update and draw particles
-            for (let i = particles.length - 1; i >= 0; i--) {
-                particles[i].update();
-                particles[i].draw();
-                if (particles[i].life <= 0) {
-                    particles.splice(i, 1);
-                }
-            }
-            
-            // Update and draw embers
-            for (let i = embers.length - 1; i >= 0; i--) {
-                embers[i].update();
-                embers[i].draw();
-                if (embers[i].life <= 0 || embers[i].y > canvas.height) {
-                    embers.splice(i, 1);
-                }
-            }
-            
-            // Update and draw smoke
-            for (let i = smoke.length - 1; i >= 0; i--) {
-                smoke[i].update();
-                smoke[i].draw();
-                if (smoke[i].life <= 0 || smoke[i].y < -50) {
-                    smoke.splice(i, 1);
-                }
-            }
-            
-            // Update and draw cinders (paper turning into ash)
-            for (let i = cinders.length - 1; i >= 0; i--) {
-                cinders[i].update();
-                cinders[i].draw();
-                if (cinders[i].life <= 0 || cinders[i].y > canvas.height + 50) {
-                    cinders.splice(i, 1);
-                }
-            }
-            
-            // Update overlay mask to hide burned area (make it disappear)
-            if (burnProgress > 0) {
-                // Create mask canvas - white = visible, black = hidden
-                const maskCanvas = document.createElement('canvas');
-                maskCanvas.width = canvas.width;
-                maskCanvas.height = canvas.height;
-                const maskCtx = maskCanvas.getContext('2d');
-                
-                // In CSS mask: white = visible (opaque), black = transparent (reveals content behind)
-                // Fill entire canvas with white (keep papyrus visible initially)
-                maskCtx.fillStyle = 'white';
-                maskCtx.fillRect(0, 0, maskCanvas.width, maskCanvas.height);
-                
-                // Use the irregular burn edge to create realistic mask (not a perfect circle)
-                const centerX = canvas.width * 0.1;
-                const centerY = canvas.height * 0.1;
-                const maxDist = Math.max(canvas.width, canvas.height) * burnProgress * 1.3;
-                
-                // Draw the burned area using the actual irregular burn edge shape
-                maskCtx.beginPath();
-                maskCtx.moveTo(burnEdge[0].x, burnEdge[0].y);
-                for (let i = 1; i < burnEdge.length; i++) {
-                    maskCtx.lineTo(burnEdge[i].x, burnEdge[i].y);
-                }
-                maskCtx.closePath();
-                
-                // Use destination-out to "cut out" the burned area following the irregular edge
-                maskCtx.globalCompositeOperation = 'destination-out';
-                
-                // Create gradient for smooth charred edge transition
-                const burnGradient = maskCtx.createRadialGradient(
-                    centerX, centerY, 0,
-                    centerX, centerY, maxDist * 1.15
-                );
-                
-                // Smooth fade at edges for realistic charred paper effect
-                burnGradient.addColorStop(0, 'rgba(0, 0, 0, 1)'); // Fully erase center
-                burnGradient.addColorStop(0.8, 'rgba(0, 0, 0, 1)'); // Fully erase burned area
-                burnGradient.addColorStop(0.92, 'rgba(0, 0, 0, 0.7)'); // Charred edge
-                burnGradient.addColorStop(0.97, 'rgba(0, 0, 0, 0.3)'); // Fading edge
-                burnGradient.addColorStop(1, 'rgba(0, 0, 0, 0)'); // No erase outside
-                
-                maskCtx.fillStyle = burnGradient;
-                maskCtx.fill();
-                
-                // Reset composite operation for next frame
-                maskCtx.globalCompositeOperation = 'source-over';
-                
-                // Apply mask to overlay (black areas become transparent, revealing content behind)
-                // In CSS mask: white = visible, black = transparent
-                overlay.style.maskImage = `url(${maskCanvas.toDataURL()})`;
-                overlay.style.webkitMaskImage = `url(${maskCanvas.toDataURL()})`;
-                overlay.style.maskSize = '100% 100%';
-                overlay.style.webkitMaskSize = '100% 100%';
-                overlay.style.maskRepeat = 'no-repeat';
-                overlay.style.webkitMaskRepeat = 'no-repeat';
-                overlay.style.maskPosition = 'center';
-                overlay.style.webkitMaskPosition = 'center';
-                
-                // Apply decay/browning effect to papyrus overlay using CSS variables
-                const decayOpacity = Math.min(1, burnProgress * 1.2);
-                const centerXPercent = (centerX / canvas.width) * 100;
-                const centerYPercent = (centerY / canvas.height) * 100;
-                const burnRadiusPercent = (maxDist / Math.max(canvas.width, canvas.height)) * 100;
-                
-                // Update CSS variables for decay effect
-                overlay.style.setProperty('--decay-opacity', decayOpacity);
-                overlay.style.setProperty('--decay-center-x', `${centerXPercent}%`);
-                overlay.style.setProperty('--decay-center-y', `${centerYPercent}%`);
-                overlay.style.setProperty('--decay-radius', `${burnRadiusPercent * 1.1}%`);
-                
-                // Simple realistic burn texture - radial gradient that grows
-                const burnTextureOpacity = Math.min(1, burnProgress * 1.5);
-                // Calculate burn size - grows from 0 to cover screen
-                const burnSize = (burnProgress * 250); // Percentage
-                // Position the burn gradient to follow the burn center
-                const burnBgX = -50 + (centerXPercent * 0.5); // Center the gradient
-                const burnBgY = -50 + (centerYPercent * 0.5);
-                
-                overlay.style.setProperty('--burn-x', `${centerXPercent}%`);
-                overlay.style.setProperty('--burn-y', `${centerYPercent}%`);
-                overlay.style.setProperty('--burn-bg-x', `${burnBgX}%`);
-                overlay.style.setProperty('--burn-bg-y', `${burnBgY}%`);
-                overlay.style.setProperty('--burn-size', `${burnSize}%`);
-                overlay.style.setProperty('--burn-texture-opacity', burnTextureOpacity);
-                
-                // Start burning class when burn begins
-                if (burnProgress > 0.01 && !overlay.classList.contains('burning')) {
-                    overlay.classList.add('burning');
-                }
-                
-                // Add decaying class to activate the ::before pseudo-element
-                if (!overlay.classList.contains('decaying')) {
-                    overlay.classList.add('decaying');
-                }
-                
-                // Draw RED burning edge and charred overlay on fire canvas - AMPED UP
-                const charGradient = ctx.createRadialGradient(
-                    centerX, centerY, 0,
-                    centerX, centerY, maxDist
-                );
-                // Red burning edge at the perimeter
-                charGradient.addColorStop(0, 'rgba(255, 0, 0, 0.8)'); // Bright red center
-                charGradient.addColorStop(0.3, 'rgba(255, 69, 0, 0.7)'); // Orange-red
-                charGradient.addColorStop(0.6, 'rgba(139, 69, 19, 0.6)'); // Brown
-                charGradient.addColorStop(0.85, 'rgba(50, 35, 20, 0.5)'); // Dark brown
-                charGradient.addColorStop(0.95, 'rgba(30, 20, 10, 0.3)'); // Charred
-                charGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-                
-                ctx.save();
-                ctx.globalCompositeOperation = 'multiply';
-                ctx.globalAlpha = 0.9; // More visible
-                ctx.fillStyle = charGradient;
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                // Add red/orange burning tint for edges
-                ctx.globalCompositeOperation = 'screen';
-                ctx.globalAlpha = 0.4;
-                const redGradient = ctx.createRadialGradient(
-                    centerX, centerY, maxDist * 0.8,
-                    centerX, centerY, maxDist * 1.1
-                );
-                redGradient.addColorStop(0, 'rgba(255, 0, 0, 0.6)'); // Red edge
-                redGradient.addColorStop(0.5, 'rgba(255, 69, 0, 0.4)'); // Orange
-                redGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-                ctx.fillStyle = redGradient;
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.restore();
-            }
-            
-            // Fade out overlay when done
-            if (burnProgress >= 0.95) {
-                overlay.style.opacity = 1 - ((burnProgress - 0.95) * 20);
-            }
-            
-            if (burnProgress < 1) {
-                requestAnimationFrame(animate);
+            if (progress < 1) {
+                requestAnimationFrame(animateMask);
             } else {
+                // Animation complete - hide overlay
                 setTimeout(() => {
                     overlay.classList.add('hidden');
                     setTimeout(() => {
@@ -529,42 +53,56 @@
             }
         }
         
-        // Handle window resize
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
-        // Start animation after brief delay
-        setTimeout(() => {
-            startTime = Date.now();
-            animate();
-        }, 300);
+        // Start animation immediately - don't block page load
+        overlay.classList.add('burning');
+        requestAnimationFrame(animateMask);
     }
 
     // Initialize fire burn
     initFireBurn();
 
-    // Initial background display with soft gradient so the page never starts black
-    gsap.set('#backgroundCanvas', { opacity: 0 });
-    gsap.to('#backgroundCanvas', { duration: 0.8, opacity: 1, ease: 'power2.out', delay: 0.5 });
+    // Show background immediately - no black screen
+    const bgCanvas = document.getElementById('backgroundCanvas');
+    if (bgCanvas) {
+        bgCanvas.style.opacity = '1';
+    }
     
-    // Content reveal without long delay
+    // Show content immediately - no waiting
     const contentContainer = document.querySelector('.content-container');
     if (contentContainer) {
         contentContainer.style.visibility = 'visible';
-        gsap.to(contentContainer, {
-            duration: 1.2,
-            opacity: 1,
-            delay: 1.0,
-            ease: 'power3.out'
-        });
+        contentContainer.style.opacity = '1';
     }
-    // Initialize Skills Charts
-    const chartOptions = {
-        maintainAspectRatio: false,
-        plugins: { legend: { position: 'bottom' } }
-    };
+});
+
+    // Certification Growth Timeline
+    new Chart(document.getElementById('certificationTimeline'), {
+        type: 'line',
+        data: {
+            labels: ['2020', '2021', '2022', '2023', '2024'],
+            datasets: [{
+                label: 'Certifications',
+                data: [5, 8, 12, 18, 25],
+                borderColor: 'rgba(0, 242, 255, 0.8)',
+                backgroundColor: 'rgba(0, 242, 255, 0.1)',
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
 
     new Chart(document.getElementById('techStackChart'), {
         type: 'doughnut',
@@ -580,7 +118,10 @@
                 ]
             }]
         },
-        options: chartOptions
+        options: {
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' } }
+        }
     });
 
     // Certification Growth Timeline
@@ -596,7 +137,75 @@
                 tension: 0.4
             }]
         },
-        options: chartOptions
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Initialize fire burn
+    initFireBurn();
+
+    // Show background and content immediately - no delays
+    const bgCanvas = document.getElementById('backgroundCanvas');
+    if (bgCanvas) {
+        bgCanvas.style.opacity = '1';
+    }
+    const contentContainer = document.querySelector('.content-container');
+    if (contentContainer) {
+        contentContainer.style.visibility = 'visible';
+        contentContainer.style.opacity = '1';
+    }
+
+    // Initialize Skills Charts
+
+    new Chart(document.getElementById('techStackChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Frontend', 'Backend', 'Cloud', 'AI/ML'],
+            datasets: [{
+                data: [35, 30, 20, 15],
+                backgroundColor: [
+                    'rgba(0, 255, 157, 0.8)',
+                    'rgba(0, 217, 255, 0.8)',
+                    'rgba(162, 119, 255, 0.8)',
+                    'rgba(255, 61, 94, 0.8)'
+                ]
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' } }
+        }
+    });
+
+    // Certification Growth Timeline
+    new Chart(document.getElementById('certificationTimeline'), {
+        type: 'line',
+        data: {
+            labels: ['2020', '2021', '2022', '2023', '2024'],
+            datasets: [{
+                label: 'Certifications',
+                data: [5, 8, 12, 18, 25],
+                borderColor: 'rgba(0, 242, 255, 0.8)',
+                backgroundColor: 'rgba(0, 242, 255, 0.1)',
+                tension: 0.4
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' } }
+        }
     });
 
     // Project Type Breakdown
@@ -610,7 +219,10 @@
                 backgroundColor: 'rgba(162, 119, 255, 0.8)'
             }]
         },
-        options: chartOptions
+        options: {
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' } }
+        }
     });
 
     // Skill Proficiency Matrix
@@ -625,7 +237,10 @@
                 borderColor: 'rgba(255, 61, 94, 0.8)'
             }]
         },
-        options: chartOptions
+        options: {
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' } }
+        }
     });
 
     // Technical Mastery Spectrum Radar Chart
@@ -679,28 +294,27 @@
         }
     });
 
-  // Filtering logic
-  document.querySelectorAll('.status-filter').forEach(filter => {
-    filter.addEventListener('click', function() {
-      const status = this.dataset.status;
-      // Remove active class from all filters
-      document.querySelectorAll('.status-filter').forEach(f => f.classList.remove('active'));
-      this.classList.add('active');
-      // Show/hide project cards
-      document.querySelectorAll('.project-card').forEach(card => {
-        if (status === 'all') {
-          card.style.display = '';
-        } else {
-          if (card.classList.contains(status)) {
-            card.style.display = '';
-          } else {
-            card.style.display = 'none';
-          }
-        }
-      });
+    // Filtering logic
+    document.querySelectorAll('.status-filter').forEach(filter => {
+        filter.addEventListener('click', function() {
+            const status = this.dataset.status;
+            // Remove active class from all filters
+            document.querySelectorAll('.status-filter').forEach(f => f.classList.remove('active'));
+            this.classList.add('active');
+            // Show/hide project cards
+            document.querySelectorAll('.project-card').forEach(card => {
+                if (status === 'all') {
+                    card.style.display = '';
+                } else {
+                    if (card.classList.contains(status)) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                }
+            });
+        });
     });
-  });
-});
     </script>
     <style>
         :root {
@@ -3328,7 +2942,7 @@ transform: none !important;
             }
         }
 
-        /* Papyrus Burn Effect */
+        /* Papyrus Burn Effect - CodePen style with smooth CSS animation */
         .papyrus-overlay {
             position: fixed;
             top: 0;
@@ -3343,13 +2957,56 @@ transform: none !important;
             background-repeat: no-repeat;
             opacity: 1;
             overflow: hidden;
-            transition: opacity 0.3s ease;
-            /* Ensure mask works correctly to reveal content behind */
-            /* mask-composite removed - using standard mask behavior */
+            mix-blend-mode: darken;
+            /* Smooth mask animation for burn reveal */
+            --mask-size: 0%;
+            --mask-x: 10%;
+            --mask-y: 10%;
+            mask-image: radial-gradient(
+                circle var(--mask-size) at var(--mask-x) var(--mask-y),
+                transparent 0%,
+                transparent 45%,
+                black 50%,
+                black 100%
+            );
+            -webkit-mask-image: radial-gradient(
+                circle var(--mask-size) at var(--mask-x) var(--mask-y),
+                transparent 0%,
+                transparent 45%,
+                black 50%,
+                black 100%
+            );
+            mask-size: 100% 100%;
+            -webkit-mask-size: 100% 100%;
+            mask-repeat: no-repeat;
+            -webkit-mask-repeat: no-repeat;
+            transition: --mask-size 0.1s linear, opacity 0.8s ease-out;
         }
         
+        /* Burn glow layer - red/orange edge */
+        .papyrus-overlay::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            background: radial-gradient(
+                circle var(--mask-size) at var(--mask-x) var(--mask-y),
+                rgba(255, 0, 0, 0.8) 0%,
+                rgba(255, 69, 0, 0.7) 15%,
+                rgba(255, 140, 0, 0.5) 30%,
+                rgba(139, 69, 19, 0.3) 45%,
+                transparent 60%
+            );
+            mix-blend-mode: screen;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
         
-        /* Burn texture overlay - Simple realistic paper burn */
+        /* Burn texture - charred paper effect */
         .papyrus-overlay::after {
             content: '';
             position: absolute;
@@ -3359,43 +3016,65 @@ transform: none !important;
             height: 100%;
             pointer-events: none;
             z-index: 2;
-            /* Simple radial burn - red/orange edge, brown/black center */
             background: radial-gradient(
-                ellipse at var(--burn-x, 10%) var(--burn-y, 10%),
-                rgba(0, 0, 0, 0.9) 0%,              /* Black charred center */
-                rgba(30, 20, 10, 0.8) 15%,         /* Dark brown */
-                rgba(60, 40, 20, 0.7) 30%,         /* Brown */
-                rgba(139, 69, 19, 0.6) 50%,        /* Saddle brown */
-                rgba(255, 69, 0, 0.5) 70%,         /* Orange-red edge */
-                rgba(255, 140, 0, 0.3) 85%,        /* Orange glow */
-                transparent 100%
+                circle var(--mask-size) at var(--mask-x) var(--mask-y),
+                rgba(0, 0, 0, 0.9) 0%,
+                rgba(30, 20, 10, 0.85) 20%,
+                rgba(60, 40, 20, 0.7) 35%,
+                rgba(139, 69, 19, 0.5) 50%,
+                rgba(255, 69, 0, 0.3) 65%,
+                transparent 80%
             );
-            background-size: var(--burn-size, 200%) var(--burn-size, 200%);
-            background-position: var(--burn-bg-x, -50%) var(--burn-bg-y, -50%);
             mix-blend-mode: multiply;
-            opacity: var(--burn-texture-opacity, 0);
-            transition: opacity 0.2s ease;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
         
-        /* Decay effect overlay for papyrus - will be applied via JS */
-        .papyrus-overlay.decaying::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            opacity: var(--decay-opacity, 0);
-            transition: opacity 0.2s ease;
-            background: radial-gradient(circle at var(--decay-center-x, 10%) var(--decay-center-y, 10%), 
-                rgba(20, 15, 10, calc(0.9 * var(--decay-opacity, 0))) 0%,
-                rgba(40, 30, 20, calc(0.7 * var(--decay-opacity, 0))) 30%,
-                rgba(60, 45, 30, calc(0.5 * var(--decay-opacity, 0))) 60%,
-                rgba(80, 65, 50, calc(0.3 * var(--decay-opacity, 0))) 85%,
-                transparent 100%);
-            mix-blend-mode: multiply;
+        /* Start burn animation - smooth mask expansion */
+        .papyrus-overlay.burning {
+            animation: burnMask 4.5s ease-out forwards;
+        }
+        
+        .papyrus-overlay.burning::before {
+            opacity: 1;
+            animation: burnGlow 4.5s ease-out forwards;
+        }
+        
+        .papyrus-overlay.burning::after {
+            opacity: 1;
+            animation: burnTexture 4.5s ease-out forwards;
+        }
+        
+        /* Mask size is animated via JavaScript for smooth performance */
+        
+        @keyframes burnGlow {
+            0% {
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 0.8;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+        
+        @keyframes burnTexture {
+            0% {
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 0.9;
+            }
+            100% {
+                opacity: 0;
+            }
         }
 
         .papyrus-overlay.hidden {
@@ -3404,25 +3083,13 @@ transform: none !important;
             transition: opacity 0.8s ease-out;
         }
 
-        #fire-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 10000;
-        }
-
     </style>
 </head>
 <body>
     <!-- Papyrus Burn Overlay -->
-    <div id="papyrus-overlay" class="papyrus-overlay">
-        <canvas id="fire-canvas"></canvas>
-    </div>
+    <div id="papyrus-overlay" class="papyrus-overlay"></div>
     <div id="backgroundCanvas"></div>
-    <div class="content-container etch" style="opacity:0;visibility:hidden;">
+    <div class="content-container etch" style="opacity:1;visibility:visible;">
     <!-- Parallax Background Container -->
     <div class="parallax-container">
         <svg class="parallax" viewBox="0 0 750 500" preserveAspectRatio="xMidYMax slice">
