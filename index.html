@@ -440,13 +440,25 @@
                 const decayOpacity = Math.min(1, burnProgress * 1.2);
                 const centerXPercent = (centerX / canvas.width) * 100;
                 const centerYPercent = (centerY / canvas.height) * 100;
-                const burnRadiusPercent = (burnRadius / Math.max(canvas.width, canvas.height)) * 100;
+                const burnRadiusPercent = (maxDist / Math.max(canvas.width, canvas.height)) * 100;
                 
                 // Update CSS variables for decay effect
                 overlay.style.setProperty('--decay-opacity', decayOpacity);
                 overlay.style.setProperty('--decay-center-x', `${centerXPercent}%`);
                 overlay.style.setProperty('--decay-center-y', `${centerYPercent}%`);
                 overlay.style.setProperty('--decay-radius', `${burnRadiusPercent * 1.1}%`);
+                
+                // Add CodePen-inspired burn texture effect using background-position animation
+                // Animate background position to create progressive burn effect
+                const burnTextureOpacity = Math.min(1, burnProgress * 1.5);
+                const burnBgX = -100 + (burnProgress * 200); // Animate from -100% to 100%
+                const burnBgY = -100 + (burnProgress * 200);
+                
+                overlay.style.setProperty('--burn-x', `${centerXPercent}%`);
+                overlay.style.setProperty('--burn-y', `${centerYPercent}%`);
+                overlay.style.setProperty('--burn-bg-x', `${burnBgX}%`);
+                overlay.style.setProperty('--burn-bg-y', `${burnBgY}%`);
+                overlay.style.setProperty('--burn-texture-opacity', burnTextureOpacity);
                 
                 // Add decaying class to activate the ::before pseudo-element
                 if (!overlay.classList.contains('decaying')) {
@@ -3311,6 +3323,42 @@ transform: none !important;
             transition: opacity 0.3s ease;
             /* Ensure mask works correctly to reveal content behind */
             /* mask-composite removed - using standard mask behavior */
+        }
+        
+        /* Burn texture overlay - inspired by CodePen technique */
+        .papyrus-overlay::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+            /* Create burn texture using gradient and noise */
+            background: 
+                radial-gradient(ellipse at var(--burn-x, 10%) var(--burn-y, 10%), 
+                    rgba(139, 69, 19, 0.8) 0%,
+                    rgba(101, 67, 33, 0.6) 25%,
+                    rgba(60, 40, 20, 0.4) 50%,
+                    rgba(30, 20, 10, 0.2) 75%,
+                    transparent 100%),
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0, 0, 0, 0.1) 0px,
+                    transparent 1px,
+                    transparent 2px,
+                    rgba(0, 0, 0, 0.05) 3px
+                );
+            background-size: 
+                200% 200%,
+                4px 4px;
+            background-position: 
+                var(--burn-bg-x, -100%) var(--burn-bg-y, -100%),
+                0 0;
+            mix-blend-mode: multiply;
+            opacity: var(--burn-texture-opacity, 0);
+            transition: opacity 0.2s ease, background-position 0.1s linear;
         }
         
         /* Decay effect overlay for papyrus - will be applied via JS */
