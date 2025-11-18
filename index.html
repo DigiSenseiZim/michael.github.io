@@ -66,26 +66,31 @@
                 const alpha = this.life;
                 let r, g, b;
                 
-                // More realistic fire colors
-                if (this.color < 0.25) {
+                // More realistic fire colors with RED burning edges
+                if (this.color < 0.2) {
                     // White/yellow hot center
                     r = 255;
                     g = 255;
-                    b = 180;
-                } else if (this.color < 0.5) {
+                    b = 200;
+                } else if (this.color < 0.4) {
+                    // Bright red/orange - burning edge
+                    r = 255;
+                    g = 50 + Math.random() * 50;
+                    b = 0;
+                } else if (this.color < 0.6) {
                     // Bright orange/yellow
                     r = 255;
-                    g = 200 + Math.random() * 55;
+                    g = 150 + Math.random() * 80;
                     b = 0;
-                } else if (this.color < 0.75) {
+                } else if (this.color < 0.8) {
                     // Orange flame
                     r = 255;
-                    g = 120 + Math.random() * 60;
+                    g = 100 + Math.random() * 60;
                     b = 0;
                 } else {
-                    // Red/orange base
+                    // Red/orange base - more red
                     r = 255;
-                    g = 60 + Math.random() * 40;
+                    g = 40 + Math.random() * 40;
                     b = 0;
                 }
 
@@ -449,8 +454,8 @@
                 overlay.style.setProperty('--decay-radius', `${burnRadiusPercent * 1.1}%`);
                 
                 // Add CodePen-inspired burn texture effect using background-position animation
-                // Animate background position to create progressive burn effect
-                const burnTextureOpacity = Math.min(1, burnProgress * 1.5);
+                // Animate background position to create progressive burn effect - AMPED UP
+                const burnTextureOpacity = Math.min(1, burnProgress * 2); // More visible
                 const burnBgX = -100 + (burnProgress * 200); // Animate from -100% to 100%
                 const burnBgY = -100 + (burnProgress * 200);
                 
@@ -3325,7 +3330,7 @@ transform: none !important;
             /* mask-composite removed - using standard mask behavior */
         }
         
-        /* Burn texture overlay - inspired by CodePen technique */
+        /* Burn texture overlay - inspired by CodePen technique - AMPED UP */
         .papyrus-overlay::after {
             content: '';
             position: absolute;
@@ -3335,20 +3340,24 @@ transform: none !important;
             height: 100%;
             pointer-events: none;
             z-index: 2;
-            /* Create burn texture using gradient and noise */
+            /* Create intense burn texture with RED burning edges */
             background: 
                 radial-gradient(ellipse at var(--burn-x, 10%) var(--burn-y, 10%), 
-                    rgba(139, 69, 19, 0.8) 0%,
-                    rgba(101, 67, 33, 0.6) 25%,
-                    rgba(60, 40, 20, 0.4) 50%,
-                    rgba(30, 20, 10, 0.2) 75%,
+                    rgba(255, 0, 0, 0.9) 0%,        /* Bright red center */
+                    rgba(255, 69, 0, 0.85) 5%,     /* Orange-red */
+                    rgba(255, 140, 0, 0.8) 10%,    /* Orange */
+                    rgba(255, 165, 0, 0.7) 15%,   /* Dark orange */
+                    rgba(139, 69, 19, 0.6) 25%,   /* Saddle brown */
+                    rgba(101, 67, 33, 0.5) 40%,   /* Dark brown */
+                    rgba(60, 40, 20, 0.4) 60%,    /* Charred */
+                    rgba(30, 20, 10, 0.3) 80%,    /* Dark charred */
                     transparent 100%),
                 repeating-linear-gradient(
                     0deg,
-                    rgba(0, 0, 0, 0.1) 0px,
+                    rgba(255, 0, 0, 0.15) 0px,     /* Red texture lines */
                     transparent 1px,
                     transparent 2px,
-                    rgba(0, 0, 0, 0.05) 3px
+                    rgba(255, 69, 0, 0.1) 3px      /* Orange texture */
                 );
             background-size: 
                 200% 200%,
@@ -3358,7 +3367,11 @@ transform: none !important;
                 0 0;
             mix-blend-mode: multiply;
             opacity: var(--burn-texture-opacity, 0);
-            transition: opacity 0.2s ease, background-position 0.1s linear;
+            transition: opacity 0.1s ease, background-position 0.05s linear;
+            /* Add glow effect for burning edges */
+            box-shadow: 
+                inset 0 0 100px rgba(255, 0, 0, 0.3),
+                inset 0 0 200px rgba(255, 69, 0, 0.2);
         }
         
         /* Decay effect overlay for papyrus - will be applied via JS */
