@@ -18,9 +18,337 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+    // Realistic Fire Burn Effect
+    function initFireBurn() {
+        const canvas = document.getElementById('fire-canvas');
+        const overlay = document.getElementById('papyrus-overlay');
+        if (!canvas || !overlay) return;
+
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Fire particles
+        const particles = [];
+        const embers = [];
+        const smoke = [];
+        let burnProgress = 0;
+        const maxBurnTime = 5000; // 5 seconds for smoother animation
+        let lastFrameTime = Date.now();
+
+        // Create fire particles
+        class FireParticle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 2;
+                this.vy = -Math.random() * 3 - 1;
+                this.life = 1.0;
+                this.decay = Math.random() * 0.02 + 0.01;
+                this.size = Math.random() * 8 + 4;
+                this.color = Math.random();
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += 0.1; // gravity
+                this.life -= this.decay;
+                this.size *= 0.98;
+            }
+
+            draw() {
+                if (this.life <= 0) return;
+                
+                const alpha = this.life;
+                let r, g, b;
+                
+                if (this.color < 0.3) {
+                    // White/yellow hot center
+                    r = 255;
+                    g = 255;
+                    b = 200;
+                } else if (this.color < 0.6) {
+                    // Orange flame
+                    r = 255;
+                    g = 140 + Math.random() * 50;
+                    b = 0;
+                } else {
+                    // Red/orange
+                    r = 255;
+                    g = 69 + Math.random() * 50;
+                    b = 0;
+                }
+
+                ctx.save();
+                ctx.globalAlpha = alpha;
+                ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Add glow
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // Create ember particles
+        class Ember {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 4;
+                this.vy = -Math.random() * 5 - 2;
+                this.life = 1.0;
+                this.decay = Math.random() * 0.01 + 0.005;
+                this.size = Math.random() * 3 + 2;
+                this.brightness = Math.random();
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += 0.15;
+                this.vx *= 0.98;
+                this.life -= this.decay;
+            }
+
+            draw() {
+                if (this.life <= 0) return;
+                
+                const alpha = this.life * 0.8;
+                const brightness = 200 + this.brightness * 55;
+                
+                ctx.save();
+                ctx.globalAlpha = alpha;
+                ctx.fillStyle = `rgba(${brightness}, ${brightness * 0.6}, 0, ${alpha})`;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = `rgba(${brightness}, ${brightness * 0.6}, 0, ${alpha})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // Create smoke particles
+        class SmokeParticle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 1.5;
+                this.vy = -Math.random() * 2 - 1;
+                this.life = 1.0;
+                this.decay = Math.random() * 0.008 + 0.005;
+                this.size = Math.random() * 20 + 15;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy *= 0.98;
+                this.life -= this.decay;
+                this.size += 0.5;
+            }
+
+            draw() {
+                if (this.life <= 0) return;
+                
+                const alpha = this.life * 0.4;
+                ctx.save();
+                ctx.globalAlpha = alpha;
+                ctx.fillStyle = `rgba(50, 50, 50, ${alpha})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // Generate burn edge points (irregular, organic shape - smoother)
+        function generateBurnEdge(progress) {
+            const edgePoints = [];
+            const numPoints = 80; // More points for smoother edge
+            const spread = progress * Math.max(canvas.width, canvas.height) * 1.3;
+            
+            for (let i = 0; i < numPoints; i++) {
+                const angle = (i / numPoints) * Math.PI * 2;
+                const baseDist = spread;
+                // Smoother variation using multiple sine waves
+                const variation = Math.sin(angle * 2) * (spread * 0.25) + 
+                                 Math.cos(angle * 4) * (spread * 0.15) +
+                                 Math.sin(angle * 6) * (spread * 0.1) +
+                                 Math.random() * (spread * 0.1);
+                const dist = baseDist + variation;
+                
+                const x = canvas.width * 0.1 + Math.cos(angle) * dist;
+                const y = canvas.height * 0.1 + Math.sin(angle) * dist;
+                edgePoints.push({ x, y });
+            }
+            return edgePoints;
+        }
+
+        // Animation loop
+        let startTime = Date.now();
+        
+        function animate() {
+            const elapsed = Date.now() - startTime;
+            burnProgress = Math.min(elapsed / maxBurnTime, 1);
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Generate burn edge
+            const burnEdge = generateBurnEdge(burnProgress);
+            
+            // Create fire particles along burn edge (smoother, more particles)
+            if (burnProgress < 0.95) {
+                for (let i = 0; i < burnEdge.length; i++) {
+                    if (Math.random() < 0.4) {
+                        const point = burnEdge[i];
+                        particles.push(new FireParticle(point.x, point.y));
+                    }
+                }
+                
+                // Create embers (more frequent)
+                if (Math.random() < 0.15) {
+                    const point = burnEdge[Math.floor(Math.random() * burnEdge.length)];
+                    embers.push(new Ember(point.x, point.y));
+                }
+                
+                // Create smoke (more frequent)
+                if (Math.random() < 0.2) {
+                    const point = burnEdge[Math.floor(Math.random() * burnEdge.length)];
+                    smoke.push(new SmokeParticle(point.x, point.y));
+                }
+            }
+            
+            // Update and draw particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].life <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+            
+            // Update and draw embers
+            for (let i = embers.length - 1; i >= 0; i--) {
+                embers[i].update();
+                embers[i].draw();
+                if (embers[i].life <= 0 || embers[i].y > canvas.height) {
+                    embers.splice(i, 1);
+                }
+            }
+            
+            // Update and draw smoke
+            for (let i = smoke.length - 1; i >= 0; i--) {
+                smoke[i].update();
+                smoke[i].draw();
+                if (smoke[i].life <= 0 || smoke[i].y < -50) {
+                    smoke.splice(i, 1);
+                }
+            }
+            
+            // Update overlay mask to hide burned area (make it disappear)
+            if (burnProgress > 0) {
+                // Create mask canvas - white = visible, black = hidden
+                const maskCanvas = document.createElement('canvas');
+                maskCanvas.width = canvas.width;
+                maskCanvas.height = canvas.height;
+                const maskCtx = maskCanvas.getContext('2d');
+                
+                // Fill with white (keep papyrus visible)
+                maskCtx.fillStyle = 'white';
+                maskCtx.fillRect(0, 0, maskCanvas.width, maskCanvas.height);
+                
+                // Draw black (transparent) area for burned region
+                maskCtx.fillStyle = 'black';
+                maskCtx.beginPath();
+                maskCtx.moveTo(burnEdge[0].x, burnEdge[0].y);
+                for (let i = 1; i < burnEdge.length; i++) {
+                    maskCtx.lineTo(burnEdge[i].x, burnEdge[i].y);
+                }
+                maskCtx.closePath();
+                
+                // Add soft edge for charred effect
+                const gradient = maskCtx.createRadialGradient(
+                    canvas.width * 0.1, canvas.height * 0.1, 0,
+                    canvas.width * 0.1, canvas.height * 0.1, 
+                    Math.max(canvas.width, canvas.height) * burnProgress * 1.2
+                );
+                gradient.addColorStop(0, 'rgba(0, 0, 0, 1)');
+                gradient.addColorStop(0.85, 'rgba(0, 0, 0, 0.8)');
+                gradient.addColorStop(0.95, 'rgba(0, 0, 0, 0.3)');
+                gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                
+                maskCtx.fillStyle = gradient;
+                maskCtx.fill();
+                
+                // Apply mask to overlay (black areas become transparent)
+                overlay.style.maskImage = `url(${maskCanvas.toDataURL()})`;
+                overlay.style.webkitMaskImage = `url(${maskCanvas.toDataURL()})`;
+                overlay.style.maskSize = '100% 100%';
+                overlay.style.webkitMaskSize = '100% 100%';
+                
+                // Add charred edge effect on fire canvas
+                const charGradient = ctx.createRadialGradient(
+                    canvas.width * 0.1, canvas.height * 0.1, 0,
+                    canvas.width * 0.1, canvas.height * 0.1, 
+                    Math.max(canvas.width, canvas.height) * burnProgress * 1.2
+                );
+                charGradient.addColorStop(0, 'rgba(20, 20, 20, 0.6)');
+                charGradient.addColorStop(0.7, 'rgba(40, 30, 20, 0.3)');
+                charGradient.addColorStop(0.9, 'rgba(60, 40, 20, 0.1)');
+                charGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                
+                ctx.save();
+                ctx.globalCompositeOperation = 'multiply';
+                ctx.globalAlpha = 0.5;
+                ctx.fillStyle = charGradient;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.restore();
+            }
+            
+            // Fade out overlay when done
+            if (burnProgress >= 0.95) {
+                overlay.style.opacity = 1 - ((burnProgress - 0.95) * 20);
+            }
+            
+            if (burnProgress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                    }, 800);
+                }, 200);
+            }
+        }
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Start animation after brief delay
+        setTimeout(() => {
+            startTime = Date.now();
+            animate();
+        }, 300);
+    }
+
+    // Initialize fire burn
+    initFireBurn();
+
     // Initial background display with soft gradient so the page never starts black
     gsap.set('#backgroundCanvas', { opacity: 0 });
-    gsap.to('#backgroundCanvas', { duration: 0.8, opacity: 1, ease: 'power2.out' });
+    gsap.to('#backgroundCanvas', { duration: 0.8, opacity: 1, ease: 'power2.out', delay: 0.5 });
     
     // Content reveal without long delay
     const contentContainer = document.querySelector('.content-container');
@@ -29,7 +357,7 @@
         gsap.to(contentContainer, {
             duration: 1.2,
             opacity: 1,
-            delay: 0.3,
+            delay: 1.0,
             ease: 'power3.out'
         });
     }
@@ -786,6 +1114,14 @@ transform: none !important;
         0px -1px 0px rgba(0, 0, 0, 0.3),
         1px 0px 0px rgba(255, 255, 255, 0.3),
         -1px 0px 0px rgba(0, 0, 0, 0.4);
+        }
+
+        /* All icons - etched glass blue */
+        i, .fa, .fas, .fab, .far, .fal, .fad, [class*="fa-"], 
+        .icon, svg, .nav-icon i, .panel-title i,
+        .project-card i, .stat-card i, .chart-title i {
+            color: var(--primary) !important;
+            filter: drop-shadow(0 0 3px rgba(0, 255, 255, 0.5));
         }
     
         .lead-snapshot {
@@ -1758,18 +2094,18 @@ transform: none !important;
         -1px 0px 0px rgba(0, 0, 0, 0.4);
         }
     
-        /* Section-specific colors */
-        .nav-icon[data-section="Projects"] { color: var(--projects-color); }
-        .nav-icon[data-section="Analysis"] { color: var(--analysis-color); }
-        .nav-icon[data-section="Skills"] { color: var(--skills-color); }
-        .nav-icon[data-section="Education"] { color: var(--education-color); }
-        .nav-icon[data-section="Motivation"] { color: var(--motivation-color); }
-    
-        .nav-icon.active[data-section="Projects"] { background: var(--projects-color); }
-        .nav-icon.active[data-section="Analysis"] { background: var(--analysis-color); }
-        .nav-icon.active[data-section="Skills"] { background: var(--skills-color); }
-        .nav-icon.active[data-section="Education"] { background: var(--education-color); }
-        .nav-icon.active[data-section="Motivation"] { background: var(--motivation-color); }
+        /* Section-specific colors - all icons use etched glass blue */
+        .nav-icon[data-section="Projects"] { color: var(--primary) !important; }
+        .nav-icon[data-section="Analysis"] { color: var(--primary) !important; }
+        .nav-icon[data-section="Skills"] { color: var(--primary) !important; }
+        .nav-icon[data-section="Education"] { color: var(--primary) !important; }
+        .nav-icon[data-section="Motivation"] { color: var(--primary) !important; }
+
+        .nav-icon.active[data-section="Projects"] { background: var(--primary); }
+        .nav-icon.active[data-section="Analysis"] { background: var(--primary); }
+        .nav-icon.active[data-section="Skills"] { background: var(--primary); }
+        .nav-icon.active[data-section="Education"] { background: var(--primary); }
+        .nav-icon.active[data-section="Motivation"] { background: var(--primary); }
     
         .hamburger {
             display: none;
@@ -2792,9 +3128,47 @@ transform: none !important;
                 width: 100%;
             }
         }
+
+        /* Papyrus Burn Effect */
+        .papyrus-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            pointer-events: none;
+            background-image: url('assets/papyrus.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 1;
+            overflow: hidden;
+        }
+
+        .papyrus-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease-out;
+        }
+
+        #fire-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10000;
+        }
+
     </style>
 </head>
 <body>
+    <!-- Papyrus Burn Overlay -->
+    <div id="papyrus-overlay" class="papyrus-overlay">
+        <canvas id="fire-canvas"></canvas>
+    </div>
     <div id="backgroundCanvas"></div>
     <div class="content-container etch" style="opacity:0;visibility:hidden;">
     <!-- Parallax Background Container -->
@@ -3692,7 +4066,7 @@ transform: none !important;
     </p>
     <div class="certification-grid" style="display:grid;gap:16px;">
       <article class="glass-panel" style="padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,0.15);background:rgba(4,6,15,0.35);">
-        <h4 style="margin:0 0 6px;font-size:1.05rem;display:flex;align-items:center;gap:8px;">
+        <h4 style="margin:0 0 6px;font-size:1.05rem;display:flex;align-items:center;gap:8px;color:var(--text-primary);">
           <i class="fab fa-aws"></i> AWS Certified Cloud Practitioner
         </h4>
         <p style="margin:0 0 6px;font-size:0.95rem;line-height:1.45;">
@@ -3705,7 +4079,7 @@ transform: none !important;
         <p style="margin:0;font-size:0.92rem;">Status: <strong>Certified</strong></p>
       </article>
       <article class="glass-panel" style="padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,0.15);background:rgba(4,6,15,0.35);">
-        <h4 style="margin:0 0 6px;font-size:1.05rem;display:flex;align-items:center;gap:8px;">
+        <h4 style="margin:0 0 6px;font-size:1.05rem;display:flex;align-items:center;gap:8px;color:var(--text-primary);">
           <i class="fas fa-cloud"></i> Google Cloud Certified – Cloud Digital Leader
         </h4>
         <p style="margin:0 0 6px;font-size:0.95rem;line-height:1.45;">
@@ -3718,7 +4092,7 @@ transform: none !important;
         <p style="margin:0;font-size:0.92rem;">Status: <strong>Certified</strong></p>
       </article>
       <article class="glass-panel" style="padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,0.15);background:rgba(4,6,15,0.35);">
-        <h4 style="margin:0 0 6px;font-size:1.05rem;display:flex;align-items:center;gap:8px;">
+        <h4 style="margin:0 0 6px;font-size:1.05rem;display:flex;align-items:center;gap:8px;color:var(--text-primary);">
           <i class="fab fa-microsoft"></i> Microsoft Certified: Azure AI Fundamentals (AI-900)
         </h4>
         <p style="margin:0 0 6px;font-size:0.95rem;line-height:1.45;">
