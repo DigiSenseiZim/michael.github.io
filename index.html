@@ -454,9 +454,10 @@
                 overlay.style.setProperty('--decay-radius', `${burnRadiusPercent * 1.1}%`);
                 
                 // Add CodePen-inspired burn texture effect using background-position animation
-                // Animate background position to create progressive burn effect - AMPED UP
+                // Animate background position to create progressive burn effect - CodePen style
                 const burnTextureOpacity = Math.min(1, burnProgress * 2); // More visible
-                const burnBgX = -100 + (burnProgress * 200); // Animate from -100% to 100%
+                // Animate from left to right like CodePen (negative to positive)
+                const burnBgX = -200 + (burnProgress * 300); // Animate from -200% to 100%
                 const burnBgY = -100 + (burnProgress * 200);
                 
                 overlay.style.setProperty('--burn-x', `${centerXPercent}%`);
@@ -464,6 +465,19 @@
                 overlay.style.setProperty('--burn-bg-x', `${burnBgX}%`);
                 overlay.style.setProperty('--burn-bg-y', `${burnBgY}%`);
                 overlay.style.setProperty('--burn-texture-opacity', burnTextureOpacity);
+                overlay.style.setProperty('--burn-duration', `${maxBurnTime}ms`);
+                
+                // Add ash effects - CodePen style
+                const ashOpacity = Math.min(0.6, burnProgress * 1.5);
+                const ashOuterOpacity = Math.min(0.4, burnProgress * 1.2);
+                overlay.style.setProperty('--ash-opacity', ashOpacity);
+                overlay.style.setProperty('--ash-outer-opacity', ashOuterOpacity);
+                overlay.style.setProperty('--ash-duration', '2000ms');
+                
+                // Start animations when burn begins
+                if (burnProgress > 0.01 && !overlay.classList.contains('burning')) {
+                    overlay.classList.add('burning');
+                }
                 
                 // Add decaying class to activate the ::before pseudo-element
                 if (!overlay.classList.contains('decaying')) {
@@ -3340,7 +3354,12 @@ transform: none !important;
             /* mask-composite removed - using standard mask behavior */
         }
         
-        /* Burn texture overlay - inspired by CodePen technique - AMPED UP */
+        /* CodePen style - original image with darken blend mode */
+        .papyrus-overlay.burning {
+            mix-blend-mode: darken; /* Like CodePen's image_original */
+        }
+        
+        /* Burn texture overlay - CodePen technique with animated background-position */
         .papyrus-overlay::after {
             content: '';
             position: absolute;
@@ -3350,38 +3369,105 @@ transform: none !important;
             height: 100%;
             pointer-events: none;
             z-index: 2;
-            /* Create intense burn texture with RED burning edges */
+            /* Create burn effect using animated background-position like CodePen */
             background: 
-                radial-gradient(ellipse at var(--burn-x, 10%) var(--burn-y, 10%), 
-                    rgba(255, 0, 0, 0.9) 0%,        /* Bright red center */
-                    rgba(255, 69, 0, 0.85) 5%,     /* Orange-red */
-                    rgba(255, 140, 0, 0.8) 10%,    /* Orange */
-                    rgba(255, 165, 0, 0.7) 15%,   /* Dark orange */
-                    rgba(139, 69, 19, 0.6) 25%,   /* Saddle brown */
-                    rgba(101, 67, 33, 0.5) 40%,   /* Dark brown */
-                    rgba(60, 40, 20, 0.4) 60%,    /* Charred */
-                    rgba(30, 20, 10, 0.3) 80%,    /* Dark charred */
-                    transparent 100%),
+                /* Burn line - bright red/orange edge */
+                linear-gradient(
+                    90deg,
+                    rgba(255, 0, 0, 0.9) 0%,
+                    rgba(255, 69, 0, 0.8) 2%,
+                    rgba(255, 140, 0, 0.7) 5%,
+                    rgba(139, 69, 19, 0.6) 10%,
+                    rgba(60, 40, 20, 0.4) 20%,
+                    transparent 30%
+                ),
+                /* Burn texture - animated position */
                 repeating-linear-gradient(
                     0deg,
-                    rgba(255, 0, 0, 0.15) 0px,     /* Red texture lines */
-                    transparent 1px,
+                    rgba(255, 0, 0, 0.3) 0px,
+                    rgba(255, 69, 0, 0.2) 1px,
                     transparent 2px,
-                    rgba(255, 69, 0, 0.1) 3px      /* Orange texture */
+                    rgba(139, 69, 19, 0.15) 3px,
+                    transparent 4px
                 );
             background-size: 
-                200% 200%,
-                4px 4px;
+                300% 100%,
+                8px 8px;
             background-position: 
-                var(--burn-bg-x, -100%) var(--burn-bg-y, -100%),
-                0 0;
-            mix-blend-mode: multiply;
+                var(--burn-bg-x, -200%) 0,
+                var(--burn-bg-x, 0) 0;
+            mix-blend-mode: lighten; /* Like CodePen's burnline */
             opacity: var(--burn-texture-opacity, 0);
-            transition: opacity 0.1s ease, background-position 0.05s linear;
-            /* Add glow effect for burning edges */
-            box-shadow: 
-                inset 0 0 100px rgba(255, 0, 0, 0.3),
-                inset 0 0 200px rgba(255, 69, 0, 0.2);
+            transition: opacity 0.1s ease;
+            animation: burnAnimation var(--burn-duration, 4.5s) steps(50, end) forwards;
+        }
+        
+        /* Ash overlay - inner ash effect */
+        .papyrus-overlay .ash-inner {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+            background: 
+                repeating-radial-gradient(
+                    circle at var(--burn-x, 10%) var(--burn-y, 10%),
+                    rgba(100, 100, 100, 0.4) 0px,
+                    transparent 2px,
+                    rgba(80, 80, 80, 0.3) 4px,
+                    transparent 6px
+                );
+            background-size: 20px 20px;
+            background-position: var(--burn-bg-x, -100%) var(--burn-bg-y, -100%);
+            mix-blend-mode: screen; /* Like CodePen's ash */
+            opacity: var(--ash-opacity, 0);
+            animation: ashAnimation var(--ash-duration, 2s) steps(66, end) infinite;
+        }
+        
+        /* Ash overlay - outer ash effect */
+        .papyrus-overlay .ash-outer {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 4;
+            background: 
+                repeating-radial-gradient(
+                    circle at var(--burn-x, 10%) var(--burn-y, 10%),
+                    rgba(150, 150, 150, 0.3) 0px,
+                    transparent 3px,
+                    rgba(120, 120, 120, 0.2) 6px,
+                    transparent 9px
+                );
+            background-size: 30px 30px;
+            background-position: var(--burn-bg-x, -100%) var(--burn-bg-y, -100%);
+            mix-blend-mode: difference; /* Like CodePen's ashOuter */
+            opacity: var(--ash-outer-opacity, 0);
+            animation: ashAnimation var(--ash-duration, 2s) steps(66, end) infinite;
+        }
+        
+        @keyframes burnAnimation {
+            0% {
+                background-position: -200% 0, 0 0;
+            }
+            100% {
+                background-position: 100% 0, -50000px 0; /* Animate like CodePen */
+            }
+        }
+        
+        @keyframes ashAnimation {
+            0% {
+                background-position: -100% -100%, -100% -100%;
+            }
+            100% {
+                background-position: 100% 100%, -50000px -50000px; /* Animate like CodePen */
+            }
         }
         
         /* Decay effect overlay for papyrus - will be applied via JS */
@@ -3426,6 +3512,8 @@ transform: none !important;
 <body>
     <!-- Papyrus Burn Overlay -->
     <div id="papyrus-overlay" class="papyrus-overlay">
+        <div class="ash-inner"></div>
+        <div class="ash-outer"></div>
         <canvas id="fire-canvas"></canvas>
     </div>
     <div id="backgroundCanvas"></div>
