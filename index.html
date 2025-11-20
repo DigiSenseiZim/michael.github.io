@@ -25,9 +25,23 @@
         // Then create a Gist and get its ID from the URL
         const GITHUB_CONFIG = {
             token: '', // Your GitHub Personal Access Token (keep this secret!)
+            // To get a token: https://github.com/settings/tokens -> Generate new token (classic) -> Select 'gist' scope
             gistId: '', // Your Gist ID (from gist URL: https://gist.github.com/username/GIST_ID)
+            // To create a gist: https://gist.github.com -> Create a new gist -> Copy the ID from the URL
             username: '' // Your GitHub username
         };
+        // VISITOR COUNTER SETUP:
+        // 1. Create a GitHub Personal Access Token at https://github.com/settings/tokens
+        //    - Click "Generate new token (classic)"
+        //    - Name it "Portfolio Visitor Counter"
+        //    - Select the "gist" scope
+        //    - Click "Generate token" and COPY IT (you won't see it again!)
+        // 2. Create a new Gist at https://gist.github.com
+        //    - Name the file: portfolio-data.json
+        //    - Add content: {"stats":{"totalVisits":0,"uniqueVisitors":0},"visitors":{},"messages":[],"analytics":{}}
+        //    - Click "Create public gist"
+        // 3. Copy the Gist ID from the URL (e.g., if URL is https://gist.github.com/username/abc123def456, the ID is "abc123def456")
+        // 4. Fill in the GITHUB_CONFIG above with your token, gistId, and username
         
         // Storage API - uses GitHub Gists as JSON storage
         window.storageAPI = {
@@ -87,13 +101,13 @@
     <noscript>
         <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0a0e27; color: #f5f9ff; display: flex; align-items: center; justify-content: center; z-index: 99999; padding: 20px; text-align: center;">
             <div role="alert">
-                <h1 style="color: #00d9ff; margin-bottom: 20px;">JavaScript Required</h1>
+                <h1 style="color: #FF8C42; margin-bottom: 20px;">JavaScript Required</h1>
                 <p>This portfolio requires JavaScript to function properly. Please enable JavaScript in your browser settings.</p>
                 <p style="margin-top: 20px; font-size: 0.9rem; color: #aaa;">
                     <strong>Alternative:</strong> You can view a static version of the portfolio content below.
                 </p>
-                <div style="margin-top: 30px; padding: 20px; background: rgba(0, 217, 255, 0.1); border-radius: 8px; max-width: 600px; margin-left: auto; margin-right: auto;">
-                    <h2 style="color: #00d9ff; font-size: 1.5rem; margin-bottom: 15px;">Michael Ngonidzashe Mukwekezeke</h2>
+                <div style="margin-top: 30px; padding: 20px; background: rgba(99, 102, 241, 0.1); border-radius: 8px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                    <h2 style="color: #FF8C42; font-size: 1.5rem; margin-bottom: 15px;">Michael Ngonidzashe Mukwekezeke</h2>
                     <p style="margin-bottom: 10px;"><strong>Lead Developer | Intelligent Platforms & AI-Augmented Delivery</strong></p>
                     <p style="margin-top: 20px;">I transform complex technical challenges into high-impact digital solutions that drive measurable business results.</p>
                     <p style="margin-top: 15px;">For the full interactive experience, please enable JavaScript.</p>
@@ -126,9 +140,9 @@
                         console.warn('Could not get 2d context for certification timeline canvas');
                     } else {
                         const certGradient = ctx2d.createLinearGradient(0, 0, 0, 400);
-                        certGradient.addColorStop(0, 'rgba(0, 217, 255, 0.5)');
-                        certGradient.addColorStop(0.5, 'rgba(0, 217, 255, 0.25)');
-                        certGradient.addColorStop(1, 'rgba(0, 217, 255, 0)');
+                        certGradient.addColorStop(0, 'rgba(99, 102, 241, 0.5)');
+                        certGradient.addColorStop(0.5, 'rgba(99, 102, 241, 0.25)');
+                        certGradient.addColorStop(1, 'rgba(99, 102, 241, 0)');
                         
                         new Chart(certCtx, {
                     type: 'line',
@@ -137,7 +151,7 @@
             datasets: [{
                             label: 'Certifications (Actual)',
                             data: [5, 8, 12, 18, 25, null],
-                            borderColor: '#00d9ff',
+                            borderColor: '#6366f1',
                             backgroundColor: certGradient,
                             borderWidth: 4,
                             pointRadius: 8,
@@ -148,7 +162,7 @@
                         }, {
                             label: 'Growth Trend (Exponential Fit)',
                             data: [5, 7.5, 11.2, 16.8, 25.2, 37.8],
-                            borderColor: '#00ff9d',
+                            borderColor: '#8b5cf6',
                             borderWidth: 2,
                             borderDash: [5, 5],
                             pointRadius: 0,
@@ -164,7 +178,7 @@
                                 display: true,
                                 position: 'top',
                                 labels: {
-                                    color: '#00d9ff',
+                                    color: '#6366f1',
                                     font: { size: 13, weight: 'bold' },
                                     padding: 12,
                                     usePointStyle: true
@@ -172,9 +186,9 @@
                             },
                             tooltip: {
                                 backgroundColor: 'rgba(0, 0, 0, 0.95)',
-                                titleColor: '#00d9ff',
+                                titleColor: '#6366f1',
                                 bodyColor: '#ffffff',
-                                borderColor: '#00d9ff',
+                                borderColor: '#6366f1',
                                 borderWidth: 2,
                                 padding: 12,
                                 callbacks: {
@@ -199,18 +213,18 @@
                             y: {
                                 beginAtZero: true,
                                 grid: {
-                                    color: 'rgba(0, 217, 255, 0.15)',
+                                    color: 'rgba(99, 102, 241, 0.15)',
                                     lineWidth: 1
                                 },
                                 ticks: {
-                                    color: '#00d9ff',
+                                    color: '#6366f1',
                                     font: { size: 11, weight: 'bold' },
                                     callback: (value) => value + ' certs'
                                 },
                                 title: {
                                     display: true,
                                     text: 'Certification Count',
-                                    color: '#00d9ff',
+                                    color: '#6366f1',
                                     font: { size: 12, weight: 'bold' }
                                 }
                             },
@@ -219,7 +233,7 @@
                                     display: false
                                 },
                                 ticks: {
-                                    color: '#00d9ff',
+                                    color: '#6366f1',
                                     font: { size: 11, weight: 'bold' }
                                 }
                             }
@@ -244,14 +258,14 @@
                             ctx.createLinearGradient(0, 0, 0, 300),
                             ctx.createLinearGradient(0, 0, 0, 300)
                         ];
-                        techStackGradients1[0].addColorStop(0, 'rgba(0, 255, 157, 1)');
-                        techStackGradients1[0].addColorStop(1, 'rgba(0, 200, 120, 0.8)');
-                        techStackGradients1[1].addColorStop(0, 'rgba(0, 217, 255, 1)');
-                        techStackGradients1[1].addColorStop(1, 'rgba(0, 170, 200, 0.8)');
-                        techStackGradients1[2].addColorStop(0, 'rgba(162, 119, 255, 1)');
-                        techStackGradients1[2].addColorStop(1, 'rgba(130, 90, 200, 0.8)');
-                        techStackGradients1[3].addColorStop(0, 'rgba(255, 61, 94, 1)');
-                        techStackGradients1[3].addColorStop(1, 'rgba(200, 40, 70, 0.8)');
+                        techStackGradients1[0].addColorStop(0, 'rgba(99, 102, 241, 1)');
+                        techStackGradients1[0].addColorStop(1, 'rgba(139, 92, 246, 0.8)');
+                        techStackGradients1[1].addColorStop(0, 'rgba(205, 133, 63, 1)');
+                        techStackGradients1[1].addColorStop(1, 'rgba(160, 82, 45, 0.8)');
+                        techStackGradients1[2].addColorStop(0, 'rgba(218, 165, 32, 1)');
+                        techStackGradients1[2].addColorStop(1, 'rgba(184, 134, 11, 0.8)');
+                        techStackGradients1[3].addColorStop(0, 'rgba(205, 92, 92, 1)');
+                        techStackGradients1[3].addColorStop(1, 'rgba(160, 82, 45, 0.8)');
 
                         new Chart(ctx, {
                             type: 'doughnut',
@@ -261,10 +275,10 @@
                                     data: [38, 32, 18, 12], // Adjusted based on actual portfolio emphasis
                                     backgroundColor: techStackGradients1,
                                     borderColor: [
-                                        'rgba(0, 255, 157, 1)',
-                                        'rgba(0, 217, 255, 1)',
-                                        'rgba(162, 119, 255, 1)',
-                                        'rgba(255, 61, 94, 1)'
+                                        'rgba(99, 102, 241, 1)',
+                                        'rgba(205, 133, 63, 1)',
+                                        'rgba(218, 165, 32, 1)',
+                                        'rgba(205, 92, 92, 1)'
                                     ],
                                     borderWidth: 4,
                                     hoverBorderWidth: 6,
@@ -278,7 +292,7 @@
                                     legend: { 
                                         position: 'bottom',
                                         labels: {
-                                            color: '#00d9ff',
+                                            color: '#6366f1',
                                             font: { size: 14, weight: 'bold' },
                                             padding: 18,
                                             usePointStyle: true,
@@ -287,9 +301,9 @@
                                     },
                                     tooltip: {
                                         backgroundColor: 'rgba(0, 0, 0, 0.95)',
-                                        titleColor: '#00d9ff',
+                                        titleColor: '#6366f1',
                                         bodyColor: '#ffffff',
-                                        borderColor: '#00d9ff',
+                                        borderColor: '#6366f1',
                                         borderWidth: 2,
                                         padding: 14,
                                         displayColors: true,
@@ -331,16 +345,16 @@
         projectDistCtx.createLinearGradient(0, 0, 0, 400),
         projectDistCtx.createLinearGradient(0, 0, 0, 400)
     ];
-    projectGradients[0].addColorStop(0, 'rgba(0, 255, 157, 1)');
-    projectGradients[0].addColorStop(1, 'rgba(0, 200, 120, 0.7)');
-    projectGradients[1].addColorStop(0, 'rgba(0, 217, 255, 1)');
-    projectGradients[1].addColorStop(1, 'rgba(0, 170, 200, 0.7)');
-    projectGradients[2].addColorStop(0, 'rgba(162, 119, 255, 1)');
-    projectGradients[2].addColorStop(1, 'rgba(130, 90, 200, 0.7)');
-    projectGradients[3].addColorStop(0, 'rgba(255, 61, 94, 1)');
-    projectGradients[3].addColorStop(1, 'rgba(200, 40, 70, 0.7)');
-    projectGradients[4].addColorStop(0, 'rgba(255, 200, 0, 1)');
-    projectGradients[4].addColorStop(1, 'rgba(200, 150, 0, 0.7)');
+    projectGradients[0].addColorStop(0, 'rgba(99, 102, 241, 1)');
+    projectGradients[0].addColorStop(1, 'rgba(139, 92, 246, 0.7)');
+    projectGradients[1].addColorStop(0, 'rgba(205, 133, 63, 1)');
+    projectGradients[1].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
+    projectGradients[2].addColorStop(0, 'rgba(218, 165, 32, 1)');
+    projectGradients[2].addColorStop(1, 'rgba(184, 134, 11, 0.7)');
+    projectGradients[3].addColorStop(0, 'rgba(205, 92, 92, 1)');
+    projectGradients[3].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
+    projectGradients[4].addColorStop(0, 'rgba(255, 165, 0, 1)');
+    projectGradients[4].addColorStop(1, 'rgba(218, 165, 32, 0.7)');
 
     // Data Science: Project Distribution Analysis
     // Portfolio data: 8+ production systems, 4 live products
@@ -355,7 +369,7 @@
                 backgroundColor: projectGradients,
                 borderColor: [
                     'rgba(0, 255, 157, 1)',
-                    'rgba(0, 217, 255, 1)',
+                    'rgba(99, 102, 241, 1)',
                     'rgba(162, 119, 255, 1)',
                     'rgba(255, 61, 94, 1)',
                     'rgba(255, 200, 0, 1)'
@@ -366,7 +380,7 @@
                 shadowOffsetX: 0,
                 shadowOffsetY: 6,
                 shadowBlur: 15,
-                shadowColor: 'rgba(0, 217, 255, 0.4)'
+                shadowColor: 'rgba(99, 102, 241, 0.4)'
             }]
         },
         options: {
@@ -377,16 +391,16 @@
                     display: true,
                     position: 'top',
                     labels: {
-                        color: '#00d9ff',
+                        color: '#6366f1',
                         font: { size: 14, weight: 'bold' },
                         padding: 15
                     }
                 },
                 tooltip: {
                     backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                    titleColor: '#00d9ff',
+                    titleColor: '#6366f1',
                     bodyColor: '#ffffff',
-                    borderColor: '#00d9ff',
+                    borderColor: '#6366f1',
                     borderWidth: 2,
                     padding: 12,
                     displayColors: true,
@@ -401,11 +415,11 @@
                 y: {
                     beginAtZero: true,
                     grid: {
-                        color: 'rgba(0, 217, 255, 0.2)',
+                        color: 'rgba(99, 102, 241, 0.2)',
                         lineWidth: 2
                     },
                     ticks: {
-                        color: '#00d9ff',
+                        color: '#6366f1',
                         font: { size: 12, weight: 'bold' },
                         stepSize: 2
                     }
@@ -415,7 +429,7 @@
                         display: false
                     },
                     ticks: {
-                        color: '#00d9ff',
+                        color: '#6366f1',
                         font: { size: 12, weight: 'bold' }
                     }
                 }
@@ -430,9 +444,9 @@
     // Enhanced Skill Proficiency Radar with radial gradient
     const skillProfCtx = document.getElementById('skillProficiency').getContext('2d');
     const skillProfGradient = skillProfCtx.createRadialGradient(0, 0, 0, 0, 0, 200);
-    skillProfGradient.addColorStop(0, 'rgba(0, 217, 255, 0.5)');
-    skillProfGradient.addColorStop(0.5, 'rgba(0, 217, 255, 0.3)');
-    skillProfGradient.addColorStop(1, 'rgba(0, 217, 255, 0.1)');
+    skillProfGradient.addColorStop(0, 'rgba(99, 102, 241, 0.5)');
+    skillProfGradient.addColorStop(0.5, 'rgba(99, 102, 241, 0.3)');
+    skillProfGradient.addColorStop(1, 'rgba(99, 102, 241, 0.1)');
 
     new Chart(skillProfCtx, {
         type: 'radar',
@@ -442,15 +456,15 @@
                 label: 'Technical Proficiency %',
                 data: [90, 85, 80, 75, 70, 65],
                 backgroundColor: skillProfGradient,
-                borderColor: '#00d9ff',
+                borderColor: '#6366f1',
                 borderWidth: 5,
-                pointBackgroundColor: '#00d9ff',
+                pointBackgroundColor: '#6366f1',
                 pointBorderColor: '#ffffff',
                 pointBorderWidth: 4,
                 pointRadius: 8,
                 pointHoverRadius: 14,
                 pointHoverBorderWidth: 5,
-                pointHoverBackgroundColor: '#00ffff',
+                pointHoverBackgroundColor: '#818cf8',
                 tension: 0.3
             }]
         },
@@ -462,21 +476,21 @@
                     beginAtZero: true,
                     max: 100,
                     ticks: {
-                        color: '#00d9ff',
+                        color: '#6366f1',
                         font: { size: 12, weight: 'bold' },
                         stepSize: 10,
                         backdropColor: 'rgba(0, 0, 0, 0.8)'
                     },
                     grid: {
-                        color: 'rgba(0, 217, 255, 0.3)',
+                        color: 'rgba(99, 102, 241, 0.3)',
                         lineWidth: 2
                     },
                     pointLabels: {
-                        color: '#00d9ff',
+                        color: '#6366f1',
                         font: { size: 14, weight: 'bold' }
                     },
                     angleLines: {
-                        color: 'rgba(0, 217, 255, 0.2)',
+                        color: 'rgba(99, 102, 241, 0.2)',
                         lineWidth: 2
                     }
                 }
@@ -486,16 +500,16 @@
                     display: true,
                     position: 'bottom',
                     labels: {
-                        color: '#00d9ff',
+                        color: '#6366f1',
                         font: { size: 14, weight: 'bold' },
                         padding: 15
                     }
                 },
                 tooltip: {
                     backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                    titleColor: '#00d9ff',
+                    titleColor: '#6366f1',
                     bodyColor: '#ffffff',
-                    borderColor: '#00d9ff',
+                    borderColor: '#6366f1',
                     borderWidth: 2,
                     padding: 12,
                     callbacks: {
@@ -521,9 +535,9 @@
     // Enhanced Technical Mastery Radar with radial gradient
     const techMasteryCtx = document.getElementById('techMasteryChart').getContext('2d');
     const techMasteryGradient = techMasteryCtx.createRadialGradient(0, 0, 0, 0, 0, 250);
-    techMasteryGradient.addColorStop(0, 'rgba(0, 217, 255, 0.5)');
-    techMasteryGradient.addColorStop(0.5, 'rgba(0, 217, 255, 0.3)');
-    techMasteryGradient.addColorStop(1, 'rgba(0, 217, 255, 0.1)');
+    techMasteryGradient.addColorStop(0, 'rgba(99, 102, 241, 0.5)');
+    techMasteryGradient.addColorStop(0.5, 'rgba(99, 102, 241, 0.3)');
+    techMasteryGradient.addColorStop(1, 'rgba(99, 102, 241, 0.1)');
 
     new Chart(techMasteryCtx, {
         type: 'radar',
@@ -533,15 +547,15 @@
             label: 'Expertise Level %',
             data: [88, 84, 91, 82, 86, 79],
             backgroundColor: techMasteryGradient,
-            borderColor: '#00d9ff',
+            borderColor: '#6366f1',
             borderWidth: 5,
-            pointBackgroundColor: '#00d9ff',
+            pointBackgroundColor: '#6366f1',
             pointBorderColor: '#ffffff',
             pointBorderWidth: 4,
             pointRadius: 9,
             pointHoverRadius: 15,
             pointHoverBorderWidth: 5,
-            pointHoverBackgroundColor: '#00ffff',
+            pointHoverBackgroundColor: '#818cf8',
             tension: 0.3
             }]
         },
@@ -553,17 +567,17 @@
                     beginAtZero: true,
                     max: 100,
                     ticks: {
-                        color: '#00d9ff',
+                        color: '#6366f1',
                         font: { size: 12, weight: 'bold' },
                         backdropColor: 'rgba(0, 0, 0, 0.8)',
                         stepSize: 10
                     },
                     grid: {
-                        color: 'rgba(0, 217, 255, 0.3)',
+                        color: 'rgba(99, 102, 241, 0.3)',
                         lineWidth: 2
                     },
                     pointLabels: {
-                        color: '#00d9ff',
+                        color: '#6366f1',
                         font: {
                             size: 15,
                             weight: 'bold'
@@ -616,9 +630,9 @@
     
     <style>
         :root {
-            --primary-color: #00ffff;
-            --secondary-color: #ff00ff;
-            --tertiary-color: #00ffaa;
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --tertiary-color: #06b6d4;
             --background-color: #0a0a1f;
             --text-color: #f5f9ff;
             --node-glow: 0 0 15px var(--primary-color);
@@ -789,13 +803,13 @@
     --text-shadow-right: 1px 0px 0px rgba(255, 255, 255, 0.3);
     --text-shadow-left: -1px 0px 0px rgba(0, 0, 0, 0.4);
     --text-shadow-complete: var(--text-shadow-light), var(--text-shadow-dark), var(--text-shadow-right), var(--text-shadow-left);
-            --primary: #00559a;
-            --primary-light: #7ae7ff;
-            --secondary: #00ff9d;
-            --accent: #ff00c8;
-            --danger: #ff3d5e;
-            --info: #00d9ff;
-            --purple: #a277ff;
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --danger: #ef4444;
+            --info: #06b6d4;
+            --purple: #a855f7;
             --background: #0a0a14;
             --card-bg: rgba(255, 255, 255, 0.15);
             --text-primary: #f5f9ff;
@@ -814,13 +828,13 @@
             --glitch-color-two: #2d358b;
             --glitch-color-three: #004b95;
     
-            /* Section theme colors */
-            --profile-color: #00f2ff;
-            --projects-color: #00ff9d;
-            --analysis-color: #ff00c8;
-            --skills-color: #ffd700;
-            --education-color: #a277ff;
-            --motivation-color: #00d9ff;
+            /* Section theme colors - Modern vibrant theme */
+            --profile-color: #6366f1;
+            --projects-color: #8b5cf6;
+            --analysis-color: #ec4899;
+            --skills-color: #06b6d4;
+            --education-color: #a855f7;
+            --motivation-color: #818cf8;
         }
     
         * {
@@ -1131,6 +1145,34 @@ transform: none !important;
     border-radius: 12px;
     padding: 1.5rem;
     border: 1px solid var(--glass-border);
+    position: relative;
+}
+
+/* Skills Radar specific sizing - prevent stretching and overlap */
+.diagram:has(#skillsRadar) {
+    margin-bottom: 3rem;
+    clear: both;
+    width: 100%;
+}
+
+.diagram:has(#skillsRadar) .chart-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    min-height: 450px;
+    max-height: 550px;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+#skillsRadar {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    width: 100% !important;
+    height: 100% !important;
 }
 
 .chart-title {
@@ -1229,10 +1271,40 @@ transform: none !important;
 
         /* All icons - bold etched glass blue */
         i, .fa, .fas, .fab, .far, .fal, .fad, [class*="fa-"], 
-        .icon, svg, .nav-icon i, .panel-title i,
+        .icon, svg, .nav-icon i,
         .project-card i, .stat-card i, .chart-title i {
             color: #00d9ff !important;
-            filter: drop-shadow(0 0 4px rgba(0, 217, 255, 0.8)) drop-shadow(0 0 8px rgba(0, 217, 255, 0.4));
+        
+        /* Pastel colored icons for headings - each with unique representative colors */
+        .panel-title i,
+        h3.body-font-heading i,
+        h3 i,
+        h4 i {
+            /* Project Portfolio - pastel blue (creative/projects) */
+            color: #9BB5FF !important;
+        }
+        
+        #projectsPanel .panel-title i { color: #9BB5FF !important; } /* Pastel Blue */
+        #analysisPanel .panel-title i { color: #B19CD9 !important; } /* Pastel Purple - Analysis */
+        #skillsPanel .panel-title i { color: #FFE5B4 !important; } /* Pastel Yellow - Bright ideas */
+        #educationPanel .panel-title i { color: #A8E6CF !important; } /* Pastel Green - Growth */
+        #motivationPanel .panel-title i { color: #FFC8A2 !important; } /* Pastel Orange - Energy */
+        #skillsMatrixSection .panel-title i { color: #C5CAE9 !important; } /* Pastel Lavender - Skills */
+        #visitor-section .panel-title i { color: #FFAB91 !important; } /* Pastel Coral - Community */
+        
+        /* H3 heading icons */
+        h3.body-font-heading i[class*="fa-cogs"] { color: #9FA8DA !important; } /* Pastel Indigo - Innovation */
+        h3.body-font-heading i[class*="fa-users"] { color: #F8BBD0 !important; } /* Pastel Pink - Team */
+        h3.body-font-heading i[class*="fa-university"] { color: #B2EBF2 !important; } /* Pastel Cyan - Academic */
+        h3.body-font-heading i[class*="fa-certificate"] { color: #B2DFDB !important; } /* Pastel Mint - Certifications */
+        h3 i[class*="fa-chart-line"] { color: #CE93D8 !important; } /* Pastel Violet - Analytics */
+        h3 i[class*="fa-database"] { color: #81D4FA !important; } /* Pastel Sky Blue - Cloud/AI */
+        h3 i[class*="fa-briefcase"] { color: #FFE082 !important; } /* Pastel Gold - Achievements */
+        
+        /* Chart headings */
+        h4 i[class*="fa-play-circle"] { color: #9BB5FF !important; } /* Pastel Blue - Courses */
+        h4 i[class*="fa-linkedin"] { color: #81D4FA !important; } /* Pastel Sky Blue - LinkedIn */
+            filter: drop-shadow(0 0 4px rgba(99, 102, 241, 0.8)) drop-shadow(0 0 8px rgba(99, 102, 241, 0.4));
         }
     
         .lead-snapshot {
@@ -1345,7 +1417,7 @@ transform: none !important;
         0px -1px 0px rgba(0, 0, 0, 0.3),
         1px 0px 0px rgba(255, 255, 255, 0.3),
         -1px 0px 0px rgba(0, 0, 0, 0.4);}
-        .completed { background-color: rgba(0, 217, 255, 0.15); color: #00d9ff; text-shadow: 
+        .completed { background-color: rgba(99, 102, 241, 0.15); color: #00d9ff; text-shadow: 
         0px 1px 0px rgba(255, 255, 255, 0.4),
         0px -1px 0px rgba(0, 0, 0, 0.3),
         1px 0px 0px rgba(255, 255, 255, 0.3),
@@ -4080,12 +4152,12 @@ transform: none !important;
                     </div>
                     
                     <!-- Skills Radar Chart -->
-                    <div class="diagram">
+                    <div class="diagram" style="margin-bottom: 2rem; clear: both;">
                         <div class="diagram-title">
                             <i class="fas fa-chart-radar"></i>
                             Skills Distribution
                         </div>
-                        <div class="chart-container">
+                        <div class="chart-container" style="width: 100%; max-width: 600px; margin: 0 auto;">
                             <canvas id="skillsRadar"></canvas>
                         </div>
                     </div>
@@ -4117,10 +4189,49 @@ transform: none !important;
                     <div class="diagram">
                         <div class="diagram-title">
                             <i class="fas fa-graduation-cap"></i>
-                            Knowledge Transfer Progress
+                            Knowledge Transfer Analytics Dashboard
                         </div>
-                        <div class="chart-container">
-                            <canvas id="knowledgeChart"></canvas>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                            <div class="chart-container" style="min-height: 350px;">
+                                <canvas id="knowledgeChart"></canvas>
+                            </div>
+                            <div class="chart-container" style="min-height: 350px;">
+                                <canvas id="knowledgeDemographics"></canvas>
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 20px;">
+                            <div class="chart-container" style="min-height: 280px;">
+                                <canvas id="knowledgeGeography"></canvas>
+                            </div>
+                            <div class="chart-container" style="min-height: 280px;">
+                                <canvas id="knowledgeExperience"></canvas>
+                            </div>
+                            <div class="chart-container" style="min-height: 280px;">
+                                <canvas id="knowledgeSkills"></canvas>
+                            </div>
+                        </div>
+                        <div style="margin-top: 25px; padding: 20px; background: rgba(99, 102, 241, 0.1); border-radius: 12px; border: 1px solid rgba(99, 102, 241, 0.3);">
+                            <h4 style="color: #818cf8; margin-bottom: 15px; font-family: 'Space Grotesk', sans-serif; font-weight: 600;">
+                                <i class="fas fa-chart-line"></i> Impact Metrics
+                            </h4>
+                            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; text-align: center;">
+                                <div>
+                                    <div style="font-size: 2rem; font-weight: bold; color: #818cf8; font-family: 'Space Grotesk', sans-serif;">24</div>
+                                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 5px;">Total Mentees</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 2rem; font-weight: bold; color: #22d3ee; font-family: 'Space Grotesk', sans-serif;">680+</div>
+                                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 5px;">Training Hours</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 2rem; font-weight: bold; color: #a78bfa; font-family: 'Space Grotesk', sans-serif;">87%</div>
+                                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 5px;">Career Progression</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 2rem; font-weight: bold; color: #f472b6; font-family: 'Space Grotesk', sans-serif;">4.7/5</div>
+                                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 5px;">Avg. Rating</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -4160,25 +4271,29 @@ transform: none !important;
     <!-- Course Completion Chart -->
     <h3 class="body-font-heading"><i class="fas fa-certificate"></i> Professional Qualifications</h3>
 <p id="courseProgressText">
-  I have successfully completed <strong>10 advanced Udemy Business courses</strong> covering modern software development practices, plus 
+  I have successfully completed <strong>36 Udemy Business courses</strong> covering modern software development practices, plus 
   <strong>Diploma in Digital Transformation & Operational Excellence</strong> (MTF Institute, USA), and 
   <strong>360+ hours of LinkedIn Learning</strong> in cutting-edge technologies and industry best practices.
 </p>
     <div style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; margin-top: 20px;">
   <!-- Udemy Chart -->
-  <div style="flex: 1; min-width: 280px; max-width: 400px;">
-    <h4 style="text-align:center; margin-bottom:10px;"><i class="fas fa-play-circle"></i> Udemy Business Courses</h4>
-    <canvas id="udemyChart" style="max-height:260px;"></canvas>
+  <div style="flex: 1; min-width: 300px; max-width: 500px; margin: 0 auto;">
+    <h4 style="text-align:center; margin-bottom:20px; color: var(--text-primary); font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 1.1rem;">
+      <i class="fas fa-play-circle"></i> Udemy Courses by Category
+    </h4>
+    <canvas id="udemyChart" style="max-height:450px; height: 450px !important;"></canvas>
   </div>
 
   <!-- LinkedIn Chart -->
-  <div style="flex: 1; min-width: 280px; max-width: 400px;">
-    <h4 style="text-align:center; margin-bottom:10px;"><i class="fab fa-linkedin"></i> LinkedIn Learning Hours</h4>
-    <canvas id="linkedinChart" style="max-height:260px;"></canvas>
+  <div style="flex: 1; min-width: 300px; max-width: 500px; margin: 0 auto;">
+    <h4 style="text-align:center; margin-bottom:20px; color: var(--text-primary); font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 1.1rem;">
+      <i class="fab fa-linkedin"></i> LinkedIn Learning by Category
+    </h4>
+    <canvas id="linkedinChart" style="max-height:450px; height: 450px !important;"></canvas>
   </div>
 </div>
     <!-- Value Proposition with Industry Chart -->
-    <h3><i class="fas fa-chart-line"></i> Industry Value Proposition</h3>
+    <h3 class="body-font-heading"><i class="fas fa-chart-line"></i> Industry Value Proposition</h3>
     <p>
       Current industry trends demonstrate the increasing importance of <strong>practical skills and experience</strong> in technology roles:
     </p>
@@ -4191,7 +4306,7 @@ transform: none !important;
     </p>
 
     <!-- Oracle Cert -->
-    <h3><i class="fas fa-database"></i> Cloud & AI Certifications</h3>
+    <h3 class="body-font-heading"><i class="fas fa-database"></i> Cloud & AI Certifications</h3>
     <p>
       I hold the <strong>Oracle Cloud Infrastructure (OCI) Certification in Generative AI</strong>, demonstrating expertise in cutting-edge AI technologies and cloud infrastructure management.
     </p>
@@ -4271,10 +4386,10 @@ transform: none !important;
         <div style="font-size:.8rem;color:var(--text-secondary)">Engineering teams mentored</div>
       </div>
 
-      <div class="glass-panel glass-strong" style="flex:1;min-width:160px;padding:12px;">
-        <div style="font-size:.85rem;color:var(--text-secondary)">Training & Certs</div>
-        <div style="font-weight:800;font-size:1.05rem">Udemy: 10 • LinkedIn: 360+ hrs</div>
-        <div style="font-size:.8rem;color:var(--text-secondary)">OCI GenAI • Diploma (MTF)</div>
+      <div class="glass-panel glass-strong" style="flex:1;min-width:160px;padding:12px;border:1px solid rgba(0,217,255,0.3);">
+        <div style="font-size:.85rem;color:#00d9ff;font-weight:600">🎓 Training & Certs</div>
+        <div style="font-weight:800;font-size:1.5rem;color:#00d9ff;text-shadow:0 0 10px rgba(0,217,255,0.5)">36+</div>
+        <div style="font-size:.8rem;color:var(--text-secondary)">Udemy • LinkedIn: 360+ hrs • OCI GenAI • Diploma (MTF)</div>
       </div>
     </div>
 
@@ -4293,30 +4408,7 @@ transform: none !important;
 
       </div>
 
-      <!-- Right: compact visuals (explicit heights ensure render) -->
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <div style="display:flex;gap:10px;align-items:stretch;">
-          <div style="flex:1;min-width:180px;">
-            <div style="text-align:center;font-size:0.9rem;color:var(--text-secondary);margin-bottom:6px">Udemy (Courses)</div>
-            <div class="chart-wrap" style="height:180px;">
-              <canvas id="motUdemy" aria-label="Udemy completed vs required"></canvas>
-            </div>
-          </div>
-
-          <div style="flex:1;min-width:180px;">
-            <div style="text-align:center;font-size:0.9rem;color:var(--text-secondary);margin-bottom:6px">LinkedIn (Hours)</div>
-            <div class="chart-wrap" style="height:180px;">
-              <canvas id="motLinkedIn" aria-label="LinkedIn hours completed vs required"></canvas>
-            </div>
-          </div>
-        </div>
-
-        <div style="background:transparent;padding:6px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-            <div style="font-size:.95rem;color:var(--text-secondary)"><i class="fas fa-chart-line"></i> Projected throughput (12 months)</div>
-
-          </div>
-        </div>
+      <!-- Right: compact visuals removed - charts moved to Professional Qualifications section -->
       </div>
     </div>
 
@@ -4330,7 +4422,7 @@ transform: none !important;
 <style>
   #motivationPanel .chart-wrap { width:100%; display:block; }
   /* ensure canvases fill wrappers */
-  #motUdemy, #motLinkedIn, #motivationROIChart { width:100% !important; height:100% !important; display:block; }
+  #motivationROIChart { width:100% !important; height:100% !important; display:block; }
   /* small responsive tweak */
   @media (max-width:900px){
     #motivationPanel .info-section { grid-template-columns: 1fr; }
@@ -4354,8 +4446,6 @@ transform: none !important;
   ensureChartJs(() => {
     try {
       // Safe destroy (hot reload)
-      try { if (window.motUdemyChart) window.motUdemyChart.destroy(); } catch(e){}
-      try { if (window.motLinkedInChart) window.motLinkedInChart.destroy(); } catch(e){}
       try { if (window.motROIChart) window.motROIChart.destroy(); } catch(e){}
 
       // helpers
@@ -4387,98 +4477,6 @@ transform: none !important;
       const sub = cssVar('--text-secondary','#8888a0');
       const textShadow = '0 1px 2px rgba(0,0,0,0.5)';
 
-      // UDemy dual gauge visualization
-      const canvasUdemy = document.getElementById('motUdemy');
-      if (canvasUdemy) {
-        const ctxU = canvasUdemy.getContext('2d');
-        if (ctxU) {
-          const gradU = verticalGradient(ctxU, colUdemy);
-          const gradPink = ctxU.createLinearGradient(0,0,0,150);
-          gradPink.addColorStop(0, '#ff9a9e');
-          gradPink.addColorStop(1, '#fad0c4');
-          
-          window.motUdemyChart = new Chart(ctxU, {
-        type: 'doughnut',
-        data: {
-          labels: ['Completed (12)','In Progress (12)'],
-          datasets: [{
-            data: [12,12],
-            backgroundColor: [gradU, gradPink],
-            borderColor: ['#00d9ff', 'rgba(255,255,255,0.4)'],
-            borderWidth: 5,
-            hoverBorderWidth: 7,
-            hoverOffset: 14
-          }]
-        },
-        options: {
-          maintainAspectRatio: false,
-          cutout: '66%',
-          plugins: {
-            legend: { 
-              display: true,
-              position: 'bottom',
-              labels: {
-                color: '#00d9ff',
-                font: { size: 13, weight: 'bold' },
-                padding: 18,
-                usePointStyle: true,
-                pointStyle: 'circle'
-              }
-            },
-            tooltip: { 
-              backgroundColor: 'rgba(0, 0, 0, 0.95)',
-              titleColor: '#00d9ff',
-              bodyColor: '#ffffff',
-              borderColor: '#00d9ff',
-              borderWidth: 2,
-              padding: 14,
-              boxPadding: 6,
-              callbacks: { label: (ctx)=> `${ctx.label}: ${ctx.raw} courses` } 
-            },
-            title: { 
-              display: true, 
-              text: 'Udemy Course Completion', 
-              color: '#00d9ff', 
-              font: { 
-                size: 16,
-                weight: 'bold',
-                family: 'Space Grotesk'
-              },
-              padding: { bottom: 10 }
-            },
-            subtitle: {
-              display: true,
-              text: '12 courses completed • 50% completion rate • Continuous learning',
-              color: '#00d9ff',
-              font: { 
-                size: 11,
-                weight: '600',
-                family: 'Space Grotesk'
-              },
-              padding: { bottom: 15 }
-            }
-          },
-          animation: {
-            animateRotate: true,
-            animateScale: true,
-            duration: 2500,
-            easing: 'easeOutCubic',
-            delay: function(context) {
-              return context.dataIndex * 150;
-            }
-          },
-          interaction: {
-            intersect: false
-          },
-          scales: {
-            y: {
-              display: false,
-              max: 24
-            }
-          }
-        }
-      });
-
       // Technical Mastery Spectrum Radar Chart
       const ctxT = document.getElementById('techMasteryChart').getContext('2d');
       window.techMasteryChart = new Chart(ctxT, {
@@ -4488,10 +4486,10 @@ transform: none !important;
           datasets: [{
             label: 'Expertise Level %',
             data: [88, 84, 91, 82, 86, 79],
-            backgroundColor: 'rgba(0, 217, 255, 0.3)',
-            borderColor: '#00d9ff',
+            backgroundColor: 'rgba(99, 102, 241, 0.3)',
+            borderColor: '#6366f1',
             borderWidth: 4,
-            pointBackgroundColor: '#00d9ff',
+            pointBackgroundColor: '#6366f1',
             pointBorderColor: '#ffffff',
             pointBorderWidth: 3,
             pointRadius: 7,
@@ -4507,21 +4505,21 @@ transform: none !important;
               beginAtZero: true,
               max: 100,
               angleLines: { 
-                color: 'rgba(0, 217, 255, 0.3)',
+                color: 'rgba(99, 102, 241, 0.3)',
                 lineWidth: 2
               },
               grid: { 
-                color: 'rgba(0, 217, 255, 0.3)',
+                color: 'rgba(99, 102, 241, 0.3)',
                 lineWidth: 2
               },
               ticks: {
                 backdropColor: 'rgba(0, 0, 0, 0.8)',
-                color: '#00d9ff',
+                color: '#6366f1',
                 font: { size: 12, weight: 'bold' },
                 stepSize: 10
               },
               pointLabels: {
-                color: '#00d9ff',
+                color: '#6366f1',
                 font: { size: 13, weight: 'bold' }
               }
             }
@@ -4531,16 +4529,16 @@ transform: none !important;
               display: true,
               position: 'bottom',
               labels: {
-                color: '#00d9ff',
+                color: '#6366f1',
                 font: { size: 14, weight: 'bold' },
                 padding: 15
               }
             },
             tooltip: {
               backgroundColor: 'rgba(0, 0, 0, 0.9)',
-              titleColor: '#00d9ff',
+              titleColor: '#6366f1',
               bodyColor: '#ffffff',
-              borderColor: '#00d9ff',
+              borderColor: '#6366f1',
               borderWidth: 2,
               padding: 12,
               callbacks: {
@@ -4593,98 +4591,6 @@ transform: none !important;
           }
         }
           });
-        } else {
-          console.warn('Could not get 2d context for motUdemy canvas');
-        }
-      } else {
-        console.warn('motUdemy canvas not found - skipping chart initialization');
-      }
-
-      // LinkedIn donut
-      const canvasLinkedIn = document.getElementById('motLinkedIn');
-      if (canvasLinkedIn) {
-        const ctxL = canvasLinkedIn.getContext('2d');
-        if (ctxL) {
-          const gradL = verticalGradient(ctxL, colLinked);
-          window.motLinkedInChart = new Chart(ctxL, {
-        type: 'doughnut',
-        data: {
-          labels: ['Completed (360+)','Required (72)'],
-          datasets: [{
-            data: [360,72],
-            backgroundColor: [gradL, 'rgba(255,255,255,0.1)'],
-            borderColor: ['#00d9ff', 'rgba(255,255,255,0.3)'],
-            borderWidth: 5,
-            hoverBorderWidth: 7,
-            hoverOffset: 14
-          }]
-        },
-        options: {
-          maintainAspectRatio: false,
-          cutout: '66%',
-          plugins: {
-            legend: { 
-              display: true,
-              position: 'bottom',
-              labels: {
-                color: '#00d9ff',
-                font: { size: 13, weight: 'bold' },
-                padding: 18,
-                usePointStyle: true
-              }
-            },
-            tooltip: { 
-              backgroundColor: 'rgba(0, 0, 0, 0.95)',
-              titleColor: '#00d9ff',
-              bodyColor: '#ffffff',
-              borderColor: '#00d9ff',
-              borderWidth: 2,
-              padding: 14,
-              callbacks: { label: (ctx)=> `${ctx.label}: ${ctx.raw} hours` } 
-            },
-            title: { 
-              display: true, 
-              text: 'LinkedIn: 5× Requirement', 
-              color: '#00d9ff', 
-              font: { 
-                size: 16,
-                weight: 'bold',
-                family: 'Space Grotesk' 
-              },
-              padding: { bottom: 10 }
-            },
-            subtitle: {
-              display: true,
-              text: '360+ hours completed • Continuous professional development',
-              color: '#00d9ff',
-              font: { 
-                size: 11,
-                weight: '600',
-                family: 'Space Grotesk'
-              },
-              padding: { bottom: 15 }
-            }
-          },
-          animation: {
-            animateRotate: true,
-            animateScale: true,
-            duration: 2500,
-            easing: 'easeOutCubic',
-            delay: function(context) {
-              return context.dataIndex * 150;
-            }
-          },
-          interaction: {
-            intersect: false
-          }
-        }
-          });
-        } else {
-          console.warn('Could not get 2d context for motLinkedIn canvas');
-        }
-      } else {
-        console.warn('motLinkedIn canvas not found - skipping chart initialization');
-      }
 
       // ROI projection (12 months)
       // baseline: monthly growth 0.8%; uplift: phased to 15% by month 3
@@ -4735,22 +4641,22 @@ transform: none !important;
             {
               label: 'With Renewal & Promotion',
               data: uplift,
-              borderColor: '#00d9ff',
+              borderColor: '#6366f1',
               backgroundColor: gradROI,
               tension: 0.5,
               borderWidth: 5,
-              pointBackgroundColor: '#00d9ff',
+              pointBackgroundColor: '#6366f1',
               pointBorderColor: '#ffffff',
               pointBorderWidth: 4,
               pointRadius: 7,
               pointHoverRadius: 12,
               pointHoverBorderWidth: 5,
-              pointHoverBackgroundColor: '#00ffff',
+              pointHoverBackgroundColor: '#818cf8',
               fill: true,
               shadowOffsetX: 0,
               shadowOffsetY: 8,
               shadowBlur: 20,
-              shadowColor: 'rgba(0, 217, 255, 0.5)'
+              shadowColor: 'rgba(99, 102, 241, 0.5)'
             }
           ]
         },
@@ -4761,16 +4667,16 @@ transform: none !important;
             legend: { 
               position: 'top', 
               labels: { 
-                color: '#00d9ff',
+                color: '#6366f1',
                 font: { size: 13, weight: 'bold' },
                 padding: 15
               } 
             },
             tooltip: { 
               backgroundColor: 'rgba(0, 0, 0, 0.9)',
-              titleColor: '#00d9ff',
+              titleColor: '#6366f1',
               bodyColor: '#ffffff',
-              borderColor: '#00d9ff',
+              borderColor: '#6366f1',
               borderWidth: 2,
               padding: 12,
               callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.formattedValue}` } 
@@ -4778,7 +4684,7 @@ transform: none !important;
             title: {
               display: true,
               text: '📈 Projected ROI Impact (12 Months)',
-              color: '#00d9ff',
+              color: '#6366f1',
               font: { size: 16, weight: 'bold', family: 'Space Grotesk' },
               padding: { bottom: 15 }
             }
@@ -4786,28 +4692,28 @@ transform: none !important;
           scales: {
             x: { 
               grid: {
-                color: 'rgba(0, 217, 255, 0.2)',
+                color: 'rgba(99, 102, 241, 0.2)',
                 lineWidth: 2
               },
               ticks: { 
-                color: '#00d9ff',
+                color: '#6366f1',
                 font: { size: 12, weight: 'bold' }
               } 
             },
             y: {
               beginAtZero: false,
               grid: {
-                color: 'rgba(0, 217, 255, 0.2)',
+                color: 'rgba(99, 102, 241, 0.2)',
                 lineWidth: 2
               },
               ticks: { 
-                color: '#00d9ff',
+                color: '#6366f1',
                 font: { size: 12, weight: 'bold' }
               },
               title: { 
                 display: true, 
                 text: 'Throughput Index', 
-                color: '#00d9ff', 
+                color: '#6366f1', 
                 font: { 
                   size: 14,
                   weight: 'bold',
@@ -4981,12 +4887,12 @@ transform: none !important;
             impactCtx.createLinearGradient(0, 0, 0, 300),
             impactCtx.createLinearGradient(0, 0, 0, 300)
         ];
-        impactGradients[0].addColorStop(0, 'rgba(0, 255, 157, 1)');
-        impactGradients[0].addColorStop(1, 'rgba(0, 200, 120, 0.7)');
-        impactGradients[1].addColorStop(0, 'rgba(0, 217, 255, 1)');
-        impactGradients[1].addColorStop(1, 'rgba(0, 170, 200, 0.7)');
-        impactGradients[2].addColorStop(0, 'rgba(162, 119, 255, 1)');
-        impactGradients[2].addColorStop(1, 'rgba(130, 90, 200, 0.7)');
+        impactGradients[0].addColorStop(0, 'rgba(99, 102, 241, 1)');
+        impactGradients[0].addColorStop(1, 'rgba(139, 92, 246, 0.7)');
+        impactGradients[1].addColorStop(0, 'rgba(205, 133, 63, 1)');
+        impactGradients[1].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
+        impactGradients[2].addColorStop(0, 'rgba(218, 165, 32, 1)');
+        impactGradients[2].addColorStop(1, 'rgba(184, 134, 11, 0.7)');
 
         const impactChart = new Chart(impactCtx, {
             type: 'bar',
@@ -4997,8 +4903,8 @@ transform: none !important;
                     data: [7, 2, 1],
                     backgroundColor: impactGradients,
                     borderColor: [
-                        '#00ff9d',
-                        '#00d9ff',
+                        '#8b5cf6',
+                        '#6366f1',
                         '#a277ff'
                     ],
                     borderWidth: 4,
@@ -5007,7 +4913,7 @@ transform: none !important;
                     shadowOffsetX: 0,
                     shadowOffsetY: 6,
                     shadowBlur: 15,
-                    shadowColor: 'rgba(0, 217, 255, 0.4)'
+                    shadowColor: 'rgba(99, 102, 241, 0.4)'
                 }]
             },
             options: {
@@ -5018,18 +4924,18 @@ transform: none !important;
                         beginAtZero: true,
                         ticks: {
                             precision: 0,
-                            color: '#00d9ff',
+                            color: '#6366f1',
                             font: { size: 12, weight: 'bold' },
                             stepSize: 1
                         },
                         grid: {
-                            color: 'rgba(0, 217, 255, 0.2)',
+                            color: 'rgba(99, 102, 241, 0.2)',
                             lineWidth: 2
                         }
                     },
                     x: {
                         ticks: {
-                            color: '#00d9ff',
+                            color: '#6366f1',
                             font: { size: 12, weight: 'bold' }
                         },
                         grid: {
@@ -5042,16 +4948,16 @@ transform: none !important;
                         display: true,
                         position: 'top',
                         labels: {
-                            color: '#00d9ff',
+                            color: '#6366f1',
                             font: { size: 13, weight: 'bold' },
                             padding: 15
                         }
                     },
                     tooltip: {
                         backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                        titleColor: '#00d9ff',
+                        titleColor: '#6366f1',
                         bodyColor: '#ffffff',
-                        borderColor: '#00d9ff',
+                        borderColor: '#6366f1',
                         borderWidth: 2,
                         padding: 12,
                         callbacks: {
@@ -5063,7 +4969,7 @@ transform: none !important;
                     title: {
                         display: true,
                         text: 'Projects by Impact Type',
-                        color: '#00d9ff',
+                        color: '#6366f1',
                         font: { size: 16, weight: 'bold', family: 'Space Grotesk' },
                         padding: { bottom: 15 }
                     }
@@ -5993,10 +5899,10 @@ if (window.innovationChartInstance) {
 
   // Theme colors from :root (keeps chart matching your UI)
   const colorPrimary = cssVar('--primary', '#00f2ff');
-  const colorProjects = cssVar('--projects-color', '#00ff9d');
+  const colorProjects = cssVar('--projects-color', '#8b5cf6');
   const colorSkills = cssVar('--skills-color', '#ffd700');
   const colorDanger = cssVar('--danger', '#ff3d5e');
-  const colorInfo = cssVar('--info', '#00d9ff');
+  const colorInfo = cssVar('--info', '#6366f1');
   const colorPurple = cssVar('--education-color', '#a277ff');
 
   // Chart labels (months) - extend as needed
@@ -6058,13 +5964,13 @@ const launched = [0, 0, 0, 1, 2, 3, 3, 4];
         {
           label: 'Completed',
           data: completed,
-          borderColor: '#00ff9d',
-          backgroundColor: safeGradient(ctx, '#00ff9d'),
+          borderColor: '#8b5cf6',
+          backgroundColor: safeGradient(ctx, '#8b5cf6'),
           fill: true,
           tension: 0.4,
           pointRadius: 6,
           pointHoverRadius: 10,
-          pointBackgroundColor: '#00ff9d',
+          pointBackgroundColor: '#8b5cf6',
           pointBorderColor: '#ffffff',
           pointBorderWidth: 3,
           borderWidth: 4,
@@ -6073,13 +5979,13 @@ const launched = [0, 0, 0, 1, 2, 3, 3, 4];
         {
           label: 'In Progress',
           data: inProgress,
-          borderColor: '#00d9ff',
-          backgroundColor: safeGradient(ctx, '#00d9ff'),
+          borderColor: '#6366f1',
+          backgroundColor: safeGradient(ctx, '#6366f1'),
           fill: true,
           tension: 0.4,
           pointRadius: 6,
           pointHoverRadius: 10,
-          pointBackgroundColor: '#00d9ff',
+          pointBackgroundColor: '#6366f1',
           pointBorderColor: '#ffffff',
           pointBorderWidth: 3,
           borderWidth: 4,
@@ -6088,15 +5994,15 @@ const launched = [0, 0, 0, 1, 2, 3, 3, 4];
         {
           label: 'Paused',
           data: paused,
-          borderColor: '#ff3d5e',
-          backgroundColor: safeGradient(ctx, '#ff3d5e'),
+          borderColor: '#CD5C5C',
+          backgroundColor: safeGradient(ctx, '#CD5C5C'),
           borderDash: [8,6],
           fill: true,
           tension: 0.4,
           pointRadius: 5,
           pointStyle: 'rectRot',
           pointHoverRadius: 9,
-          pointBackgroundColor: '#ff3d5e',
+          pointBackgroundColor: '#CD5C5C',
           pointBorderColor: '#ffffff',
           pointBorderWidth: 2,
           borderWidth: 3,
@@ -6105,13 +6011,13 @@ const launched = [0, 0, 0, 1, 2, 3, 3, 4];
         {
           label: 'Launched',
           data: launched,
-          borderColor: '#a277ff',
-          backgroundColor: safeGradient(ctx, '#a277ff'),
+          borderColor: '#a855f7',
+          backgroundColor: safeGradient(ctx, '#a855f7'),
           fill: true,
           tension: 0.4,
           pointRadius: 6,
           pointHoverRadius: 10,
-          pointBackgroundColor: '#a277ff',
+          pointBackgroundColor: '#a855f7',
           pointBorderColor: '#ffffff',
           pointBorderWidth: 3,
           borderWidth: 4,
@@ -6130,7 +6036,7 @@ const launched = [0, 0, 0, 1, 2, 3, 3, 4];
         legend: {
           position: 'top',
           labels: {
-            color: '#00d9ff',
+            color: '#6366f1',
             font: { size: 13, weight: 'bold' },
             usePointStyle: true,
             padding: 15,
@@ -6155,9 +6061,9 @@ const launched = [0, 0, 0, 1, 2, 3, 3, 4];
         },
         tooltip: {
           backgroundColor: 'rgba(0, 0, 0, 0.9)',
-          titleColor: '#00d9ff',
+          titleColor: '#6366f1',
           bodyColor: '#ffffff',
-          borderColor: '#00d9ff',
+          borderColor: '#6366f1',
           borderWidth: 2,
           padding: 12,
           mode: 'nearest',
@@ -6176,22 +6082,22 @@ const launched = [0, 0, 0, 1, 2, 3, 3, 4];
       scales: {
         x: {
           grid: {
-            color: 'rgba(0, 217, 255, 0.2)',
+            color: 'rgba(99, 102, 241, 0.2)',
             lineWidth: 2
           },
           ticks: { 
-            color: '#00d9ff',
+            color: '#6366f1',
             font: { size: 12, weight: 'bold' }
           }
         },
         y: {
           beginAtZero: true,
           grid: { 
-            color: 'rgba(0, 217, 255, 0.2)',
+            color: 'rgba(99, 102, 241, 0.2)',
             lineWidth: 2
           },
           ticks: { 
-            color: '#00d9ff',
+            color: '#6366f1',
             font: { size: 12, weight: 'bold' }
           }
         }
@@ -6249,10 +6155,10 @@ const momentumValues = [0.5, 0.3, 0.8, -0.2, 0.6, 0.1]; // recent growth (delta)
 
 // Palette from :root
 const colorPrimary = cssVar('--primary', '#00f2ff');
-const colorProjects = cssVar('--projects-color', '#00ff9d');
+const colorProjects = cssVar('--projects-color', '#8b5cf6');
 const colorSkills = cssVar('--skills-color', '#ffd700');
 const colorDanger = cssVar('--danger', '#ff3d5e');
-const colorInfo = cssVar('--info', '#00d9ff');
+const colorInfo = cssVar('--info', '#6366f1');
 const colorPurple = cssVar('--education-color', '#a277ff');
 
 // Convert hex to rgba helper (for translucent fills)
@@ -6380,35 +6286,35 @@ window.skillsRadarInstance = new Chart(ctx, {
         data: currentValues,
         backgroundColor: (() => {
           const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, 200);
-          grad.addColorStop(0, 'rgba(0, 217, 255, 0.4)');
-          grad.addColorStop(0.5, 'rgba(0, 217, 255, 0.25)');
-          grad.addColorStop(1, 'rgba(0, 217, 255, 0.1)');
+          grad.addColorStop(0, 'rgba(99, 102, 241, 0.4)');
+          grad.addColorStop(0.5, 'rgba(99, 102, 241, 0.25)');
+          grad.addColorStop(1, 'rgba(99, 102, 241, 0.1)');
           return grad;
         })(),
-        borderColor: '#00d9ff',
-        pointBackgroundColor: '#00d9ff',
+        borderColor: '#6366f1',
+        pointBackgroundColor: '#6366f1',
         pointBorderColor: '#ffffff',
         pointBorderWidth: 4,
         borderWidth: 5,
         pointRadius: 8,
-        pointHoverRadius: 14,
-        pointHoverBorderWidth: 5,
-        pointHoverBackgroundColor: '#00ffff',
+        pointHoverRadius: 18,
+        pointHoverBorderWidth: 6,
+        pointHoverBackgroundColor: '#818cf8',
         tension: 0.3,
       },
       {
         label: 'Target Goals',
         data: targetValues,
         backgroundColor: 'transparent',
-        borderColor: '#a277ff',
+        borderColor: '#8b5cf6',
         borderDash: [10, 8],
         pointRadius: 7,
-        pointHoverRadius: 13,
-        pointBackgroundColor: '#a277ff',
+        pointHoverRadius: 16,
+        pointBackgroundColor: '#8b5cf6',
         pointBorderColor: '#ffffff',
         pointBorderWidth: 4,
-        pointHoverBorderWidth: 5,
-        pointHoverBackgroundColor: '#b388ff',
+        pointHoverBorderWidth: 6,
+        pointHoverBackgroundColor: '#a78bfa',
         borderWidth: 4,
         tension: 0.3,
       },
@@ -6417,18 +6323,18 @@ window.skillsRadarInstance = new Chart(ctx, {
         data: momentumValues.map(v => Math.max(0, Math.min(10, 5 + v))), // show as offset around center for visibility
         backgroundColor: (() => {
           const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, 150);
-          grad.addColorStop(0, 'rgba(0, 255, 157, 0.3)');
-          grad.addColorStop(1, 'rgba(0, 255, 157, 0.1)');
+          grad.addColorStop(0, 'rgba(6, 182, 212, 0.3)');
+          grad.addColorStop(1, 'rgba(6, 182, 212, 0.1)');
           return grad;
         })(),
-        borderColor: '#00ff9d',
+        borderColor: '#06b6d4',
         pointStyle: 'rect',
         pointRadius: 6,
-        pointHoverRadius: 11,
-        pointBackgroundColor: '#00ff9d',
+        pointHoverRadius: 14,
+        pointBackgroundColor: '#06b6d4',
         pointBorderColor: '#ffffff',
         pointBorderWidth: 3,
-        pointHoverBorderWidth: 4,
+        pointHoverBorderWidth: 5,
         borderWidth: 4,
         tension: 0.3,
         hidden: false
@@ -6437,7 +6343,8 @@ window.skillsRadarInstance = new Chart(ctx, {
   },
   options: {
     responsive: true,
-    maintainAspectRatio: false,
+    maintainAspectRatio: true,
+    aspectRatio: 1.1,
     elements: {
       line: { borderJoinStyle: 'round' }
     },
@@ -6445,23 +6352,23 @@ window.skillsRadarInstance = new Chart(ctx, {
       r: {
         angleLines: { 
           display: true, 
-          color: 'rgba(0, 217, 255, 0.3)',
-          lineWidth: 2
+          color: 'rgba(99, 102, 241, 0.25)',
+          lineWidth: 1.5
         },
         grid: { 
-          color: 'rgba(0, 217, 255, 0.3)',
-          lineWidth: 2
+          color: 'rgba(99, 102, 241, 0.25)',
+          lineWidth: 1.5
         },
         beginAtZero: true,
         max: 10,
         ticks: {
           stepSize: 2,
-          color: '#00d9ff',
+          color: '#818cf8',
           backdropColor: 'rgba(0, 0, 0, 0.8)',
           font: { size: 12, weight: 'bold' }
         },
         pointLabels: {
-          color: '#00d9ff',
+          color: '#c7d2fe',
           font: { size: 14, weight: 'bold' }
         }
       }
@@ -6470,11 +6377,13 @@ window.skillsRadarInstance = new Chart(ctx, {
       legend: {
         position: 'bottom',
         labels: {
-          color: '#00d9ff',
+          color: '#c7d2fe',
           font: { size: 13, weight: 'bold' },
           usePointStyle: true,
           pointStyle: 'circle',
-          padding: 15
+          padding: 15,
+          boxWidth: 14,
+          boxHeight: 14
         },
         onClick(e, legendItem, legend) {
           // ensure at least one dataset visible (prevent hiding all)
@@ -6493,12 +6402,21 @@ window.skillsRadarInstance = new Chart(ctx, {
         }
       },
       tooltip: {
-        backgroundColor: 'rgba(0, 0, 0, 0.9)',
-        titleColor: '#00d9ff',
-        bodyColor: '#ffffff',
-        borderColor: '#00d9ff',
+        enabled: true,
+        backgroundColor: 'rgba(15, 23, 42, 0.95)',
+        titleColor: '#818cf8',
+        bodyColor: '#e0e7ff',
+        borderColor: '#6366f1',
         borderWidth: 2,
-        padding: 12,
+        padding: 14,
+        cornerRadius: 8,
+        displayColors: true,
+        titleFont: { size: 14, weight: 'bold' },
+        bodyFont: { size: 13 },
+        boxPadding: 8,
+        animation: {
+          duration: 200
+        },
         callbacks: {
           title(tooltipItems) {
             return 'Skill: ' + tooltipItems[0].label;
@@ -6512,6 +6430,13 @@ window.skillsRadarInstance = new Chart(ctx, {
               return `${dsLabel}: ${delta >= 0 ? '+' : ''}${delta.toFixed(2)} Δ`;
             }
             return `${dsLabel}: ${value}/10`;
+          },
+          labelColor(ctx) {
+            const color = ctx.dataset.borderColor || '#6366f1';
+            return {
+              borderColor: color,
+              backgroundColor: color
+            };
           }
         }
       },
@@ -6519,8 +6444,20 @@ window.skillsRadarInstance = new Chart(ctx, {
       radarRingsPlugin,
       radarCenterSummary
     },
-    interaction: { mode: 'nearest', intersect: true },
-    animation: { duration: 700, easing: 'easeOutQuart' }
+    interaction: { 
+      mode: 'nearest', 
+      intersect: false,
+      axis: 'r'
+    },
+    animation: { 
+      duration: 1200, 
+      easing: 'easeOutQuart'
+    },
+    onHover: (event, activeElements) => {
+      if (event.native && event.native.target) {
+        event.native.target.style.cursor = activeElements.length > 0 ? 'pointer' : 'default';
+      }
+    }
   },
 });
 
@@ -6552,7 +6489,7 @@ document.getElementById('skillsRadar').addEventListener('keydown', (e) => {
             ];
             projectStatsGradients[0].addColorStop(0, 'rgba(0, 255, 157, 1)');
             projectStatsGradients[0].addColorStop(1, 'rgba(0, 200, 120, 0.8)');
-            projectStatsGradients[1].addColorStop(0, 'rgba(0, 217, 255, 1)');
+            projectStatsGradients[1].addColorStop(0, 'rgba(99, 102, 241, 1)');
             projectStatsGradients[1].addColorStop(1, 'rgba(0, 170, 200, 0.8)');
             projectStatsGradients[2].addColorStop(0, 'rgba(255, 200, 0, 1)');
             projectStatsGradients[2].addColorStop(1, 'rgba(200, 150, 0, 0.8)');
@@ -6565,8 +6502,8 @@ document.getElementById('skillsRadar').addEventListener('keydown', (e) => {
                         data: [18, 5, 3],
                         backgroundColor: projectStatsGradients,
                         borderColor: [
-                            '#00ff9d',
-                            '#00d9ff',
+                            '#8b5cf6',
+                            '#6366f1',
                             '#ffc800'
                         ],
                         borderWidth: 4,
@@ -6582,7 +6519,7 @@ document.getElementById('skillsRadar').addEventListener('keydown', (e) => {
                         legend: {
                             position: 'bottom',
                             labels: {
-                                color: '#00d9ff',
+                                color: '#6366f1',
                                 font: { size: 13, weight: 'bold' },
                                 padding: 15,
                                 usePointStyle: true,
@@ -6591,9 +6528,9 @@ document.getElementById('skillsRadar').addEventListener('keydown', (e) => {
                         },
                         tooltip: {
                             backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                            titleColor: '#00d9ff',
+                            titleColor: '#6366f1',
                             bodyColor: '#ffffff',
-                            borderColor: '#00d9ff',
+                            borderColor: '#6366f1',
                             borderWidth: 2,
                             padding: 12,
                             callbacks: {
@@ -6627,7 +6564,7 @@ document.getElementById('skillsRadar').addEventListener('keydown', (e) => {
                 vendorCtx.createLinearGradient(0, 0, 0, 200),
                 vendorCtx.createLinearGradient(0, 0, 0, 200)
             ];
-            vendorGradients[0].addColorStop(0, 'rgba(0, 217, 255, 1)');
+            vendorGradients[0].addColorStop(0, 'rgba(99, 102, 241, 1)');
             vendorGradients[0].addColorStop(1, 'rgba(0, 170, 200, 0.7)');
             vendorGradients[1].addColorStop(0, 'rgba(0, 255, 157, 1)');
             vendorGradients[1].addColorStop(1, 'rgba(0, 200, 120, 0.7)');
@@ -6643,8 +6580,8 @@ document.getElementById('skillsRadar').addEventListener('keydown', (e) => {
                         data: [9, 8, 7],
                         backgroundColor: vendorGradients,
                         borderColor: [
-                            '#00d9ff',
-                            '#00ff9d',
+                            '#6366f1',
+                            '#8b5cf6',
                             '#a277ff'
                         ],
                         borderWidth: 4,
@@ -6653,7 +6590,7 @@ document.getElementById('skillsRadar').addEventListener('keydown', (e) => {
                         shadowOffsetX: 0,
                         shadowOffsetY: 6,
                         shadowBlur: 15,
-                        shadowColor: 'rgba(0, 217, 255, 0.4)'
+                        shadowColor: 'rgba(99, 102, 241, 0.4)'
                     }]
                 },
                 options: {
@@ -6664,18 +6601,18 @@ document.getElementById('skillsRadar').addEventListener('keydown', (e) => {
                             beginAtZero: true,
                             max: 10,
                             ticks: {
-                                color: '#00d9ff',
+                                color: '#6366f1',
                                 font: { size: 12, weight: 'bold' },
                                 stepSize: 1
                             },
                             grid: {
-                                color: 'rgba(0, 217, 255, 0.2)',
+                                color: 'rgba(99, 102, 241, 0.2)',
                                 lineWidth: 2
                             }
                         },
                         x: {
                             ticks: {
-                                color: '#00d9ff',
+                                color: '#6366f1',
                                 font: { size: 12, weight: 'bold' }
                             },
                             grid: {
@@ -6688,16 +6625,16 @@ document.getElementById('skillsRadar').addEventListener('keydown', (e) => {
                             display: true,
                             position: 'top',
                             labels: {
-                                color: '#00d9ff',
+                                color: '#6366f1',
                                 font: { size: 13, weight: 'bold' },
                                 padding: 15
                             }
                         },
                         tooltip: {
                             backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                            titleColor: '#00d9ff',
+                            titleColor: '#6366f1',
                             bodyColor: '#ffffff',
-                            borderColor: '#00d9ff',
+                            borderColor: '#6366f1',
                             borderWidth: 2,
                             padding: 12,
                             callbacks: {
@@ -6819,12 +6756,12 @@ try {
 
   const ctx = canvas.getContext('2d');
 
-  // Data - replace with real values if needed
-  const labels = ['Completed Training', 'Ongoing Training', 'Pending Training'];
-  const counts = [7, 3, 1];
+  // Enhanced Data - Mentees by Status
+  const labels = ['Completed Programs', 'Active Mentorship', 'Early Stage', 'Onboarding'];
+  const counts = [18, 4, 2, 0]; // Total 24 mentees
 
   // Pull colors from :root where possible
-  const cCompleted = cssVar('--projects-color', '#00ff9d'); // green
+  const cCompleted = cssVar('--projects-color', '#8b5cf6'); // green
   const cOngoing   = cssVar('--skills-color', '#ffd700');   // yellow
   const cPending   = cssVar('--danger', '#ff3d5e');         // red
   const textPrimary = cssVar('--text-primary', '#fff');
@@ -6839,6 +6776,9 @@ try {
   const total = counts.reduce((s, v) => s + (Number(v) || 0), 0);
   const completedCount = Number(counts[0] || 0);
   const pctCompleted = total ? Math.round((completedCount / total) * 100) : 0;
+  
+  // Enhanced center text with total mentees
+  const totalMentees = 24;
 
   // Center text plugin
   const centerText = {
@@ -6856,16 +6796,20 @@ try {
       ctx.fill();
       ctx.closePath();
 
-      // percentage
+      // Total mentees
       ctx.fillStyle = textPrimary;
-      ctx.font = '700 20px Inter, system-ui, -apple-system';
+      ctx.font = 'bold 28px Space Grotesk, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(`${pctCompleted}%`, centerX, centerY - 6);
+      ctx.fillText(`${totalMentees}`, centerX, centerY - 10);
 
       ctx.fillStyle = textSecondary;
-      ctx.font = '400 12px Inter, system-ui';
-      ctx.fillText(`${completedCount} of ${total} completed`, centerX, centerY + 14);
+      ctx.font = '600 12px Space Grotesk, sans-serif';
+      ctx.fillText('Total Mentees', centerX, centerY + 12);
+      
+      ctx.fillStyle = '#818cf8';
+      ctx.font = '600 11px Space Grotesk, sans-serif';
+      ctx.fillText(`${pctCompleted}% completed`, centerX, centerY + 28);
 
       ctx.restore();
     }
@@ -6895,7 +6839,7 @@ try {
       datasets: [{
         data: counts,
         backgroundColor: [gradCompleted, gradOngoing, gradPending],
-        borderColor: ['#00d9ff', '#00ff9d', '#a277ff'],
+        borderColor: ['#6366f1', '#8b5cf6', '#a855f7'],
         borderWidth: 3,
         hoverBorderWidth: 5,
         hoverOffset: 10
@@ -6909,7 +6853,7 @@ try {
         legend: {
           position: 'bottom',
           labels: {
-            color: '#00d9ff',
+            color: '#6366f1',
             font: { size: 13, weight: 'bold' },
             usePointStyle: true,
             pointStyle: 'circle',
@@ -6918,18 +6862,33 @@ try {
           onClick: safeLegendClick
         },
         tooltip: {
-          backgroundColor: 'rgba(0, 0, 0, 0.9)',
-          titleColor: '#00d9ff',
-          bodyColor: '#ffffff',
-          borderColor: '#00d9ff',
-          borderWidth: 2,
-          padding: 12,
+          backgroundColor: 'rgba(15, 23, 42, 0.98)',
+          titleColor: '#818cf8',
+          bodyColor: '#e0e7ff',
+          borderColor: '#6366f1',
+          borderWidth: 3,
+          padding: 14,
+          cornerRadius: 10,
+          titleFont: { size: 14, weight: 'bold', family: 'Space Grotesk, sans-serif' },
+          bodyFont: { size: 13, family: 'Space Grotesk, sans-serif' },
           callbacks: {
+            title: function(tooltipItems) {
+              return tooltipItems[0].label;
+            },
             label(ctx) {
               const i = ctx.dataIndex;
               const val = ctx.dataset.data[i] || 0;
               const pct = total ? ((val / total) * 100).toFixed(1) : '0.0';
-              return `${ctx.label}: ${val} courses (${pct}%)`;
+              return `${val} mentees (${pct}%)`;
+            },
+            afterLabel: function(context) {
+              const statusDetails = {
+                'Completed Programs': 'Advanced to senior roles, leading projects',
+                'Active Mentorship': 'Currently in 6-month structured program',
+                'Early Stage': 'Recently onboarded, baseline assessments done',
+                'Onboarding': 'Awaiting program start'
+              };
+              return `Status: ${statusDetails[context.label] || 'In progress'}`;
             }
           }
         },
@@ -6956,6 +6915,352 @@ try {
     },
     plugins: [centerText]
   });
+  
+  // === Demographics Chart (Age & Gender) ===
+  const canvasDemo = document.getElementById('knowledgeDemographics');
+  if (canvasDemo) {
+    const ctxDemo = canvasDemo.getContext('2d');
+    
+    // Age groups distribution
+    const ageLabels = ['22-26', '27-30', '31-35', '36+'];
+    const ageData = [8, 10, 4, 2]; // 24 total
+    const ageGradients = ageLabels.map((_, i) => {
+      const grad = ctxDemo.createLinearGradient(0, 0, 250, 250);
+      const colors = [
+        ['#6366f1', '#818cf8'], // Youngest - Indigo
+        ['#8b5cf6', '#a78bfa'], // Early career - Purple
+        ['#06b6d4', '#22d3ee'], // Mid-career - Cyan
+        ['#ec4899', '#f472b6']  // Senior - Pink
+      ];
+      grad.addColorStop(0, colors[i][0]);
+      grad.addColorStop(1, colors[i][1]);
+      return grad;
+    });
+    
+    window.knowledgeDemoChart = new Chart(ctxDemo, {
+      type: 'doughnut',
+      data: {
+        labels: ageLabels,
+        datasets: [{
+          data: ageData,
+          backgroundColor: ageGradients,
+          borderColor: '#0f172a',
+          borderWidth: 3,
+          hoverBorderWidth: 6,
+          hoverOffset: 15
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '70%',
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: '#e0e7ff',
+              font: { size: 11, weight: '600', family: 'Space Grotesk, sans-serif' },
+              padding: 12,
+              usePointStyle: true,
+              generateLabels: function(chart) {
+                return chart.data.labels.map((label, i) => ({
+                  text: `${label} (${ageData[i]})`,
+                  fillStyle: ageGradients[i],
+                  strokeStyle: '#0f172a',
+                  lineWidth: 2,
+                  hidden: false,
+                  index: i
+                }));
+              }
+            }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(15, 23, 42, 0.98)',
+            titleColor: '#818cf8',
+            bodyColor: '#e0e7ff',
+            borderColor: '#6366f1',
+            borderWidth: 3,
+            padding: 12,
+            titleFont: { size: 13, weight: 'bold', family: 'Space Grotesk, sans-serif' },
+            bodyFont: { size: 12, family: 'Space Grotesk, sans-serif' },
+            callbacks: {
+              label: function(context) {
+                const pct = ((context.parsed / 24) * 100).toFixed(1);
+                return `${context.parsed} mentees (${pct}%)`;
+              },
+              afterLabel: function(context) {
+                const insights = ['Early career focus', 'Peak learning years', 'Leadership development', 'Senior mentorship'];
+                return insights[context.dataIndex];
+              }
+            }
+          },
+          title: {
+            display: true,
+            text: 'Age Distribution',
+            color: '#818cf8',
+            font: { size: 14, weight: 'bold', family: 'Space Grotesk, sans-serif' },
+            padding: { bottom: 10 }
+          }
+        },
+        animation: {
+          duration: 1800,
+          easing: 'easeOutCubic'
+        }
+      },
+      plugins: [{
+        id: 'demoCenter',
+        beforeDraw(chart) {
+          const ctx = chart.ctx;
+          const centerX = (chart.chartArea.left + chart.chartArea.right) / 2;
+          const centerY = (chart.chartArea.top + chart.chartArea.bottom) / 2;
+          
+          ctx.save();
+          ctx.fillStyle = 'rgba(99, 102, 241, 0.15)';
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, 45, 0, Math.PI * 2);
+          ctx.fill();
+          
+          ctx.fillStyle = '#e0e7ff';
+          ctx.font = 'bold 18px Space Grotesk, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('Gender', centerX, centerY - 8);
+          
+          ctx.fillStyle = '#818cf8';
+          ctx.font = '600 12px Space Grotesk, sans-serif';
+          ctx.fillText('12% F, 88% M', centerX, centerY + 10);
+          ctx.restore();
+        }
+      }]
+    });
+  }
+  
+  // === Geography Chart ===
+  const canvasGeo = document.getElementById('knowledgeGeography');
+  if (canvasGeo) {
+    const ctxGeo = canvasGeo.getContext('2d');
+    
+    const geoLabels = ['Africa', 'Europe', 'North America', 'Asia', 'Oceania'];
+    const geoData = [12, 6, 4, 2, 0];
+    const geoColors = ['#6366f1', '#8b5cf6', '#06b6d4', '#ec4899', '#a78bfa'];
+    
+    window.knowledgeGeoChart = new Chart(ctxGeo, {
+      type: 'pie',
+      data: {
+        labels: geoLabels,
+        datasets: [{
+          data: geoData,
+          backgroundColor: geoColors.map(c => toRgbaString(c, 0.85)),
+          borderColor: '#0f172a',
+          borderWidth: 2,
+          hoverBorderWidth: 4,
+          hoverOffset: 12
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: '#e0e7ff',
+              font: { size: 10, weight: '600', family: 'Space Grotesk, sans-serif' },
+              padding: 10,
+              usePointStyle: true,
+              boxWidth: 8
+            }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(15, 23, 42, 0.98)',
+            titleColor: '#818cf8',
+            bodyColor: '#e0e7ff',
+            borderColor: '#6366f1',
+            borderWidth: 2,
+            padding: 10,
+            titleFont: { size: 12, weight: 'bold', family: 'Space Grotesk, sans-serif' },
+            bodyFont: { size: 11, family: 'Space Grotesk, sans-serif' },
+            callbacks: {
+              label: function(context) {
+                const pct = ((context.parsed / 24) * 100).toFixed(1);
+                return `${context.parsed} mentees (${pct}%)`;
+              }
+            }
+          },
+          title: {
+            display: true,
+            text: 'Geographic Distribution',
+            color: '#818cf8',
+            font: { size: 13, weight: 'bold', family: 'Space Grotesk, sans-serif' },
+            padding: { bottom: 8 }
+          }
+        },
+        animation: { duration: 1500 }
+      }
+    });
+  }
+  
+  // === Experience Level Chart ===
+  const canvasExp = document.getElementById('knowledgeExperience');
+  if (canvasExp) {
+    const ctxExp = canvasExp.getContext('2d');
+    
+    const expLabels = ['Junior', 'Mid-Level', 'Senior'];
+    const expData = [10, 9, 5];
+    const expGradients = [
+      ctxExp.createLinearGradient(0, 0, 200, 200),
+      ctxExp.createLinearGradient(0, 0, 200, 200),
+      ctxExp.createLinearGradient(0, 0, 200, 200)
+    ];
+    expGradients[0].addColorStop(0, '#6366f1');
+    expGradients[0].addColorStop(1, '#818cf8');
+    expGradients[1].addColorStop(0, '#8b5cf6');
+    expGradients[1].addColorStop(1, '#a78bfa');
+    expGradients[2].addColorStop(0, '#06b6d4');
+    expGradients[2].addColorStop(1, '#22d3ee');
+    
+    window.knowledgeExpChart = new Chart(ctxExp, {
+      type: 'bar',
+      data: {
+        labels: expLabels,
+        datasets: [{
+          label: 'Mentees',
+          data: expData,
+          backgroundColor: expGradients,
+          borderColor: ['#6366f1', '#8b5cf6', '#06b6d4'],
+          borderWidth: 3,
+          borderRadius: 8,
+          borderSkipped: false
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        indexAxis: 'y',
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(15, 23, 42, 0.98)',
+            titleColor: '#818cf8',
+            bodyColor: '#e0e7ff',
+            borderColor: '#6366f1',
+            borderWidth: 2,
+            padding: 10,
+            titleFont: { size: 12, weight: 'bold', family: 'Space Grotesk, sans-serif' },
+            bodyFont: { size: 11, family: 'Space Grotesk, sans-serif' },
+            callbacks: {
+              label: function(context) {
+                const pct = ((context.parsed.x / 24) * 100).toFixed(1);
+                return `${context.parsed.x} mentees (${pct}%)`;
+              }
+            }
+          },
+          title: {
+            display: true,
+            text: 'Experience Levels',
+            color: '#818cf8',
+            font: { size: 13, weight: 'bold', family: 'Space Grotesk, sans-serif' },
+            padding: { bottom: 8 }
+          }
+        },
+        scales: {
+          x: {
+            beginAtZero: true,
+            ticks: {
+              color: '#818cf8',
+              font: { size: 10, weight: 'bold', family: 'Space Grotesk, sans-serif' }
+            },
+            grid: { color: 'rgba(99, 102, 241, 0.2)', lineWidth: 1 }
+          },
+          y: {
+            ticks: {
+              color: '#818cf8',
+              font: { size: 11, weight: 'bold', family: 'Space Grotesk, sans-serif' }
+            },
+            grid: { display: false }
+          }
+        },
+        animation: { duration: 1500 }
+      }
+    });
+  }
+  
+  // === Skills/Topics Chart ===
+  const canvasSkills = document.getElementById('knowledgeSkills');
+  if (canvasSkills) {
+    const ctxSkills = canvasSkills.getContext('2d');
+    
+    const skillLabels = ['React/JS', 'AI/ML', 'Backend', 'Cloud', 'DevOps'];
+    const skillData = [14, 8, 10, 6, 5]; // Some mentees learn multiple
+    const skillColors = ['#6366f1', '#ec4899', '#8b5cf6', '#06b6d4', '#f472b6'];
+    
+    window.knowledgeSkillsChart = new Chart(ctxSkills, {
+      type: 'polarArea',
+      data: {
+        labels: skillLabels,
+        datasets: [{
+          data: skillData,
+          backgroundColor: skillColors.map(c => toRgbaString(c, 0.7)),
+          borderColor: skillColors,
+          borderWidth: 3
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: '#e0e7ff',
+              font: { size: 10, weight: '600', family: 'Space Grotesk, sans-serif' },
+              padding: 10,
+              usePointStyle: true,
+              boxWidth: 8
+            }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(15, 23, 42, 0.98)',
+            titleColor: '#818cf8',
+            bodyColor: '#e0e7ff',
+            borderColor: '#6366f1',
+            borderWidth: 2,
+            padding: 10,
+            titleFont: { size: 12, weight: 'bold', family: 'Space Grotesk, sans-serif' },
+            bodyFont: { size: 11, family: 'Space Grotesk, sans-serif' },
+            callbacks: {
+              label: function(context) {
+                return `${context.parsed} mentees learning ${context.label}`;
+              }
+            }
+          },
+          title: {
+            display: true,
+            text: 'Topics Taught',
+            color: '#818cf8',
+            font: { size: 13, weight: 'bold', family: 'Space Grotesk, sans-serif' },
+            padding: { bottom: 8 }
+          }
+        },
+        scales: {
+          r: {
+            beginAtZero: true,
+            ticks: {
+              color: '#818cf8',
+              font: { size: 9 },
+              stepSize: 3
+            },
+            grid: { color: 'rgba(99, 102, 241, 0.3)', lineWidth: 1 },
+            pointLabels: {
+              color: '#e0e7ff',
+              font: { size: 10, weight: '600', family: 'Space Grotesk, sans-serif' }
+            }
+          }
+        },
+        animation: { duration: 2000 }
+      }
+    });
+  }
 
 } catch (err) {
   console.error('Knowledge Chart error:', err);
@@ -6972,160 +7277,482 @@ try {
 if (window.udemyChartInstance) window.udemyChartInstance.destroy();
 if (window.linkedinChartInstance) window.linkedinChartInstance.destroy();
 
-// === Udemy Donut Chart ===
+// === Udemy Courses by Category - Modern Pie Chart ===
 const ctxUdemy = document.getElementById('udemyChart').getContext('2d');
+
+// Consolidated course categories (4 main areas)
+const courseCategories = {
+  'AI & Machine Learning': 8,      // AI/ML courses
+  'Full-Stack Development': 18,     // React/JS/Backend/Full-Stack combined
+  'Cloud & DevOps': 4,              // Cloud/DevOps/Security
+  'Tools & Design': 6               // UI/UX/Tools/Testing/Digital Transformation
+};
+
+const categoryLabels = Object.keys(courseCategories);
+const categoryData = Object.values(courseCategories);
+const totalCourses = categoryData.reduce((sum, val) => sum + val, 0);
+
+// Sleek modern gradient colors
+const categoryGradients = categoryLabels.map((label, index) => {
+  const gradients = [
+    [ctxUdemy.createLinearGradient(0, 0, 300, 300), '#6366f1', '#818cf8'],      // AI/ML - Indigo gradient
+    [ctxUdemy.createLinearGradient(0, 0, 300, 300), '#8b5cf6', '#a78bfa'],      // Full-Stack - Purple gradient
+    [ctxUdemy.createLinearGradient(0, 0, 300, 300), '#06b6d4', '#22d3ee'],      // Cloud/DevOps - Cyan gradient
+    [ctxUdemy.createLinearGradient(0, 0, 300, 300), '#ec4899', '#f472b6']       // Tools/Design - Pink gradient
+  ];
+  const [grad, startColor, endColor] = gradients[index];
+  grad.addColorStop(0, startColor);
+  grad.addColorStop(1, endColor);
+  return grad;
+});
+
+const categoryBorders = ['#6366f1', '#8b5cf6', '#06b6d4', '#ec4899'];
+
 window.udemyChartInstance = new Chart(ctxUdemy, {
-  type: 'doughnut',
+  type: 'pie',
   data: {
-    labels: ['Completed (10)', 'Required (4)'],
+    labels: categoryLabels,
     datasets: [{
-      data: [10, 4],
-      backgroundColor: [
-        'rgba(0, 217, 255, 1)',
-        'rgba(149, 165, 166, 0.4)'
-      ],
-      borderColor: [
-        '#00d9ff',
-        'rgba(149, 165, 166, 0.6)'
-      ],
-      borderWidth: 3,
-      hoverBorderWidth: 5,
-      hoverOffset: 8
+      data: categoryData,
+      backgroundColor: categoryGradients,
+      borderColor: '#0f172a',
+      borderWidth: 4,
+      hoverBorderWidth: 8,
+      hoverOffset: 20,
+      shadowOffsetX: 0,
+      shadowOffsetY: 8,
+      shadowBlur: 25,
+      shadowColor: 'rgba(99, 102, 241, 0.5)'
     }]
   },
   options: {
     responsive: true,
     maintainAspectRatio: false,
-    cutout: '65%',
+    layout: {
+      padding: {
+        top: 10,
+        bottom: 10,
+        left: 10,
+        right: 10
+      }
+    },
     plugins: {
       legend: { 
-        position: 'bottom',
+        position: 'right',
+        align: 'center',
         labels: {
-          color: '#00d9ff',
-          font: { size: 13, weight: 'bold' },
-          padding: 15,
-          usePointStyle: true
+          color: '#e0e7ff',
+          font: { 
+            size: 13, 
+            weight: '600',
+            family: 'Space Grotesk, sans-serif'
+          },
+          padding: 18,
+          usePointStyle: true,
+          pointStyle: 'circle',
+          boxWidth: 10,
+          boxHeight: 10,
+          generateLabels: function(chart) {
+            const data = chart.data;
+            if (data.labels.length && data.datasets.length) {
+              return data.labels.map((label, i) => {
+                const dataset = data.datasets[0];
+                const value = dataset.data[i];
+                const percentage = ((value / totalCourses) * 100).toFixed(1);
+                return {
+                  text: `${label} (${value})`,
+                  fillStyle: dataset.backgroundColor[i],
+                  strokeStyle: dataset.borderColor,
+                  lineWidth: 2,
+                  hidden: false,
+                  index: i,
+                  fontColor: '#e0e7ff'
+                };
+              });
+            }
+            return [];
+          }
+        },
+        onClick: function(e, legendItem, legend) {
+          const index = legendItem.index;
+          const ci = legend.chart;
+          const meta = ci.getDatasetMeta(0);
+          const segment = meta.data[index];
+          
+          if (segment.hidden) {
+            segment.hidden = false;
+          } else {
+            const visibleCount = meta.data.filter(d => !d.hidden).length;
+            if (visibleCount > 1) {
+              segment.hidden = true;
+            }
+          }
+          ci.update('active');
         }
       },
       tooltip: { 
-        backgroundColor: 'rgba(0, 0, 0, 0.9)',
-        titleColor: '#00d9ff',
-        bodyColor: '#ffffff',
-        borderColor: '#00d9ff',
-        borderWidth: 2,
-        padding: 12,
+        enabled: true,
+        backgroundColor: 'rgba(15, 23, 42, 0.98)',
+        titleColor: '#818cf8',
+        bodyColor: '#e0e7ff',
+        borderColor: '#6366f1',
+        borderWidth: 3,
+        padding: 16,
+        cornerRadius: 12,
+        displayColors: true,
+        titleFont: { 
+          size: 15, 
+          weight: 'bold',
+          family: 'Space Grotesk, sans-serif'
+        },
+        bodyFont: { 
+          size: 13,
+          family: 'Space Grotesk, sans-serif'
+        },
+        boxPadding: 10,
+        animation: {
+          duration: 150,
+          easing: 'easeOutQuart'
+        },
         callbacks: {
+          title: function(tooltipItems) {
+            return tooltipItems[0].label;
+          },
           label: function(context) {
-            return context.label + ': ' + context.parsed + ' courses';
+            const label = context.label || '';
+            const value = context.parsed || 0;
+            const percentage = ((value / totalCourses) * 100).toFixed(1);
+            return [`${value} courses`, `${percentage}% of total`];
+          },
+          afterLabel: function(context) {
+            const category = context.label;
+            const examples = {
+              'AI & Machine Learning': 'AI Engineer Core Track, MLOps Bootcamp, Reinforcement Learning, Generative AI',
+              'Full-Stack Development': 'React Complete Guide, Java Masterclass, Node.js, Python, C#',
+              'Cloud & DevOps': 'AWS Introduction, Secure Coding, Secure Deployment, Security Best Practices',
+              'Tools & Design': 'Design Rules, Material UI, Git/GitHub, Cypress E2E, Digital Transformation'
+            };
+            return `Focus: ${examples[category] || 'Various specializations'}`;
+          },
+          labelColor: function(context) {
+            return {
+              borderColor: categoryBorders[context.dataIndex],
+              backgroundColor: categoryGradients[context.dataIndex]
+            };
+          },
+          footer: function(tooltipItems) {
+            return `Total: ${totalCourses} courses completed`;
           }
         }
       },
       title: {
-        display: true,
-        text: 'Udemy: 2.5× Requirement',
-        color: '#00d9ff',
-        font: { 
-          size: 16,
-          weight: 'bold', 
-          family: 'Space Grotesk' 
-        },
-        padding: { bottom: 10 }
+        display: false
       }
     },
     animation: {
       animateRotate: true,
       animateScale: true,
-      duration: 2500,
+      duration: 1800,
       easing: 'easeOutCubic',
       delay: function(context) {
-        return context.dataIndex * 150;
+        return context.dataIndex * 120;
       }
     },
     interaction: {
-      intersect: false
+      intersect: false,
+      mode: 'point'
+    },
+    onHover: (event, activeElements, chart) => {
+      if (event.native && event.native.target) {
+        event.native.target.style.cursor = activeElements.length > 0 ? 'pointer' : 'default';
+      }
+      
+      // Enhanced hover effect with scale animation
+      if (activeElements.length > 0) {
+        const element = activeElements[0].element;
+        const index = activeElements[0].index;
+        const meta = chart.getDatasetMeta(0);
+        const segment = meta.data[index];
+        
+        // Animate segment expansion on hover
+        if (!segment._hoverAnimating) {
+          segment._hoverAnimating = true;
+          segment.hoverBorderWidth = 8;
+          segment.hoverOffset = 25;
+        }
+      } else {
+        // Reset all segments
+        const meta = chart.getDatasetMeta(0);
+        meta.data.forEach(seg => {
+          seg._hoverAnimating = false;
+          seg.hoverBorderWidth = 0;
+          seg.hoverOffset = 20;
+        });
+      }
+      chart.update('none');
+    },
+    elements: {
+      arc: {
+        borderJoinStyle: 'round',
+        borderAlign: 'inner',
+        borderWidth: 4,
+        hoverBorderWidth: 8,
+        hoverOffset: 25
+      }
     }
-  }
+  },
+  plugins: [{
+    id: 'centerText',
+    beforeDraw(chart) {
+      const ctx = chart.ctx;
+      const centerX = (chart.chartArea.left + chart.chartArea.right) / 2;
+      const centerY = (chart.chartArea.top + chart.chartArea.bottom) / 2;
+      
+      ctx.save();
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.8)';
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, 60, 0, Math.PI * 2);
+      ctx.fill();
+      
+      ctx.fillStyle = '#e0e7ff';
+      ctx.font = 'bold 24px Space Grotesk, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(totalCourses, centerX, centerY - 8);
+      
+      ctx.fillStyle = '#818cf8';
+      ctx.font = '600 11px Space Grotesk, sans-serif';
+      ctx.fillText('Courses', centerX, centerY + 12);
+      ctx.restore();
+    }
+  }]
 });
 
-// === Enhanced LinkedIn Donut Chart with gradients ===
+// === LinkedIn Learning by Category - Doughnut Chart ===
 const ctxLinkedIn = document.getElementById('linkedinChart').getContext('2d');
-const linkedInGradients = [
-  ctxLinkedIn.createLinearGradient(0, 0, 0, 300),
-  ctxLinkedIn.createLinearGradient(0, 0, 0, 300)
-];
-linkedInGradients[0].addColorStop(0, 'rgba(0, 255, 157, 1)');
-linkedInGradients[0].addColorStop(1, 'rgba(0, 200, 120, 0.8)');
-linkedInGradients[1].addColorStop(0, 'rgba(149, 165, 166, 0.5)');
-linkedInGradients[1].addColorStop(1, 'rgba(120, 130, 140, 0.3)');
+
+// Categorize LinkedIn courses (simplified to 4 main areas)
+const linkedInCategories = {
+  'AI & Machine Learning': 25,      // AI courses, AIOps, Generative AI, Agentic AI, etc.
+  'Cloud & Azure': 8,                // Azure AI, Cloud Computing, AWS
+  'Data & Analytics': 6,             // Power BI, Data Analytics, Databases
+  'Programming & Development': 8     // Python, JavaScript, Java, React, C#, etc.
+};
+
+const linkedInLabels = Object.keys(linkedInCategories);
+const linkedInData = Object.values(linkedInCategories);
+const totalLinkedInHours = linkedInData.reduce((sum, val) => sum + val, 0);
+
+// Create gradients for LinkedIn chart
+const linkedInGradients = linkedInLabels.map((label, index) => {
+  const gradients = [
+    [ctxLinkedIn.createLinearGradient(0, 0, 250, 250), '#6366f1', '#818cf8'],
+    [ctxLinkedIn.createLinearGradient(0, 0, 250, 250), '#06b6d4', '#22d3ee'],
+    [ctxLinkedIn.createLinearGradient(0, 0, 250, 250), '#8b5cf6', '#a78bfa'],
+    [ctxLinkedIn.createLinearGradient(0, 0, 250, 250), '#ec4899', '#f472b6']
+  ];
+  const [grad, startColor, endColor] = gradients[index];
+  grad.addColorStop(0, startColor);
+  grad.addColorStop(1, endColor);
+  return grad;
+});
+
+const linkedInBorders = ['#6366f1', '#06b6d4', '#8b5cf6', '#ec4899'];
 
 window.linkedinChartInstance = new Chart(ctxLinkedIn, {
   type: 'doughnut',
   data: {
-    labels: ['Completed (360+ hrs)', 'Required (72 hrs)'],
+    labels: linkedInLabels,
     datasets: [{
-      data: [360, 72],
+      data: linkedInData,
       backgroundColor: linkedInGradients,
-      borderColor: [
-        '#00ff9d',
-        'rgba(149, 165, 166, 0.6)'
-      ],
+      borderColor: '#0f172a',
       borderWidth: 4,
-      hoverBorderWidth: 6,
-      hoverOffset: 12
+      hoverBorderWidth: 8,
+      hoverOffset: 18,
+      shadowOffsetX: 0,
+      shadowOffsetY: 6,
+      shadowBlur: 20,
+      shadowColor: 'rgba(99, 102, 241, 0.4)'
     }]
   },
   options: {
     responsive: true,
     maintainAspectRatio: false,
     cutout: '65%',
+    layout: {
+      padding: {
+        top: 10,
+        bottom: 10
+      }
+    },
     plugins: {
       legend: { 
         position: 'bottom',
+        align: 'center',
         labels: {
-          color: '#00d9ff',
-          font: { size: 13, weight: 'bold' },
+          color: '#e0e7ff',
+          font: { 
+            size: 12, 
+            weight: '600',
+            family: 'Space Grotesk, sans-serif'
+          },
           padding: 15,
-          usePointStyle: true
+          usePointStyle: true,
+          pointStyle: 'circle',
+          boxWidth: 10,
+          boxHeight: 10
+        },
+        onClick: function(e, legendItem, legend) {
+          const index = legendItem.index;
+          const ci = legend.chart;
+          const meta = ci.getDatasetMeta(0);
+          const segment = meta.data[index];
+          
+          if (segment.hidden) {
+            segment.hidden = false;
+          } else {
+            const visibleCount = meta.data.filter(d => !d.hidden).length;
+            if (visibleCount > 1) {
+              segment.hidden = true;
+            }
+          }
+          ci.update('active');
         }
       },
       tooltip: { 
-        backgroundColor: 'rgba(0, 0, 0, 0.9)',
-        titleColor: '#00d9ff',
-        bodyColor: '#ffffff',
-        borderColor: '#00d9ff',
-        borderWidth: 2,
-        padding: 12,
+        enabled: true,
+        backgroundColor: 'rgba(15, 23, 42, 0.98)',
+        titleColor: '#818cf8',
+        bodyColor: '#e0e7ff',
+        borderColor: '#6366f1',
+        borderWidth: 3,
+        padding: 16,
+        cornerRadius: 12,
+        displayColors: true,
+        titleFont: { 
+          size: 15, 
+          weight: 'bold',
+          family: 'Space Grotesk, sans-serif'
+        },
+        bodyFont: { 
+          size: 13,
+          family: 'Space Grotesk, sans-serif'
+        },
+        boxPadding: 10,
+        animation: {
+          duration: 150,
+          easing: 'easeOutQuart'
+        },
         callbacks: {
+          title: function(tooltipItems) {
+            return tooltipItems[0].label;
+          },
           label: function(context) {
-            return context.label + ': ' + context.parsed + ' hours';
+            const label = context.label || '';
+            const value = context.parsed || 0;
+            const percentage = ((value / totalLinkedInHours) * 100).toFixed(1);
+            return [`${value} courses`, `${percentage}% of total`];
+          },
+          afterLabel: function(context) {
+            const category = context.label;
+            const examples = {
+              'AI & Machine Learning': 'Agentic AI, AIOps, Generative AI, Neural Networks, Reinforcement Learning',
+              'Cloud & Azure': 'Azure AI Fundamentals, Cloud Computing, AWS Certification Prep',
+              'Data & Analytics': 'Power BI, Data Analytics, MySQL, PostgreSQL, Database Foundations',
+              'Programming & Development': 'Python, JavaScript, Java, React, C#, TypeScript, ASP.NET'
+            };
+            return `Topics: ${examples[category] || 'Various specializations'}`;
+          },
+          labelColor: function(context) {
+            return {
+              borderColor: linkedInBorders[context.dataIndex],
+              backgroundColor: linkedInGradients[context.dataIndex]
+            };
+          },
+          footer: function(tooltipItems) {
+            return `Total: ${totalLinkedInHours}+ courses completed`;
           }
         }
       },
       title: {
-        display: true,
-        text: 'LinkedIn: 5× Requirement',
-        color: '#00d9ff',
-        font: { 
-          size: 16,
-          weight: 'bold', 
-          family: 'Space Grotesk' 
-        },
-        padding: { bottom: 10 }
+        display: false
       }
     },
     animation: {
       animateRotate: true,
       animateScale: true,
-      duration: 2500,
+      duration: 1800,
       easing: 'easeOutCubic',
       delay: function(context) {
-        return context.dataIndex * 150;
+        return context.dataIndex * 120;
       }
     },
     interaction: {
-      intersect: false
+      intersect: false,
+      mode: 'point'
+    },
+    onHover: (event, activeElements, chart) => {
+      if (event.native && event.native.target) {
+        event.native.target.style.cursor = activeElements.length > 0 ? 'pointer' : 'default';
+      }
+      
+      if (activeElements.length > 0) {
+        const element = activeElements[0].element;
+        const index = activeElements[0].index;
+        const meta = chart.getDatasetMeta(0);
+        const segment = meta.data[index];
+        
+        if (!segment._hoverAnimating) {
+          segment._hoverAnimating = true;
+          segment.hoverBorderWidth = 8;
+          segment.hoverOffset = 22;
+        }
+      } else {
+        const meta = chart.getDatasetMeta(0);
+        meta.data.forEach(seg => {
+          seg._hoverAnimating = false;
+          seg.hoverBorderWidth = 0;
+          seg.hoverOffset = 18;
+        });
+      }
+      chart.update('none');
+    },
+    elements: {
+      arc: {
+        borderJoinStyle: 'round',
+        borderAlign: 'inner',
+        borderWidth: 4,
+        hoverBorderWidth: 8,
+        hoverOffset: 22
+      }
     }
-  }
+  },
+  plugins: [{
+    id: 'centerTextLinkedIn',
+    beforeDraw(chart) {
+      const ctx = chart.ctx;
+      const centerX = (chart.chartArea.left + chart.chartArea.right) / 2;
+      const centerY = (chart.chartArea.top + chart.chartArea.bottom) / 2;
+      
+      ctx.save();
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.8)';
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, 55, 0, Math.PI * 2);
+      ctx.fill();
+      
+      ctx.fillStyle = '#e0e7ff';
+      ctx.font = 'bold 22px Space Grotesk, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(totalLinkedInHours + '+', centerX, centerY - 8);
+      
+      ctx.fillStyle = '#818cf8';
+      ctx.font = '600 10px Space Grotesk, sans-serif';
+      ctx.fillText('Courses', centerX, centerY + 12);
+      ctx.restore();
+    }
+  }]
 });
 
 // === Enhanced Hiring Trends Bar Chart with gradients ===
@@ -7135,12 +7762,12 @@ const hiringGradients = [
   ctxHiring.createLinearGradient(0, 0, 0, 400),
   ctxHiring.createLinearGradient(0, 0, 0, 400)
 ];
-hiringGradients[0].addColorStop(0, 'rgba(0, 255, 157, 1)');
-hiringGradients[0].addColorStop(1, 'rgba(0, 200, 120, 0.7)');
-hiringGradients[1].addColorStop(0, 'rgba(0, 217, 255, 1)');
-hiringGradients[1].addColorStop(1, 'rgba(0, 170, 200, 0.7)');
-hiringGradients[2].addColorStop(0, 'rgba(255, 61, 94, 1)');
-hiringGradients[2].addColorStop(1, 'rgba(200, 40, 70, 0.7)');
+hiringGradients[0].addColorStop(0, 'rgba(99, 102, 241, 1)');
+hiringGradients[0].addColorStop(1, 'rgba(139, 92, 246, 0.7)');
+hiringGradients[1].addColorStop(0, 'rgba(205, 133, 63, 1)');
+hiringGradients[1].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
+hiringGradients[2].addColorStop(0, 'rgba(205, 92, 92, 1)');
+hiringGradients[2].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
 
 new Chart(ctxHiring, {
   type: 'bar',
@@ -7151,9 +7778,9 @@ new Chart(ctxHiring, {
       data: [70, 65, 43],
       backgroundColor: hiringGradients,
       borderColor: [
-        '#00ff9d',
-        '#00d9ff',
-        '#ff3d5e'
+        '#8b5cf6',
+        '#6366f1',
+        '#CD5C5C'
       ],
       borderWidth: 4,
       borderRadius: 10,
@@ -7161,7 +7788,7 @@ new Chart(ctxHiring, {
       shadowOffsetX: 0,
       shadowOffsetY: 6,
       shadowBlur: 15,
-      shadowColor: 'rgba(0, 217, 255, 0.4)'
+      shadowColor: 'rgba(99, 102, 241, 0.4)'
     }]
   },
   options: {
@@ -7173,16 +7800,16 @@ new Chart(ctxHiring, {
         display: true,
         position: 'top',
         labels: {
-          color: '#00d9ff',
+          color: '#6366f1',
           font: { size: 13, weight: 'bold' },
           padding: 15
         }
       },
       tooltip: { 
         backgroundColor: 'rgba(0, 0, 0, 0.9)',
-        titleColor: '#00d9ff',
+        titleColor: '#6366f1',
         bodyColor: '#ffffff',
-        borderColor: '#00d9ff',
+        borderColor: '#6366f1',
         borderWidth: 2,
         padding: 12,
         callbacks: {
@@ -7194,7 +7821,7 @@ new Chart(ctxHiring, {
       title: {
         display: true,
         text: 'Hiring Trends: Skills-Based Hiring on the Rise',
-        color: '#00d9ff',
+        color: '#6366f1',
         font: { 
           size: 16,
           weight: 'bold', 
@@ -7208,18 +7835,18 @@ new Chart(ctxHiring, {
         beginAtZero: true, 
         max: 100,
         ticks: {
-          color: '#00d9ff',
+          color: '#6366f1',
           font: { size: 12, weight: 'bold' },
           stepSize: 10
         },
         grid: {
-          color: 'rgba(0, 217, 255, 0.2)',
+          color: 'rgba(99, 102, 241, 0.2)',
           lineWidth: 2
         }
       },
       y: {
         ticks: {
-          color: '#00d9ff',
+          color: '#6366f1',
           font: { size: 12, weight: 'bold' }
         },
         grid: {
@@ -7859,7 +8486,7 @@ new Chart(ctxHiring, {
             <i class="fas fa-users"></i>
             <span>Visitor Counter</span>
         </div>
-        <div id="visitor-counter" style="text-align: center; padding: 20px; font-size: 2rem; font-weight: bold; color: #00d9ff; text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);">
+        <div id="visitor-counter" style="text-align: center; padding: 20px; font-size: 2rem; font-weight: bold; color: #00d9ff; text-shadow: 0 0 10px rgba(99, 102, 241, 0.5);">
             <i class="fas fa-spinner fa-spin"></i> Loading...
         </div>
 
@@ -8082,7 +8709,7 @@ new Chart(ctxHiring, {
             if (submitBtn) {
                 submitBtn.addEventListener('mouseenter', function() {
                     this.style.transform = 'translateY(-2px)';
-                    this.style.boxShadow = '0 8px 20px rgba(0, 217, 255, 0.4)';
+                    this.style.boxShadow = '0 8px 20px rgba(99, 102, 241, 0.4)';
                 });
                 submitBtn.addEventListener('mouseleave', function() {
                     this.style.transform = 'translateY(0)';
