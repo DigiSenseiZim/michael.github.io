@@ -26,11 +26,9 @@ Fine-grained tokens don't support Gist access. Here's how to create the correct 
 7. Click **"Generate token"** at the bottom
 8. **COPY THE TOKEN IMMEDIATELY** (you won't see it again!)
    - It will start with `ghp_` (e.g., `ghp_abc123def456...`)
-
-   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
-
-
 9. Store it securely (e.g., password manager)
+   
+   **⚠️ NEVER commit your token to git! Keep it private!**
 
 **If you don't see the "gist" checkbox:**
 - Make sure you clicked **"Generate new token (classic)"** NOT "fine-grained"
@@ -58,8 +56,6 @@ Fine-grained tokens don't support Gist access. Here's how to create the correct 
    - URL format: `https://gist.github.com/YOUR_USERNAME/abc123def456`
    - The Gist ID is: `abc123def456` (the last part of the URL)
 
-0bdf6369fc962c756e2ede6a490c9b4d
-
 ### Step 3: Get Your GitHub Username
 - Your GitHub username (e.g., `yourusername` from `github.com/yourusername`)
 
@@ -71,9 +67,9 @@ Fine-grained tokens don't support Gist access. Here's how to create the correct 
 3. Fill in the three values:
 ```javascript
 const GITHUB_CONFIG = {
-    token: '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', // Paste your CLASSIC token from Step 1 (starts with ghp_)
-    gistId: '0bdf6369fc962c756e2ede6a490c9b4d',        // Paste your Gist ID from Step 2
-    username: 'DigiSenseiZim'       // Your GitHub username
+    token: 'ghp_your_token_here', // Paste your CLASSIC token from Step 1 (starts with ghp_)
+    gistId: 'your_gist_id_here',  // Paste your Gist ID from Step 2
+    username: 'yourusername'      // Your GitHub username
 };
 ```
 
@@ -94,7 +90,7 @@ const GITHUB_CONFIG = {
 ### Storage Location
 - **All data is stored in the GitHub Gist** you created
 - File name: `portfolio-data.json`
-- View it at: `https://gist.github.com/DigiSenseiZim/0bdf6369fc962c756e2ede6a490c9b4d`
+- View it at: `https://gist.github.com/YOUR_USERNAME/GIST_ID`
 
 ### Data Structure
 Messages are stored in the `messages` array within the JSON file:
