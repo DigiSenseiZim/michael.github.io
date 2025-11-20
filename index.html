@@ -19,31 +19,13 @@
     
     <!-- GitHub Gist Storage Configuration (must be in head for early initialization) -->
     <script>
-        // GitHub Gist Configuration
-        // Create a GitHub Personal Access Token with 'gist' scope at:
-        // https://github.com/settings/tokens
-        // Then create a Gist and get its ID from the URL
-        const GITHUB_CONFIG = {
-            token: '', // Your GitHub Personal Access Token (keep this secret!)
-            // To get a token: https://github.com/settings/tokens -> Generate new token (classic) -> Select 'gist' scope
-            gistId: '', // Your Gist ID (from gist URL: https://gist.github.com/username/GIST_ID)
-            // To create a gist: https://gist.github.com -> Create a new gist -> Copy the ID from the URL
-            username: '' // Your GitHub username
-        };
-        // VISITOR COUNTER SETUP:
-        // 1. Create a GitHub Personal Access Token at https://github.com/settings/tokens
-        //    - Click "Generate new token (classic)"
-        //    - Name it "Portfolio Visitor Counter"
-        //    - Select the "gist" scope
-        //    - Click "Generate token" and COPY IT (you won't see it again!)
-        // 2. Create a new Gist at https://gist.github.com
-        //    - Name the file: portfolio-data.json
-        //    - Add content: {"stats":{"totalVisits":0,"uniqueVisitors":0},"visitors":{},"messages":[],"analytics":{}}
-        //    - Click "Create public gist"
-        // 3. Copy the Gist ID from the URL (e.g., if URL is https://gist.github.com/username/abc123def456, the ID is "abc123def456")
-        // 4. Fill in the GITHUB_CONFIG above with your token, gistId, and username
-        
-        // Storage API - uses GitHub Gists as JSON storage
+
+                    const GITHUB_CONFIG = {
+                token: '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', // Paste your CLASSIC token from Step 1 (starts with ghp_)
+                gistId: '0bdf6369fc962c756e2ede6a490c9b4d',        // Paste your Gist ID from Step 2
+                username: 'DigiSenseiZim'       // Your GitHub username
+            };
+
         window.storageAPI = {
             async load() {
                 if (!GITHUB_CONFIG.gistId) {
@@ -1269,43 +1251,91 @@ transform: none !important;
         -1px 0px 0px rgba(0, 0, 0, 0.4);
         }
 
-        /* All icons - bold etched glass blue */
+        /* All icons - bold etched glass blue (default) */
         i, .fa, .fas, .fab, .far, .fal, .fad, [class*="fa-"], 
         .icon, svg, .nav-icon i,
         .project-card i, .stat-card i, .chart-title i {
             color: #00d9ff !important;
-        
-        /* Pastel colored icons for headings - each with unique representative colors */
-        .panel-title i,
-        h3.body-font-heading i,
-        h3 i,
-        h4 i {
-            /* Project Portfolio - pastel blue (creative/projects) */
-            color: #9BB5FF !important;
-        }
-        
-        #projectsPanel .panel-title i { color: #9BB5FF !important; } /* Pastel Blue */
-        #analysisPanel .panel-title i { color: #B19CD9 !important; } /* Pastel Purple - Analysis */
-        #skillsPanel .panel-title i { color: #FFE5B4 !important; } /* Pastel Yellow - Bright ideas */
-        #educationPanel .panel-title i { color: #A8E6CF !important; } /* Pastel Green - Growth */
-        #motivationPanel .panel-title i { color: #FFC8A2 !important; } /* Pastel Orange - Energy */
-        #skillsMatrixSection .panel-title i { color: #C5CAE9 !important; } /* Pastel Lavender - Skills */
-        #visitor-section .panel-title i { color: #FFAB91 !important; } /* Pastel Coral - Community */
-        
-        /* H3 heading icons */
-        h3.body-font-heading i[class*="fa-cogs"] { color: #9FA8DA !important; } /* Pastel Indigo - Innovation */
-        h3.body-font-heading i[class*="fa-users"] { color: #F8BBD0 !important; } /* Pastel Pink - Team */
-        h3.body-font-heading i[class*="fa-university"] { color: #B2EBF2 !important; } /* Pastel Cyan - Academic */
-        h3.body-font-heading i[class*="fa-certificate"] { color: #B2DFDB !important; } /* Pastel Mint - Certifications */
-        h3 i[class*="fa-chart-line"] { color: #CE93D8 !important; } /* Pastel Violet - Analytics */
-        h3 i[class*="fa-database"] { color: #81D4FA !important; } /* Pastel Sky Blue - Cloud/AI */
-        h3 i[class*="fa-briefcase"] { color: #FFE082 !important; } /* Pastel Gold - Achievements */
-        
-        /* Chart headings */
-        h4 i[class*="fa-play-circle"] { color: #9BB5FF !important; } /* Pastel Blue - Courses */
-        h4 i[class*="fa-linkedin"] { color: #81D4FA !important; } /* Pastel Sky Blue - LinkedIn */
             filter: drop-shadow(0 0 4px rgba(99, 102, 241, 0.8)) drop-shadow(0 0 8px rgba(99, 102, 241, 0.4));
         }
+        
+        /* Pastel colored icons for headings - each with unique representative colors */
+        /* Panel title icons */
+        #projectsPanel .panel-title i { 
+            color: #9BB5FF !important; 
+            filter: drop-shadow(0 0 4px rgba(155, 181, 255, 0.6)) drop-shadow(0 0 8px rgba(155, 181, 255, 0.3));
+        } /* Pastel Blue */
+        #analysisPanel .panel-title i { 
+            color: #B19CD9 !important; 
+            filter: drop-shadow(0 0 4px rgba(177, 156, 217, 0.6)) drop-shadow(0 0 8px rgba(177, 156, 217, 0.3));
+        } /* Pastel Purple - Analysis */
+        #skillsPanel .panel-title i { 
+            color: #FFE5B4 !important; 
+            filter: drop-shadow(0 0 4px rgba(255, 229, 180, 0.6)) drop-shadow(0 0 8px rgba(255, 229, 180, 0.3));
+        } /* Pastel Yellow - Bright ideas */
+        #educationPanel .panel-title i { 
+            color: #A8E6CF !important; 
+            filter: drop-shadow(0 0 4px rgba(168, 230, 207, 0.6)) drop-shadow(0 0 8px rgba(168, 230, 207, 0.3));
+        } /* Pastel Green - Growth */
+        #motivationPanel .panel-title i { 
+            color: #FFC8A2 !important; 
+            filter: drop-shadow(0 0 4px rgba(255, 200, 162, 0.6)) drop-shadow(0 0 8px rgba(255, 200, 162, 0.3));
+        } /* Pastel Orange - Energy */
+        #skillsMatrixSection .panel-title i { 
+            color: #C5CAE9 !important; 
+            filter: drop-shadow(0 0 4px rgba(197, 202, 233, 0.6)) drop-shadow(0 0 8px rgba(197, 202, 233, 0.3));
+        } /* Pastel Lavender - Skills */
+        #visitor-section .panel-title i { 
+            color: #FFAB91 !important; 
+            filter: drop-shadow(0 0 4px rgba(255, 171, 145, 0.6)) drop-shadow(0 0 8px rgba(255, 171, 145, 0.3));
+        } /* Pastel Coral - Community */
+        
+        /* H3 heading icons */
+        h3.body-font-heading i[class*="fa-cogs"],
+        h3 i[class*="fa-cogs"] { 
+            color: #9FA8DA !important; 
+            filter: drop-shadow(0 0 4px rgba(159, 168, 218, 0.6)) drop-shadow(0 0 8px rgba(159, 168, 218, 0.3));
+        } /* Pastel Indigo - Innovation */
+        h3.body-font-heading i[class*="fa-users"],
+        h3 i[class*="fa-users"] { 
+            color: #F8BBD0 !important; 
+            filter: drop-shadow(0 0 4px rgba(248, 187, 208, 0.6)) drop-shadow(0 0 8px rgba(248, 187, 208, 0.3));
+        } /* Pastel Pink - Team */
+        h3.body-font-heading i[class*="fa-university"],
+        h3 i[class*="fa-university"] { 
+            color: #B2EBF2 !important; 
+            filter: drop-shadow(0 0 4px rgba(178, 235, 242, 0.6)) drop-shadow(0 0 8px rgba(178, 235, 242, 0.3));
+        } /* Pastel Cyan - Academic */
+        h3.body-font-heading i[class*="fa-certificate"],
+        h3 i[class*="fa-certificate"] { 
+            color: #B2DFDB !important; 
+            filter: drop-shadow(0 0 4px rgba(178, 223, 219, 0.6)) drop-shadow(0 0 8px rgba(178, 223, 219, 0.3));
+        } /* Pastel Mint - Certifications */
+        h3.body-font-heading i[class*="fa-chart-line"],
+        h3 i[class*="fa-chart-line"] { 
+            color: #CE93D8 !important; 
+            filter: drop-shadow(0 0 4px rgba(206, 147, 216, 0.6)) drop-shadow(0 0 8px rgba(206, 147, 216, 0.3));
+        } /* Pastel Violet - Analytics */
+        h3.body-font-heading i[class*="fa-database"],
+        h3 i[class*="fa-database"] { 
+            color: #81D4FA !important; 
+            filter: drop-shadow(0 0 4px rgba(129, 212, 250, 0.6)) drop-shadow(0 0 8px rgba(129, 212, 250, 0.3));
+        } /* Pastel Sky Blue - Cloud/AI */
+        h3.body-font-heading i[class*="fa-briefcase"],
+        h3 i[class*="fa-briefcase"] { 
+            color: #FFE082 !important; 
+            filter: drop-shadow(0 0 4px rgba(255, 224, 130, 0.6)) drop-shadow(0 0 8px rgba(255, 224, 130, 0.3));
+        } /* Pastel Gold - Achievements */
+        
+        /* Chart headings */
+        h4 i[class*="fa-play-circle"] { 
+            color: #9BB5FF !important; 
+            filter: drop-shadow(0 0 4px rgba(155, 181, 255, 0.6)) drop-shadow(0 0 8px rgba(155, 181, 255, 0.3));
+        } /* Pastel Blue - Courses */
+        h4 i[class*="fa-linkedin"] { 
+            color: #81D4FA !important; 
+            filter: drop-shadow(0 0 4px rgba(129, 212, 250, 0.6)) drop-shadow(0 0 8px rgba(129, 212, 250, 0.3));
+        } /* Pastel Sky Blue - LinkedIn */
     
         .lead-snapshot {
             background: transparent !important;
