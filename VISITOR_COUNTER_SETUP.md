@@ -128,14 +128,52 @@ Messages are stored in the `messages` array within the JSON file:
    ```
 
 ### Message Fields
-- **id**: Unique message identifier
+- **id**: Unique message identifier (format: `msg_<timestamp>_<random>`)
 - **name**: Visitor's name (or "Anonymous" if not provided)
 - **email**: Visitor's email (optional, empty string if not provided)
-- **message**: The actual message content
+- **message**: The actual message content (required, 10-2000 characters)
 - **timestamp**: ISO timestamp when message was sent
-- **read**: Boolean flag (you can mark messages as read)
-- **visitorFingerprint**: Browser fingerprint for analytics
-- **metadata**: Additional visitor data (browser, referrer, etc.)
+- **read**: Boolean flag (you can mark messages as read manually in the JSON)
+- **visitorFingerprint**: Browser fingerprint hash (32 characters) for unique visitor tracking
+- **metadata**: Additional visitor data including:
+  - `timestamp`: ISO timestamp
+  - `fingerprint`: Same as visitorFingerprint
+  - `userAgent`: Browser/device information
+  - `language`: Browser language setting
+  - `timezone`: Visitor's timezone
+  - `screenResolution`: Screen dimensions (e.g., "1920x1080")
+  - `referrer`: Where visitor came from (or "direct")
+  - `url`: The page URL they visited
+  - `sessionId`: Unique session identifier
+
+### Complete Data Structure
+The full JSON structure stored in your Gist includes:
+```json
+{
+  "stats": {
+    "totalVisits": 1234,
+    "uniqueVisitors": 567,
+    "firstVisit": "2025-01-01T00:00:00.000Z",
+    "lastVisit": "2025-01-15T10:30:00.000Z"
+  },
+  "visitors": {
+    "fingerprint_hash_here": {
+      "firstVisit": "2025-01-01T00:00:00.000Z",
+      "visitCount": 5,
+      "lastVisit": "2025-01-15T10:30:00.000Z",
+      "lastMetadata": { /* visitor metadata object */ }
+    }
+  },
+  "messages": [ /* array of message objects */ ],
+  "analytics": {
+    "visitsByDate": { "2025-01-15": 10, "2025-01-16": 5 },
+    "visitsByHour": { "0": 2, "10": 5, "14": 8 },
+    "visitsByReferrer": { "direct": 50, "google.com": 30 },
+    "visitsByDevice": { "mobile": 40, "desktop": 60 },
+    "visitsByCountry": {} // Optional: not currently populated
+  }
+}
+```
 
 ---
 
@@ -162,9 +200,13 @@ Messages are stored in the `messages` array within the JSON file:
 
 ### Visitor Counter Shows "Loading..." Forever
 - Check browser console (F12) for errors
-- Verify Gist ID is correct (no extra spaces)
-- Verify token has `gist` scope
+- Verify Gist ID is correct (no extra spaces, no quotes)
+- Verify token has `gist` scope (classic token only)
 - Check Gist is public (not secret)
+- Verify the Gist file is named exactly `portfolio-data.json`
+- Check if the Gist exists and is accessible at: `https://gist.github.com/YOUR_USERNAME/GIST_ID`
+- Try loading the Gist directly in your browser to ensure it's publicly accessible
+- Check browser network tab (F12 → Network) for failed API requests
 
 ### Messages Not Saving
 - Check browser console for errors

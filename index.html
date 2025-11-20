@@ -21,12 +21,10 @@
     <script>
 
                     const GITHUB_CONFIG = {
-                token: '', // ⚠️ YOUR GITHUB PERSONAL ACCESS TOKEN (keep secret, never commit!)
-                // To get a token: https://github.com/settings/tokens -> Generate new token (classic) -> Select 'gist' scope
-                gistId: '', // Your Gist ID (from gist URL: https://gist.github.com/username/GIST_ID)
-                // To create a gist: https://gist.github.com -> Create a new gist -> Copy the ID from the URL
-                username: '' // Your GitHub username
-            };
+                        token: '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', // Paste your CLASSIC token from Step 1 (starts with ghp_)
+                        gistId: '0bdf6369fc962c756e2ede6a490c9b4d',        // Paste your Gist ID from Step 2
+                        username: 'DigiSenseiZim'       // Your GitHub username
+                    };
 
         window.storageAPI = {
             async load() {
@@ -37,10 +35,24 @@
                 
                 try {
                     const response = await fetch(`https://api.github.com/gists/${GITHUB_CONFIG.gistId}`);
-                    if (!response.ok) throw new Error('Failed to load data');
+                    if (!response.ok) {
+                        if (response.status === 404) {
+                            console.warn('Gist not found. Please check your Gist ID is correct and the Gist is public.');
+                        }
+                        throw new Error(`Failed to load data: ${response.status} ${response.statusText}`);
+                    }
                     const gist = await response.json();
                     const content = gist.files['portfolio-data.json']?.content || '{}';
-                    return JSON.parse(content);
+                    const parsedData = JSON.parse(content);
+                    // Ensure data structure is complete
+                    if (!parsedData.stats) parsedData.stats = { totalVisits: 0, uniqueVisitors: 0, firstVisit: '', lastVisit: '' };
+                    if (!parsedData.visitors) parsedData.visitors = {};
+                    if (!parsedData.messages) parsedData.messages = [];
+                    if (!parsedData.analytics) parsedData.analytics = {
+                        visitsByDate: {}, visitsByHour: {}, visitsByReferrer: {},
+                        visitsByDevice: {}, visitsByCountry: {}
+                    };
+                    return parsedData;
                 } catch (error) {
                     console.error('Error loading data:', error);
                     return null;
@@ -70,10 +82,16 @@
                         })
                     });
                     
-                    if (!response.ok) throw new Error('Failed to save data');
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(`Failed to save data: ${response.status} ${response.statusText}. ${errorData.message || ''}`);
+                    }
                     return true;
                 } catch (error) {
                     console.error('Error saving data:', error);
+                    if (error.message.includes('401') || error.message.includes('403')) {
+                        console.warn('Authentication failed. Please verify your token is valid and has the "gist" scope.');
+                    }
                     return false;
                 }
             }
@@ -8527,7 +8545,7 @@ new Chart(ctxHiring, {
                 <i class="fas fa-envelope"></i>
                 <span>Leave a Message</span>
             </div>
-            <form id="message-form" style="display: flex; flex-direction: column; gap: 15px;" novalidate aria-label="Contact form">
+            <form id="message-form" style="display: flex; flex-direction: column; gap: 15px; position: relative; z-index: 10; pointer-events: auto;" novalidate aria-label="Contact form">
                 <div>
                     <label for="visitor-name" style="display: block; margin-bottom: 8px; color: var(--text-primary); font-weight: 600;">
                         Your Name (Optional)
@@ -8540,7 +8558,7 @@ new Chart(ctxHiring, {
                         aria-label="Your name (optional)"
                         autocomplete="name"
                         maxlength="100"
-                        style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(0, 0, 0, 0.3); color: var(--text-primary); font-family: 'Space Grotesk', sans-serif;"
+                        style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(0, 0, 0, 0.3); color: var(--text-primary); font-family: 'Space Grotesk', sans-serif; pointer-events: auto;"
                     >
                     <span id="visitor-name-error" class="form-error" role="alert" aria-live="polite"></span>
                 </div>
@@ -8557,7 +8575,7 @@ new Chart(ctxHiring, {
                         aria-describedby="visitor-email-error"
                         autocomplete="email"
                         maxlength="255"
-                        style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(0, 0, 0, 0.3); color: var(--text-primary); font-family: 'Space Grotesk', sans-serif;"
+                        style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(0, 0, 0, 0.3); color: var(--text-primary); font-family: 'Space Grotesk', sans-serif; pointer-events: auto;"
                     >
                     <span id="visitor-email-error" class="form-error" role="alert" aria-live="polite"></span>
                 </div>
@@ -8575,14 +8593,14 @@ new Chart(ctxHiring, {
                         aria-describedby="visitor-message-error"
                         placeholder="Share your thoughts, feedback, or questions..."
                         maxlength="2000"
-                        style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(0, 0, 0, 0.3); color: var(--text-primary); font-family: 'Space Grotesk', sans-serif; resize: vertical; min-height: 120px;"
+                        style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(0, 0, 0, 0.3); color: var(--text-primary); font-family: 'Space Grotesk', sans-serif; resize: vertical; min-height: 120px; pointer-events: auto;"
                     ></textarea>
                     <span id="visitor-message-error" class="form-error" role="alert" aria-live="polite"></span>
                 </div>
                 <button 
                     type="submit"
                     id="submit-message-btn"
-                    style="padding: 14px 28px; border-radius: 8px; border: none; background: linear-gradient(135deg, #00d9ff, #00a8cc); color: white; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; font-family: 'Space Grotesk', sans-serif;"
+                    style="padding: 14px 28px; border-radius: 8px; border: none; background: linear-gradient(135deg, #00d9ff, #00a8cc); color: white; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; font-family: 'Space Grotesk', sans-serif; pointer-events: auto; z-index: 100; position: relative;"
                     aria-label="Send message"
                 >
                     <i class="fas fa-paper-plane" aria-hidden="true"></i> Send Message
@@ -8607,7 +8625,8 @@ new Chart(ctxHiring, {
 
     <script>
         // Visitor Counter & Message System using GitHub Gist Storage
-        (function() {
+        // Wait for DOM to be ready before initializing form
+        document.addEventListener('DOMContentLoaded', function() {
             const storage = window.storageAPI;
             
             // Generate visitor fingerprint for analytics
@@ -8736,6 +8755,12 @@ new Chart(ctxHiring, {
             const messageForm = document.getElementById('message-form');
             const messageStatus = document.getElementById('message-status');
             const submitBtn = document.getElementById('submit-message-btn');
+            
+            // Ensure form elements exist
+            if (!messageForm || !messageStatus || !submitBtn) {
+                console.error('Form elements not found. Form initialization skipped.');
+                return;
+            }
             
             // Remove inline event handlers and add proper event listeners for button
             if (submitBtn) {
@@ -8899,7 +8924,24 @@ new Chart(ctxHiring, {
                 try {
                     let data = await storage.load();
                     if (!data) {
-                        data = { stats: { totalVisits: 0, uniqueVisitors: 0 }, visitors: {}, messages: [], analytics: {} };
+                        // Initialize with same structure as trackVisitor
+                        data = {
+                            stats: {
+                                totalVisits: 0,
+                                uniqueVisitors: 0,
+                                firstVisit: new Date().toISOString(),
+                                lastVisit: new Date().toISOString()
+                            },
+                            visitors: {},
+                            messages: [],
+                            analytics: {
+                                visitsByDate: {},
+                                visitsByHour: {},
+                                visitsByReferrer: {},
+                                visitsByDevice: {},
+                                visitsByCountry: {}
+                            }
+                        };
                     }
                     
                     // Add message
@@ -9024,7 +9066,7 @@ new Chart(ctxHiring, {
 
             // Initialize visitor tracking
             trackVisitor();
-        })();
+        }); // End DOMContentLoaded
     </script>
     
     <!-- Footer -->
