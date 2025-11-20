@@ -530,9 +530,59 @@
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 
-    const logger = (scope, ...args) => {
-      console.log(`[StarSystems::${scope}]`, ...args);
+    // Enhanced granular logging utility
+    const logger = (scope, message, data = null) => {
+      const timestamp = new Date().toISOString();
+      const prefix = `[${timestamp}] [StarSystems::${scope}]`;
+      
+      if (data !== null && typeof data === 'object') {
+        console.log(prefix, message, data);
+      } else if (data !== null) {
+        console.log(prefix, message, data);
+      } else {
+        console.log(prefix, message);
+      }
     };
+    
+    const logError = (scope, message, error) => {
+      const timestamp = new Date().toISOString();
+      const errorData = {
+        message: error?.message || error,
+        stack: error?.stack,
+        name: error?.name,
+        ...(error?.response && { response: error.response })
+      };
+      console.error(`[${timestamp}] [StarSystems::${scope}]`, message, errorData);
+    };
+    
+    const logDebug = (scope, message, data = null) => {
+      const timestamp = new Date().toISOString();
+      if (data) {
+        console.debug(`[${timestamp}] [StarSystems::${scope}]`, message, data);
+      } else {
+        console.debug(`[${timestamp}] [StarSystems::${scope}]`, message);
+      }
+    };
+    
+    const logWarn = (scope, message, data = null) => {
+      const timestamp = new Date().toISOString();
+      if (data) {
+        console.warn(`[${timestamp}] [StarSystems::${scope}]`, message, data);
+      } else {
+        console.warn(`[${timestamp}] [StarSystems::${scope}]`, message);
+      }
+    };
+    
+    const logInfo = (scope, message, data = null) => {
+      const timestamp = new Date().toISOString();
+      if (data) {
+        console.info(`[${timestamp}] [StarSystems::${scope}]`, message, data);
+      } else {
+        console.info(`[${timestamp}] [StarSystems::${scope}]`, message);
+      }
+    };
+    
+    logger('Init', 'StarSystems module loading', { timestamp: new Date().toISOString() });
 
     // Loading UI references
     const overlay = document.getElementById('loading-overlay');
@@ -1124,12 +1174,26 @@
 
     const loadModel = (path, onLoad, onProgress, onError) => {
       const source = resolveAssetPath(path);
+      logDebug('Assets', 'Loading model', { path, source });
+      const startTime = performance.now();
+      
       loader.load(
         source,
-        onLoad,
-        onProgress,
+        (gltf) => {
+          const loadTime = performance.now() - startTime;
+          logInfo('Assets', 'Model loaded successfully', { path, source, duration: `${loadTime.toFixed(2)}ms` });
+          if (typeof onLoad === 'function') onLoad(gltf);
+        },
+        (progress) => {
+          if (progress && progress.lengthComputable) {
+            const percent = (progress.loaded / progress.total * 100).toFixed(1);
+            logDebug('Assets', 'Model loading progress', { path, percent: `${percent}%`, loaded: progress.loaded, total: progress.total });
+          }
+          if (typeof onProgress === 'function') onProgress(progress);
+        },
         error => {
-          logger('Assets', 'GLB load error', { source, error: error?.message || error });
+          const loadTime = performance.now() - startTime;
+          logError('Assets', 'GLB load error', { source, error, duration: `${loadTime.toFixed(2)}ms` });
           if (typeof onError === 'function') onError(error);
         }
       );
@@ -1229,8 +1293,32 @@
     const starGroup = new THREE.Group();
     scene.add(starGroup);
 
-    // Load central star
-    loadModel(
+    // Flag to track if models have been loaded
+    let modelsLoaded = false;
+
+    // Function to load all 3D models (only called when Explore Galaxy is clicked)
+    const loadAllModels = () => {
+      logInfo('Assets', 'loadAllModels called');
+      
+      if (modelsLoaded) {
+        logWarn('Assets', 'Models already loaded, skipping');
+        return; // Prevent double loading
+      }
+      
+      modelsLoaded = true;
+      logInfo('Assets', 'Starting model loading sequence');
+
+      // Show loading overlay
+      if (overlay) {
+        overlay.classList.remove('hidden');
+        overlay.style.display = 'flex';
+        logDebug('Assets', 'Loading overlay shown');
+      } else {
+        logWarn('Assets', 'Loading overlay element not found');
+      }
+
+      // Load central star
+      loadModel(
       './models/central_core.glb',
       gltf => {
         const centralStar = gltf.scene;
@@ -1686,6 +1774,7 @@
         planetsInRing++;
       });
     });
+    }; // End of loadAllModels function
 
     // Handle window resize (update camera and renderer):contentReference[oaicite:10]{index=10}
     window.addEventListener('resize', () => {
@@ -1924,14 +2013,24 @@
     };
 
     const activateGalaxyExperience = () => {
+      logInfo('Interaction', 'Activating galaxy experience');
       experienceMode = 'galaxy';
       hideExperienceSelector();
       marqueeSection?.classList.remove('visible');
       marqueeSection?.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('marquee-mode');
       const canvas = document.querySelector('canvas');
-      if (canvas) canvas.style.display = '';
+      if (canvas) {
+        canvas.style.display = '';
+        logDebug('Interaction', 'Canvas displayed');
+      } else {
+        logWarn('Interaction', 'Canvas element not found');
+      }
+      // Load models only when Explore Galaxy is clicked
+      logInfo('Interaction', 'Starting model loading');
+      loadAllModels();
       manageSimulatedHoverLoop();
+      logInfo('Interaction', 'Galaxy experience activated');
     };
 
     const activateMarqueeExperience = () => {
