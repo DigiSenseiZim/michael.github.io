@@ -10,7 +10,7 @@
     <title>Michael Mukwekezeke | Software Developer & Architect</title>
     
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="assets/css/font-awesome.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Preload critical resources -->
@@ -19,9 +19,8 @@
     
     <!-- GitHub Gist Storage Configuration (must be in head for early initialization) -->
     <!-- Load configuration from external file (config.js is gitignored) -->
-    <script src="config.js" onerror="console.warn('config.js not found. Using default configuration.')"></script>
     <script>
-        // Granular Logging Utility
+        // Granular Logging Utility (must be defined first)
         window.appLogger = {
             enabled: true,
             levels: {
@@ -75,14 +74,36 @@
                 this.debug(scope, `← ${functionName}`, result ? { result } : null);
             }
         };
-
+    </script>
+    <script src="config.js" onerror="if(window.appLogger){window.appLogger.debug('Config', 'config.js not found - using default configuration');}else{console.warn('config.js not found. Using default configuration.');}"></script>
+    <script>
         // Use config from external file if available, otherwise use defaults
         // IMPORTANT: Create config.js from config.example.js with your actual credentials
-        const GITHUB_CONFIG = window.GITHUB_CONFIG || {
+        // Check for config after script loads (with a small delay to ensure it's processed)
+        let GITHUB_CONFIG = window.GITHUB_CONFIG || {
             token: '', // Will be loaded from config.js
             gistId: '0bdf6369fc962c756e2ede6a490c9b4d',        // Paste your Gist ID from Step 2
             username: 'DigiSenseiZim'       // Your GitHub username
         };
+        
+        // Log configuration status
+        if (window.appLogger) {
+            window.appLogger.debug('Config', 'GitHub configuration loaded', {
+                hasToken: !!GITHUB_CONFIG.token,
+                tokenLength: GITHUB_CONFIG.token?.length || 0,
+                hasGistId: !!GITHUB_CONFIG.gistId,
+                gistId: GITHUB_CONFIG.gistId,
+                username: GITHUB_CONFIG.username,
+                source: window.GITHUB_CONFIG ? 'config.js' : 'default'
+            });
+            
+            if (!GITHUB_CONFIG.token) {
+                window.appLogger.warn('Config', 'GitHub token not configured', {
+                    message: 'Create config.js with your GitHub token to enable data saving',
+                    exampleFile: 'config.example.js'
+                });
+            }
+        }
 
         window.appLogger.info('App', 'Application initializing', { 
             config: { 
@@ -401,7 +422,7 @@
                 window.appLogger.debug('Charts', 'Initializing certification timeline chart');
                 const certCtx = document.getElementById('certificationTimeline');
                 if (!certCtx) {
-                    window.appLogger.warn('Charts', 'Certification timeline canvas not found - skipping chart initialization');
+                    window.appLogger.debug('Charts', 'Certification timeline canvas not found - skipping chart initialization');
                     // Chart will not be initialized, but code continues without error
                 } else {
                     window.appLogger.debug('Charts', 'Certification timeline canvas found, getting context');
@@ -618,7 +639,7 @@
                 window.appLogger.debug('Charts', 'Initializing project distribution chart');
                 const projectDistCanvas = document.getElementById('projectDistribution');
                 if (!projectDistCanvas) {
-                    window.appLogger.warn('Charts', 'Project Distribution canvas not found - skipping chart initialization');
+                    window.appLogger.debug('Charts', 'Project Distribution canvas not found - skipping chart initialization');
                 } else {
                     window.appLogger.debug('Charts', 'Project Distribution canvas found, getting context');
                     const projectDistCtx = projectDistCanvas.getContext('2d');
@@ -737,7 +758,7 @@
     window.appLogger.debug('Charts', 'Initializing skill proficiency chart');
     const skillProfCanvas = document.getElementById('skillProficiency');
     if (!skillProfCanvas) {
-        window.appLogger.warn('Charts', 'Skill Proficiency canvas not found - skipping chart initialization');
+        window.appLogger.debug('Charts', 'Skill Proficiency canvas not found - skipping chart initialization');
     } else {
         window.appLogger.debug('Charts', 'Skill Proficiency canvas found, getting context');
         const skillProfCtx = skillProfCanvas.getContext('2d');
@@ -842,7 +863,7 @@
     window.appLogger.debug('Charts', 'Initializing tech mastery chart');
     const techMasteryCanvas = document.getElementById('techMasteryChart');
     if (!techMasteryCanvas) {
-        window.appLogger.warn('Charts', 'Tech Mastery canvas not found - skipping chart initialization');
+        window.appLogger.debug('Charts', 'Tech Mastery canvas not found - skipping chart initialization');
     } else {
         window.appLogger.debug('Charts', 'Tech Mastery canvas found, getting context');
         const techMasteryCtx = techMasteryCanvas.getContext('2d');
@@ -4879,7 +4900,20 @@ transform: none !important;
       const textShadow = '0 1px 2px rgba(0,0,0,0.5)';
 
       // Technical Mastery Spectrum Radar Chart
-      const ctxT = document.getElementById('techMasteryChart').getContext('2d');
+      const techMasteryCanvas = document.getElementById('techMasteryChart');
+      if (!techMasteryCanvas) {
+        if (window.appLogger) {
+          window.appLogger.debug('Charts', 'techMasteryChart canvas not found - skipping chart initialization');
+        }
+        throw new Error('techMasteryChart canvas not found');
+      }
+      const ctxT = techMasteryCanvas.getContext('2d');
+      if (!ctxT) {
+        if (window.appLogger) {
+          window.appLogger.warn('Charts', 'Failed to get 2D context for techMasteryChart');
+        }
+        throw new Error('Failed to get 2D context for techMasteryChart');
+      }
       window.techMasteryChart = new Chart(ctxT, {
         type: 'radar',
         data: {
@@ -5010,7 +5044,20 @@ transform: none !important;
         return +(b * factor).toFixed(2);
       });
 
-      const ctxROI = document.getElementById('motivationROIChart').getContext('2d');
+      const motivationROICanvas = document.getElementById('motivationROIChart');
+      if (!motivationROICanvas) {
+        if (window.appLogger) {
+          window.appLogger.debug('Charts', 'motivationROIChart canvas not found - skipping chart initialization');
+        }
+        throw new Error('motivationROIChart canvas not found');
+      }
+      const ctxROI = motivationROICanvas.getContext('2d');
+      if (!ctxROI) {
+        if (window.appLogger) {
+          window.appLogger.warn('Charts', 'Failed to get 2D context for motivationROIChart');
+        }
+        throw new Error('Failed to get 2D context for motivationROIChart');
+      }
       const gradROI = ctxROI.createLinearGradient(0,0,0,220);
       gradROI.addColorStop(0, toRgba(colLinked, 0.20));
       gradROI.addColorStop(1, toRgba(colLinked, 0.03));
@@ -5138,7 +5185,15 @@ transform: none !important;
       });
 
     } catch (err) {
-      console.error('Rendering Motivation Panel charts:', err);
+      if (window.appLogger) {
+        window.appLogger.error('Charts', 'Rendering Motivation Panel charts failed', {
+          error: err.message,
+          name: err.name,
+          stack: err.stack?.split('\n').slice(0, 3).join('\n')
+        });
+      } else {
+        console.error('Rendering Motivation Panel charts:', err);
+      }
       // graceful fallback content
       const panel = document.getElementById('motivationPanel');
       if (panel) {
@@ -5460,7 +5515,9 @@ transform: none !important;
                     ease: 'power2.out'
                 });
             } else {
-                console.warn('GSAP: No elements with class .slide-in-left found - skipping animation');
+                if (window.appLogger) {
+                    window.appLogger.debug('GSAP', 'No elements with class .slide-in-left found - skipping animation');
+                }
             }
             
             // Animate slide-in-right elements if they exist
@@ -5474,7 +5531,9 @@ transform: none !important;
                     ease: 'power2.out'
                 });
             } else {
-                console.warn('GSAP: No elements with class .slide-in-right found - skipping animation');
+                if (window.appLogger) {
+                    window.appLogger.debug('GSAP', 'No elements with class .slide-in-right found - skipping animation');
+                }
             }
             
             // Animate scale-in elements if they exist
@@ -5488,7 +5547,9 @@ transform: none !important;
                     ease: 'power2.out'
                 });
             } else {
-                console.warn('GSAP: No elements with class .scale-in found - skipping animation');
+                if (window.appLogger) {
+                    window.appLogger.debug('GSAP', 'No elements with class .scale-in found - skipping animation');
+                }
             }
             
             // Create scroll animations for sections
@@ -5970,7 +6031,9 @@ transform: none !important;
                     localStorage.setItem('tourCompleted', 'true');
                 });
             } else {
-                console.warn('Tour: skipTour button not found - skipping event listener');
+                if (window.appLogger) {
+                    window.appLogger.debug('Tour', 'skipTour button not found - skipping event listener');
+                }
             }
             
             if (nextTourBtn) {
@@ -5985,7 +6048,9 @@ transform: none !important;
                     }
                 });
             } else {
-                console.warn('Tour: nextTour button not found - skipping event listener');
+                if (window.appLogger) {
+                    window.appLogger.debug('Tour', 'nextTour button not found - skipping event listener');
+                }
             }
             
             if (helpButton) {
@@ -6047,7 +6112,9 @@ const infoElement = document.getElementById('info');
 if (infoElement) {
     scene1.to("#info", { y: 8 * speed }, 0);
 } else {
-    console.warn('GSAP: Element #info not found - skipping animation');
+    if (window.appLogger) {
+        window.appLogger.debug('GSAP', 'Element #info not found - skipping animation');
+    }
 }
 
 /*   Bird   */
@@ -6881,8 +6948,20 @@ document.getElementById('skillsRadar').addEventListener('keydown', (e) => {
             
             // Project Stats Chart
             const projectStats = document.getElementById('projectStats');
+            if (!projectStats) {
+                if (window.appLogger) {
+                    window.appLogger.debug('Charts', 'projectStats canvas not found - skipping chart initialization');
+                }
+                return; // Skip this chart if canvas doesn't exist
+            }
             // Enhanced Project Stats with gradients
             const projectStatsCtx = projectStats.getContext('2d');
+            if (!projectStatsCtx) {
+                if (window.appLogger) {
+                    window.appLogger.warn('Charts', 'Failed to get 2D context for projectStats');
+                }
+                return; // Skip this chart if context can't be obtained
+            }
             const projectStatsGradients = [
                 projectStatsCtx.createLinearGradient(0, 0, 0, 300),
                 projectStatsCtx.createLinearGradient(0, 0, 0, 300),
