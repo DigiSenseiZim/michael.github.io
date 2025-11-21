@@ -174,15 +174,35 @@
                 window.appLogger.trace('StorageAPI', 'save', { 
                     dataSize: JSON.stringify(data).length,
                     hasStats: !!data.stats,
-                    hasMessages: !!data.messages
+                    hasMessages: !!data.messages,
+                    messageCount: data.messages?.length || 0,
+                    visitorCount: Object.keys(data.visitors || {}).length
                 });
                 
+                // Validate configuration
                 if (!GITHUB_CONFIG.token || !GITHUB_CONFIG.gistId) {
-                    window.appLogger.warn('StorageAPI', 'GitHub token not configured - data will not be saved', {
+                    const configError = new Error('GitHub configuration incomplete');
+                    configError.name = 'ConfigurationError';
+                    configError.details = {
                         hasToken: !!GITHUB_CONFIG.token,
-                        hasGistId: !!GITHUB_CONFIG.gistId
+                        hasGistId: !!GITHUB_CONFIG.gistId,
+                        tokenLength: GITHUB_CONFIG.token?.length || 0,
+                        gistId: GITHUB_CONFIG.gistId || 'missing',
+                        username: GITHUB_CONFIG.username || 'missing'
+                    };
+                    window.appLogger.error('StorageAPI', 'GitHub token not configured - data will not be saved', {
+                        error: configError.message,
+                        details: configError.details
                     });
-                    return false;
+                    throw configError;
+                }
+                
+                // Validate token format
+                if (!GITHUB_CONFIG.token.startsWith('ghp_') && !GITHUB_CONFIG.token.startsWith('github_pat_')) {
+                    window.appLogger.warn('StorageAPI', 'Token format may be incorrect', {
+                        tokenPrefix: GITHUB_CONFIG.token.substring(0, 10) + '...',
+                        expectedPrefix: 'ghp_ or github_pat_'
+                    });
                 }
                 
                 try {
@@ -194,12 +214,17 @@
                         }
                     };
                     
-                    window.appLogger.debug('StorageAPI', 'Sending save request', {
-                        payloadSize: JSON.stringify(payload).length,
-                        gistId: GITHUB_CONFIG.gistId
+                    const payloadSize = JSON.stringify(payload).length;
+                    window.appLogger.debug('StorageAPI', 'Preparing save request', {
+                        payloadSize: payloadSize,
+                        gistId: GITHUB_CONFIG.gistId,
+                        username: GITHUB_CONFIG.username,
+                        apiEndpoint: `https://api.github.com/gists/${GITHUB_CONFIG.gistId}`
                     });
                     
                     const startTime = performance.now();
+                    window.appLogger.debug('StorageAPI', 'Sending fetch request to GitHub API');
+                    
                     const response = await fetch(`https://api.github.com/gists/${GITHUB_CONFIG.gistId}`, {
                         method: 'PATCH',
                         headers: {
@@ -215,32 +240,125 @@
                     window.appLogger.debug('StorageAPI', 'Save response received', {
                         status: response.status,
                         statusText: response.statusText,
-                        duration: `${saveTime.toFixed(2)}ms`
+                        statusOk: response.ok,
+                        duration: `${saveTime.toFixed(2)}ms`,
+                        headers: {
+                            contentType: response.headers.get('content-type'),
+                            rateLimitRemaining: response.headers.get('x-ratelimit-remaining'),
+                            rateLimitReset: response.headers.get('x-ratelimit-reset')
+                        }
                     });
                     
                     if (!response.ok) {
-                        const errorData = await response.json().catch(() => ({}));
+                        let errorData = {};
+                        let errorText = '';
+                        try {
+                            errorData = await response.json();
+                            errorText = JSON.stringify(errorData);
+                        } catch (parseError) {
+                            errorText = await response.text().catch(() => 'Unable to read error response');
+                            window.appLogger.warn('StorageAPI', 'Failed to parse error response as JSON', {
+                                parseError: parseError.message,
+                                errorText: errorText.substring(0, 200)
+                            });
+                        }
+                        
+                        const apiError = new Error(`GitHub API error: ${response.status} ${response.statusText}`);
+                        apiError.name = 'GitHubAPIError';
+                        apiError.status = response.status;
+                        apiError.statusText = response.statusText;
+                        apiError.details = {
+                            gistId: GITHUB_CONFIG.gistId,
+                            username: GITHUB_CONFIG.username,
+                            errorData: errorData,
+                            errorText: errorText,
+                            rateLimitRemaining: response.headers.get('x-ratelimit-remaining'),
+                            rateLimitReset: response.headers.get('x-ratelimit-reset')
+                        };
+                        
                         window.appLogger.error('StorageAPI', 'Save request failed', {
-                            status: response.status,
-                            statusText: response.statusText,
-                            errorData: errorData
+                            error: apiError.message,
+                            status: apiError.status,
+                            statusText: apiError.statusText,
+                            details: apiError.details
                         });
-                        throw new Error(`Failed to save data: ${response.status} ${response.statusText}. ${errorData.message || ''}`);
+                        
+                        // Provide specific guidance based on status code
+                        if (response.status === 401) {
+                            apiError.userMessage = 'Authentication failed. Please verify your token is valid and has the "gist" scope.';
+                            window.appLogger.warn('StorageAPI', 'Authentication error - check token validity and permissions', {
+                                tokenPrefix: GITHUB_CONFIG.token.substring(0, 10) + '...',
+                                requiredScope: 'gist'
+                            });
+                        } else if (response.status === 403) {
+                            apiError.userMessage = 'Access forbidden. Token may lack permissions or Gist may not exist.';
+                            window.appLogger.warn('StorageAPI', 'Forbidden - check token permissions and Gist existence');
+                        } else if (response.status === 404) {
+                            apiError.userMessage = 'Gist not found. Please verify the Gist ID is correct.';
+                            window.appLogger.warn('StorageAPI', 'Gist not found', { gistId: GITHUB_CONFIG.gistId });
+                        } else if (response.status === 422) {
+                            apiError.userMessage = 'Invalid request. Check that the Gist file is named "portfolio-data.json".';
+                            window.appLogger.warn('StorageAPI', 'Validation error - check Gist file name and structure');
+                        }
+                        
+                        throw apiError;
                     }
                     
-                    window.appLogger.info('StorageAPI', 'Data saved successfully', { duration: `${saveTime.toFixed(2)}ms` });
+                    // Parse successful response
+                    let responseData = {};
+                    try {
+                        responseData = await response.json();
+                        window.appLogger.debug('StorageAPI', 'Save response parsed', {
+                            gistId: responseData.id,
+                            fileCount: Object.keys(responseData.files || {}).length,
+                            hasPortfolioData: !!responseData.files?.['portfolio-data.json']
+                        });
+                    } catch (parseError) {
+                        window.appLogger.warn('StorageAPI', 'Failed to parse success response', { error: parseError.message });
+                    }
+                    
+                    window.appLogger.info('StorageAPI', 'Data saved successfully', { 
+                        duration: `${saveTime.toFixed(2)}ms`,
+                        gistId: responseData.id || GITHUB_CONFIG.gistId,
+                        fileUpdated: 'portfolio-data.json'
+                    });
                     window.appLogger.traceEnd('StorageAPI', 'save', { success: true });
                     return true;
                 } catch (error) {
-                    window.appLogger.error('StorageAPI', 'Error saving data', error);
-                    if (error.message.includes('401') || error.message.includes('403')) {
-                        window.appLogger.warn('StorageAPI', 'Authentication failed', {
-                            message: 'Please verify your token is valid and has the "gist" scope.',
-                            error: error.message
+                    // Preserve error details
+                    const errorDetails = {
+                        name: error.name || 'Error',
+                        message: error.message || 'Unknown error',
+                        stack: error.stack,
+                        status: error.status,
+                        statusText: error.statusText,
+                        details: error.details,
+                        userMessage: error.userMessage
+                    };
+                    
+                    window.appLogger.error('StorageAPI', 'Error saving data', {
+                        error: errorDetails.message,
+                        name: errorDetails.name,
+                        status: errorDetails.status,
+                        details: errorDetails.details,
+                        stack: errorDetails.stack?.split('\n').slice(0, 3).join('\n') // First 3 lines of stack
+                    });
+                    
+                    if (error.status === 401 || error.status === 403) {
+                        window.appLogger.warn('StorageAPI', 'Authentication/Authorization failed', {
+                            message: errorDetails.userMessage || 'Please verify your token is valid and has the "gist" scope.',
+                            error: errorDetails.message
                         });
                     }
-                    window.appLogger.traceEnd('StorageAPI', 'save', { success: false });
-                    return false;
+                    
+                    window.appLogger.traceEnd('StorageAPI', 'save', { 
+                        success: false,
+                        error: errorDetails.message,
+                        errorName: errorDetails.name
+                    });
+                    
+                    // Re-throw with full context
+                    throw error;
                 }
             }
         };
@@ -9310,17 +9428,77 @@ new Chart(ctxHiring, {
                     });
                     
                     // Save
-                    window.appLogger.debug('MessageForm', 'Saving message data');
-                    const saved = await storage.save(data);
+                    window.appLogger.debug('MessageForm', 'Saving message data', {
+                        messageId: messageData.id,
+                        totalMessages: data.messages.length,
+                        dataSize: JSON.stringify(data).length
+                    });
                     
-                    if (saved) {
-                        window.appLogger.info('MessageForm', 'Message saved successfully', { messageId: messageData.id });
-                        messageStatus.innerHTML = '<span style="color: #00ff9d;"><i class="fas fa-check-circle"></i> Message sent successfully! Thank you for your feedback.</span>';
-                        messageForm.reset();
-                        window.appLogger.traceEnd('MessageForm', 'submit', { success: true });
-                    } else {
-                        window.appLogger.error('MessageForm', 'Failed to save message');
-                        throw new Error('Failed to save');
+                    try {
+                        const saved = await storage.save(data);
+                        
+                        if (saved) {
+                            window.appLogger.info('MessageForm', 'Message saved successfully', { 
+                                messageId: messageData.id,
+                                totalMessages: data.messages.length
+                            });
+                            messageStatus.innerHTML = '<span style="color: #00ff9d;"><i class="fas fa-check-circle"></i> Message sent successfully! Thank you for your feedback.</span>';
+                            messageForm.reset();
+                            window.appLogger.traceEnd('MessageForm', 'submit', { success: true });
+                        } else {
+                            // This shouldn't happen now since save() throws instead of returning false
+                            const saveError = new Error('Save operation returned false unexpectedly');
+                            saveError.name = 'SaveError';
+                            saveError.details = {
+                                messageId: messageData.id,
+                                gistId: GITHUB_CONFIG?.gistId,
+                                hasToken: !!GITHUB_CONFIG?.token
+                            };
+                            window.appLogger.error('MessageForm', 'Save operation failed unexpectedly', {
+                                error: saveError.message,
+                                details: saveError.details
+                            });
+                            throw saveError;
+                        }
+                    } catch (saveError) {
+                        // Enhanced error logging with full context
+                        const errorContext = {
+                            name: saveError.name || 'Error',
+                            message: saveError.message || 'Unknown error occurred',
+                            stack: saveError.stack,
+                            status: saveError.status,
+                            statusText: saveError.statusText,
+                            details: saveError.details || {},
+                            userMessage: saveError.userMessage,
+                            messageId: messageData.id,
+                            formData: {
+                                nameLength: name.length,
+                                emailLength: email.length,
+                                messageLength: message.length,
+                                hasEmail: !!email
+                            },
+                            config: {
+                                hasToken: !!GITHUB_CONFIG?.token,
+                                hasGistId: !!GITHUB_CONFIG?.gistId,
+                                username: GITHUB_CONFIG?.username,
+                                gistId: GITHUB_CONFIG?.gistId
+                            }
+                        };
+                        
+                        window.appLogger.error('MessageForm', 'Failed to save message', {
+                            error: errorContext.message,
+                            errorName: errorContext.name,
+                            status: errorContext.status,
+                            statusText: errorContext.statusText,
+                            details: errorContext.details,
+                            userMessage: errorContext.userMessage,
+                            messageId: errorContext.messageId,
+                            config: errorContext.config,
+                            stack: errorContext.stack?.split('\n').slice(0, 5).join('\n') // First 5 lines
+                        });
+                        
+                        // Re-throw with enhanced context
+                        throw saveError;
                     }
                     
                     // Reset button after 2 seconds
@@ -9330,11 +9508,51 @@ new Chart(ctxHiring, {
                         window.appLogger.debug('MessageForm', 'Submit button reset');
                     }, 2000);
                 } catch (error) {
-                    window.appLogger.error('MessageForm', 'Error sending message', error);
-                    messageStatus.innerHTML = '<span style="color: #ff3d5e;"><i class="fas fa-exclamation-circle"></i> Failed to send message. Please try again.</span>';
+                    // Comprehensive error logging with full context
+                    const errorInfo = {
+                        name: error.name || 'Error',
+                        message: error.message || 'Unknown error occurred',
+                        stack: error.stack,
+                        status: error.status,
+                        statusText: error.statusText,
+                        details: error.details || {},
+                        userMessage: error.userMessage,
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    window.appLogger.error('MessageForm', 'Error sending message', {
+                        error: errorInfo.message,
+                        errorName: errorInfo.name,
+                        status: errorInfo.status,
+                        statusText: errorInfo.statusText,
+                        details: errorInfo.details,
+                        userMessage: errorInfo.userMessage,
+                        stack: errorInfo.stack,
+                        timestamp: errorInfo.timestamp
+                    });
+                    
+                    // User-friendly error message
+                    let userMessage = 'Failed to send message. Please try again.';
+                    if (errorInfo.userMessage) {
+                        userMessage = errorInfo.userMessage;
+                    } else if (errorInfo.status === 401) {
+                        userMessage = 'Authentication failed. Please contact the site administrator.';
+                    } else if (errorInfo.status === 404) {
+                        userMessage = 'Service configuration error. Please contact the site administrator.';
+                    } else if (errorInfo.status === 403) {
+                        userMessage = 'Access denied. Please contact the site administrator.';
+                    }
+                    
+                    messageStatus.innerHTML = `<span style="color: #ff3d5e;"><i class="fas fa-exclamation-circle"></i> ${userMessage}</span>`;
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
-                    window.appLogger.traceEnd('MessageForm', 'submit', { success: false, error: error.message });
+                    
+                    window.appLogger.traceEnd('MessageForm', 'submit', { 
+                        success: false, 
+                        error: errorInfo.message,
+                        errorName: errorInfo.name,
+                        status: errorInfo.status
+                    });
                 }
             });
             }
