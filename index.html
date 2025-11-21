@@ -76,50 +76,30 @@
             }
         };
     </script>
+    <!-- Load config.js synchronously before other scripts -->
+    <script src="config.js" onerror="if(window.appLogger){window.appLogger.debug('Config', 'config.js not found - will use defaults');}"></script>
     <script>
-        // Load config.js with proper error handling
-        // Note: config.js is gitignored, so it won't exist on GitHub Pages unless manually uploaded
-        (function() {
-            const configScript = document.createElement('script');
-            configScript.src = 'config.js';
-            configScript.onerror = function() {
-                // config.js not found - this is expected on GitHub Pages unless manually uploaded
-                if (window.appLogger) {
-                    window.appLogger.debug('Config', 'config.js not found - using default configuration (this is normal if not uploaded to server)');
-                }
-                // Initialize with defaults
-                initializeConfig();
-            };
-            configScript.onload = function() {
-                // config.js loaded successfully, wait a moment for it to set window.GITHUB_CONFIG
-                setTimeout(initializeConfig, 10);
-            };
-            document.head.appendChild(configScript);
-        })();
-        
-        // Initialize GITHUB_CONFIG immediately with defaults (will be updated when config.js loads)
+        // Initialize GITHUB_CONFIG - config.js should have set window.GITHUB_CONFIG if it exists
+        // If config.js doesn't exist or failed to load, use defaults
         let GITHUB_CONFIG = window.GITHUB_CONFIG || {
             token: '', // Will be loaded from config.js
             gistId: '0bdf6369fc962c756e2ede6a490c9b4d',        // Paste your Gist ID from Step 2
             username: 'DigiSenseiZim'       // Your GitHub username
         };
         
-        // Make it globally available immediately
+        // Make it globally available
         window.GITHUB_CONFIG = GITHUB_CONFIG;
         
+        // Function to re-initialize config (for async updates if needed)
         function initializeConfig() {
-            // Update config from external file if available
-            // IMPORTANT: Create config.js from config.example.js with your actual credentials
-            // For GitHub Pages: You need to manually upload config.js to the server (it's gitignored)
-            if (window.GITHUB_CONFIG && window.GITHUB_CONFIG.token) {
-                // config.js has set window.GITHUB_CONFIG, use it
+            // Re-check window.GITHUB_CONFIG in case it was updated
+            if (window.GITHUB_CONFIG && window.GITHUB_CONFIG.token && !GITHUB_CONFIG.token) {
+                // config.js has set window.GITHUB_CONFIG with token, use it
                 GITHUB_CONFIG = window.GITHUB_CONFIG;
-            } else {
-                // Use defaults or what's already set
-                GITHUB_CONFIG = window.GITHUB_CONFIG || GITHUB_CONFIG;
+                window.appLogger.debug('Config', 'Updated config from window.GITHUB_CONFIG');
             }
             
-            // Make sure it's globally available
+            // Ensure window.GITHUB_CONFIG is always set
             window.GITHUB_CONFIG = GITHUB_CONFIG;
             
             // Log configuration status
