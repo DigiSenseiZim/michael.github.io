@@ -9250,7 +9250,18 @@ hiringGradients[2].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
         // Wait for DOM to be ready before initializing form
         document.addEventListener('DOMContentLoaded', function() {
             window.appLogger.info('App', 'DOMContentLoaded event fired');
-            const storage = window.storageAPI;
+            
+            // Ensure storageAPI is available (use window.storageAPI directly to avoid timing issues)
+            if (!window.storageAPI) {
+                window.appLogger.error('App', 'storageAPI not initialized - retrying in 100ms');
+                // Retry after a short delay in case of timing issues
+                setTimeout(() => {
+                    if (!window.storageAPI) {
+                        window.appLogger.error('App', 'storageAPI still not initialized after retry');
+                    }
+                }, 100);
+                return;
+            }
             
             // Generate visitor fingerprint for analytics
             function getVisitorFingerprint() {
@@ -9294,8 +9305,21 @@ hiringGradients[2].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
             async function trackVisitor() {
                 window.appLogger.trace('VisitorTracker', 'trackVisitor');
                 try {
+                    // Use window.storageAPI directly to ensure we have the latest reference
+                    const storage = window.storageAPI;
+                    
+                    // Ensure storage is available
+                    if (!storage || !storage.load) {
+                        window.appLogger.error('VisitorTracker', 'Storage API not available', {
+                            hasStorage: !!storage,
+                            hasLoad: !!(storage && storage.load),
+                            storageAPIExists: !!window.storageAPI
+                        });
+                        return;
+                    }
+                    
                     window.appLogger.debug('VisitorTracker', 'Loading visitor data');
-                    let data = await storage.load();
+                    let data = await window.storageAPI.load();
                     
                     if (!data) {
                         window.appLogger.info('VisitorTracker', 'Initializing new data structure');
@@ -9391,7 +9415,7 @@ hiringGradients[2].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
                     
                     // Save updated data
                     window.appLogger.debug('VisitorTracker', 'Saving updated visitor data');
-                    const saveResult = await storage.save(data);
+                    const saveResult = await window.storageAPI.save(data);
                     
                     if (!saveResult) {
                         window.appLogger.error('VisitorTracker', 'Failed to save visitor data');
@@ -9650,7 +9674,8 @@ hiringGradients[2].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
                 window.appLogger.debug('MessageForm', 'Loading existing data for message save');
 
                 try {
-                    let data = await storage.load();
+                    // Use window.storageAPI directly to ensure we have the latest reference
+                    let data = await window.storageAPI.load();
                     if (!data) {
                         window.appLogger.info('MessageForm', 'Initializing new data structure for message');
                         // Initialize with same structure as trackVisitor
@@ -9706,7 +9731,8 @@ hiringGradients[2].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
                     });
                     
                     try {
-                        const saved = await storage.save(data);
+                        // Use window.storageAPI directly to ensure we have the latest reference
+                        const saved = await window.storageAPI.save(data);
                         
                         if (saved) {
                             window.appLogger.info('MessageForm', 'Message saved successfully', { 
@@ -9842,7 +9868,12 @@ hiringGradients[2].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
 
             async function loadAdminMessages() {
                 try {
-                    const data = await storage.load();
+                    // Use window.storageAPI directly to ensure we have the latest reference
+                    if (!window.storageAPI) {
+                        window.appLogger.error('Admin', 'storageAPI not available');
+                        return;
+                    }
+                    const data = await window.storageAPI.load();
                     const messagesList = document.getElementById('admin-messages-list');
                     
                     if (!data || !data.messages || data.messages.length === 0) {
