@@ -18,6 +18,8 @@
     <link rel="preload" href="assets/js/chart.js" as="script">
     
     <!-- GitHub Gist Storage Configuration (must be in head for early initialization) -->
+    <!-- Load configuration from external file (config.js is gitignored) -->
+    <script src="config.js" onerror="console.warn('config.js not found. Using default configuration.')"></script>
     <script>
         // Granular Logging Utility
         window.appLogger = {
@@ -74,8 +76,10 @@
             }
         };
 
-        const GITHUB_CONFIG = {
-            token: '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', // Paste your CLASSIC token from Step 1 (starts with ghp_)
+        // Use config from external file if available, otherwise use defaults
+        // IMPORTANT: Create config.js from config.example.js with your actual credentials
+        const GITHUB_CONFIG = window.GITHUB_CONFIG || {
+            token: '', // Will be loaded from config.js
             gistId: '0bdf6369fc962c756e2ede6a490c9b4d',        // Paste your Gist ID from Step 2
             username: 'DigiSenseiZim'       // Your GitHub username
         };
@@ -398,6 +402,10 @@
                         });
                     }
                 }
+            } catch (error) {
+                window.appLogger.error('Charts', 'Error initializing certification timeline chart', error);
+            }
+            
                 // Data Science: Tech Stack Distribution
                 // Based on portfolio: Full-stack focus with AI/ML specialization
                 try {
@@ -796,6 +804,9 @@
                 } catch (error) {
                     window.appLogger.error('Charts', 'Error initializing additional charts', error);
                 }
+            } catch (error) {
+                window.appLogger.error('Charts', 'Error in main chart initialization', error);
+            }
         
             window.appLogger.info('App', 'Chart initialization complete');
             
@@ -840,6 +851,33 @@
             --font-display: 'Space Grotesk', sans-serif;
             --font-accent: 'Space Grotesk', sans-serif;
             --font-mono: 'Space Grotesk', sans-serif;
+            --neon-green: #39ff14;
+        }
+        
+        /* Neon green outline for white/light text */
+        body, p, span, div, h1, h2, h3, h4, h5, h6, li, td, th, label, a {
+            text-shadow: 
+                0 0 1px var(--neon-green),
+                0 0 2px var(--neon-green),
+                0 0 3px var(--neon-green),
+                0 0 4px rgba(57, 255, 20, 0.3);
+        }
+        
+        /* Stronger outline for white text specifically */
+        [style*="color: #fff"], 
+        [style*="color: #ffffff"], 
+        [style*="color: white"],
+        [style*="color: #f5f9ff"],
+        .text-white,
+        * {
+            color: var(--text-color);
+        }
+        
+        * {
+            text-shadow: 
+                0 0 0.5px var(--neon-green),
+                0 0 1px var(--neon-green),
+                0 0 1.5px rgba(57, 255, 20, 0.4);
         }
         
         #skills-orbit {
