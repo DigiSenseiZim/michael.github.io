@@ -151,6 +151,11 @@
             } 
         });
 
+        // Ensure storageAPI is always available
+        if (!window.storageAPI) {
+            window.storageAPI = {};
+        }
+        
         window.storageAPI = {
             async load() {
                 window.appLogger.trace('StorageAPI', 'load');
@@ -9674,6 +9679,23 @@ hiringGradients[2].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
                 window.appLogger.debug('MessageForm', 'Loading existing data for message save');
 
                 try {
+                    // Ensure storageAPI is available with retry logic (handles timing issues)
+                    let retries = 0;
+                    const maxRetries = 5;
+                    while ((!window.storageAPI || !window.storageAPI.load) && retries < maxRetries) {
+                        if (window.appLogger) {
+                            window.appLogger.warn('MessageForm', `storageAPI not available, retry ${retries + 1}/${maxRetries}`);
+                        }
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                        retries++;
+                    }
+                    
+                    if (!window.storageAPI || !window.storageAPI.load) {
+                        const error = new Error('Storage API not available. Please refresh the page and try again.');
+                        error.name = 'StorageAPIError';
+                        throw error;
+                    }
+                    
                     // Use window.storageAPI directly to ensure we have the latest reference
                     let data = await window.storageAPI.load();
                     if (!data) {
