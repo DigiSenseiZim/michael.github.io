@@ -10,7 +10,8 @@
     <title>Michael Mukwekezeke | Software Developer & Architect</title>
     
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="assets/css/font-awesome.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <!-- Font Awesome from CDN to avoid webfonts 404 errors -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Preload critical resources -->
@@ -75,33 +76,58 @@
             }
         };
     </script>
-    <script src="config.js" onerror="if(window.appLogger){window.appLogger.debug('Config', 'config.js not found - using default configuration');}else{console.warn('config.js not found. Using default configuration.');}"></script>
     <script>
-        // Use config from external file if available, otherwise use defaults
-        // IMPORTANT: Create config.js from config.example.js with your actual credentials
-        // Check for config after script loads (with a small delay to ensure it's processed)
-        let GITHUB_CONFIG = window.GITHUB_CONFIG || {
-            token: '', // Will be loaded from config.js
-            gistId: '0bdf6369fc962c756e2ede6a490c9b4d',        // Paste your Gist ID from Step 2
-            username: 'DigiSenseiZim'       // Your GitHub username
-        };
+        // Load config.js with proper error handling
+        // Note: config.js is gitignored, so it won't exist on GitHub Pages unless manually uploaded
+        (function() {
+            const configScript = document.createElement('script');
+            configScript.src = 'config.js';
+            configScript.onerror = function() {
+                // config.js not found - this is expected on GitHub Pages unless manually uploaded
+                if (window.appLogger) {
+                    window.appLogger.debug('Config', 'config.js not found - using default configuration (this is normal if not uploaded to server)');
+                }
+                // Initialize with defaults
+                initializeConfig();
+            };
+            configScript.onload = function() {
+                // config.js loaded successfully, wait a moment for it to set window.GITHUB_CONFIG
+                setTimeout(initializeConfig, 10);
+            };
+            document.head.appendChild(configScript);
+        })();
         
-        // Log configuration status
-        if (window.appLogger) {
-            window.appLogger.debug('Config', 'GitHub configuration loaded', {
-                hasToken: !!GITHUB_CONFIG.token,
-                tokenLength: GITHUB_CONFIG.token?.length || 0,
-                hasGistId: !!GITHUB_CONFIG.gistId,
-                gistId: GITHUB_CONFIG.gistId,
-                username: GITHUB_CONFIG.username,
-                source: window.GITHUB_CONFIG ? 'config.js' : 'default'
-            });
+        function initializeConfig() {
+            // Use config from external file if available, otherwise use defaults
+            // IMPORTANT: Create config.js from config.example.js with your actual credentials
+            // For GitHub Pages: You need to manually upload config.js to the server (it's gitignored)
+            let GITHUB_CONFIG = window.GITHUB_CONFIG || {
+                token: '', // Will be loaded from config.js
+                gistId: '0bdf6369fc962c756e2ede6a490c9b4d',        // Paste your Gist ID from Step 2
+                username: 'DigiSenseiZim'       // Your GitHub username
+            };
             
-            if (!GITHUB_CONFIG.token) {
-                window.appLogger.warn('Config', 'GitHub token not configured', {
-                    message: 'Create config.js with your GitHub token to enable data saving',
-                    exampleFile: 'config.example.js'
+            // Make it globally available
+            window.GITHUB_CONFIG = GITHUB_CONFIG;
+            
+            // Log configuration status
+            if (window.appLogger) {
+                window.appLogger.debug('Config', 'GitHub configuration loaded', {
+                    hasToken: !!GITHUB_CONFIG.token,
+                    tokenLength: GITHUB_CONFIG.token?.length || 0,
+                    hasGistId: !!GITHUB_CONFIG.gistId,
+                    gistId: GITHUB_CONFIG.gistId,
+                    username: GITHUB_CONFIG.username,
+                    source: window.GITHUB_CONFIG && window.GITHUB_CONFIG.token ? 'config.js' : 'default'
                 });
+                
+                if (!GITHUB_CONFIG.token) {
+                    window.appLogger.warn('Config', 'GitHub token not configured', {
+                        message: 'Create config.js locally and upload it to your server to enable data saving',
+                        note: 'config.js is gitignored, so you must manually upload it to GitHub Pages',
+                        exampleFile: 'config.example.js'
+                    });
+                }
             }
         }
 
@@ -5335,22 +5361,54 @@ transform: none !important;
             }
         });
         
-        // Impact chart
-        const impactCtx = document.getElementById('impactChart').getContext('2d');
-        // Enhanced Impact Chart with gradients
-        const impactGradients = [
-            impactCtx.createLinearGradient(0, 0, 0, 300),
-            impactCtx.createLinearGradient(0, 0, 0, 300),
-            impactCtx.createLinearGradient(0, 0, 0, 300)
-        ];
-        impactGradients[0].addColorStop(0, 'rgba(99, 102, 241, 1)');
-        impactGradients[0].addColorStop(1, 'rgba(139, 92, 246, 0.7)');
-        impactGradients[1].addColorStop(0, 'rgba(205, 133, 63, 1)');
-        impactGradients[1].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
-        impactGradients[2].addColorStop(0, 'rgba(218, 165, 32, 1)');
-        impactGradients[2].addColorStop(1, 'rgba(184, 134, 11, 0.7)');
+        // Impact chart - ensure Chart.js is loaded first
+        (function() {
+            function ensureChartJsForImpact(callback) {
+                if (window.Chart) return callback();
+                const s = document.createElement('script');
+                s.src = 'assets/js/chart.js';
+                s.onload = callback;
+                s.onerror = function() { 
+                    if (window.appLogger) {
+                        window.appLogger.error('Charts', 'Failed to load Chart.js for impact chart');
+                    } else {
+                        console.error('Failed to load Chart.js for impact chart');
+                    }
+                };
+                document.head.appendChild(s);
+            }
+            
+            ensureChartJsForImpact(() => {
+                const impactCanvas = document.getElementById('impactChart');
+                if (!impactCanvas) {
+                    if (window.appLogger) {
+                        window.appLogger.debug('Charts', 'impactChart canvas not found - skipping chart initialization');
+                    }
+                    return;
+                }
+                
+                const impactCtx = impactCanvas.getContext('2d');
+                if (!impactCtx) {
+                    if (window.appLogger) {
+                        window.appLogger.warn('Charts', 'Failed to get 2D context for impactChart');
+                    }
+                    return;
+                }
+                
+                // Enhanced Impact Chart with gradients
+                const impactGradients = [
+                    impactCtx.createLinearGradient(0, 0, 0, 300),
+                    impactCtx.createLinearGradient(0, 0, 0, 300),
+                    impactCtx.createLinearGradient(0, 0, 0, 300)
+                ];
+                impactGradients[0].addColorStop(0, 'rgba(99, 102, 241, 1)');
+                impactGradients[0].addColorStop(1, 'rgba(139, 92, 246, 0.7)');
+                impactGradients[1].addColorStop(0, 'rgba(205, 133, 63, 1)');
+                impactGradients[1].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
+                impactGradients[2].addColorStop(0, 'rgba(218, 165, 32, 1)');
+                impactGradients[2].addColorStop(1, 'rgba(184, 134, 11, 0.7)');
 
-        const impactChart = new Chart(impactCtx, {
+                const impactChart = new Chart(impactCtx, {
             type: 'bar',
             data: {
                 labels: ['Revenue Generation', 'Service Improvement', 'Hybrid Impact'],
@@ -5442,7 +5500,13 @@ transform: none !important;
                     mode: 'index'
                 }
             }
-        });
+                });
+                
+                if (window.appLogger) {
+                    window.appLogger.info('Charts', 'Impact chart created successfully');
+                }
+            });
+        })();
         
         // Filter functionality
         document.querySelectorAll('.status-filter').forEach(filter => {
@@ -6742,9 +6806,19 @@ const radarCenterSummary = {
 };
 
 // Build the Chart
-const ctx = document.getElementById('skillsRadar').getContext('2d');
-
-window.skillsRadarInstance = new Chart(ctx, {
+const skillsRadarCanvas = document.getElementById('skillsRadar');
+if (!skillsRadarCanvas) {
+    if (window.appLogger) {
+        window.appLogger.debug('Charts', 'skillsRadar canvas not found - skipping chart initialization');
+    }
+} else {
+    const ctx = skillsRadarCanvas.getContext('2d');
+    if (!ctx) {
+        if (window.appLogger) {
+            window.appLogger.warn('Charts', 'Failed to get 2D context for skillsRadar');
+        }
+    } else {
+        window.skillsRadarInstance = new Chart(ctx, {
   type: 'radar',
   data: {
     labels: skillLabels,
@@ -7037,8 +7111,18 @@ document.getElementById('skillsRadar').addEventListener('keydown', (e) => {
             
             // Vendor Chart
             const vendorChart = document.getElementById('vendorChart');
-            // Enhanced Vendor Chart with gradients
-            const vendorCtx = vendorChart.getContext('2d');
+            if (!vendorChart) {
+                if (window.appLogger) {
+                    window.appLogger.debug('Charts', 'vendorChart canvas not found - skipping chart initialization');
+                }
+            } else {
+                // Enhanced Vendor Chart with gradients
+                const vendorCtx = vendorChart.getContext('2d');
+                if (!vendorCtx) {
+                    if (window.appLogger) {
+                        window.appLogger.warn('Charts', 'Failed to get 2D context for vendorChart');
+                    }
+                } else {
             const vendorGradients = [
                 vendorCtx.createLinearGradient(0, 0, 0, 200),
                 vendorCtx.createLinearGradient(0, 0, 0, 200),
@@ -7758,7 +7842,18 @@ if (window.udemyChartInstance) window.udemyChartInstance.destroy();
 if (window.linkedinChartInstance) window.linkedinChartInstance.destroy();
 
 // === Udemy Courses by Category - Modern Pie Chart ===
-const ctxUdemy = document.getElementById('udemyChart').getContext('2d');
+const udemyCanvas = document.getElementById('udemyChart');
+if (!udemyCanvas) {
+    if (window.appLogger) {
+        window.appLogger.debug('Charts', 'udemyChart canvas not found - skipping chart initialization');
+    }
+} else {
+    const ctxUdemy = udemyCanvas.getContext('2d');
+    if (!ctxUdemy) {
+        if (window.appLogger) {
+            window.appLogger.warn('Charts', 'Failed to get 2D context for udemyChart');
+        }
+    } else {
 
 // Consolidated course categories (4 main areas)
 const courseCategories = {
@@ -7788,7 +7883,7 @@ const categoryGradients = categoryLabels.map((label, index) => {
 
 const categoryBorders = ['#6366f1', '#8b5cf6', '#06b6d4', '#ec4899'];
 
-window.udemyChartInstance = new Chart(ctxUdemy, {
+        window.udemyChartInstance = new Chart(ctxUdemy, {
   type: 'pie',
   data: {
     labels: categoryLabels,
@@ -8009,7 +8104,18 @@ window.udemyChartInstance = new Chart(ctxUdemy, {
 });
 
 // === LinkedIn Learning by Category - Doughnut Chart ===
-const ctxLinkedIn = document.getElementById('linkedinChart').getContext('2d');
+const linkedInCanvas = document.getElementById('linkedinChart');
+if (!linkedInCanvas) {
+    if (window.appLogger) {
+        window.appLogger.debug('Charts', 'linkedinChart canvas not found - skipping chart initialization');
+    }
+} else {
+    const ctxLinkedIn = linkedInCanvas.getContext('2d');
+    if (!ctxLinkedIn) {
+        if (window.appLogger) {
+            window.appLogger.warn('Charts', 'Failed to get 2D context for linkedinChart');
+        }
+    } else {
 
 // Categorize LinkedIn courses (simplified to 4 main areas)
 const linkedInCategories = {
@@ -8039,7 +8145,7 @@ const linkedInGradients = linkedInLabels.map((label, index) => {
 
 const linkedInBorders = ['#6366f1', '#06b6d4', '#8b5cf6', '#ec4899'];
 
-window.linkedinChartInstance = new Chart(ctxLinkedIn, {
+        window.linkedinChartInstance = new Chart(ctxLinkedIn, {
   type: 'doughnut',
   data: {
     labels: linkedInLabels,
@@ -8236,7 +8342,18 @@ window.linkedinChartInstance = new Chart(ctxLinkedIn, {
 });
 
 // === Enhanced Hiring Trends Bar Chart with gradients ===
-const ctxHiring = document.getElementById('hiringTrendsChart').getContext('2d');
+const hiringCanvas = document.getElementById('hiringTrendsChart');
+if (!hiringCanvas) {
+    if (window.appLogger) {
+        window.appLogger.debug('Charts', 'hiringTrendsChart canvas not found - skipping chart initialization');
+    }
+} else {
+    const ctxHiring = hiringCanvas.getContext('2d');
+    if (!ctxHiring) {
+        if (window.appLogger) {
+            window.appLogger.warn('Charts', 'Failed to get 2D context for hiringTrendsChart');
+        }
+    } else {
 const hiringGradients = [
   ctxHiring.createLinearGradient(0, 0, 0, 400),
   ctxHiring.createLinearGradient(0, 0, 0, 400),
@@ -8249,7 +8366,7 @@ hiringGradients[1].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
 hiringGradients[2].addColorStop(0, 'rgba(205, 92, 92, 1)');
 hiringGradients[2].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
 
-new Chart(ctxHiring, {
+        new Chart(ctxHiring, {
   type: 'bar',
   data: {
     labels: ['Work Experience', 'Skills Assessments', 'University Degree'],
