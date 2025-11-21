@@ -19,7 +19,6 @@
     <link rel="preload" href="assets/js/chart.js" as="script">
     
     <!-- GitHub Gist Storage Configuration (must be in head for early initialization) -->
-    <!-- Load configuration from external file (config.js is gitignored) -->
     <script>
         // Granular Logging Utility (must be defined first)
         window.appLogger = {
@@ -76,52 +75,16 @@
             }
         };
     </script>
-    <!-- Load config.js synchronously before other scripts -->
-    <script src="config.js" onerror="if(window.appLogger){window.appLogger.debug('Config', 'config.js not found - will use defaults');}"></script>
     <script>
-        // Initialize GITHUB_CONFIG - config.js should have set window.GITHUB_CONFIG if it exists
-        // If config.js doesn't exist or failed to load, use defaults
-        let GITHUB_CONFIG = window.GITHUB_CONFIG || {
-            token: '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', // ⚠️ YOUR GITHUB PERSONAL ACCESS TOKEN (keep secret, never commit!)
-            gistId: '0bdf6369fc962c756e2ede6a490c9b4d',        // Paste your Gist ID from Step 2
-            username: 'DigiSenseiZim'       // Your GitHub username
+        // Hardcoded GitHub Configuration
+        const GITHUB_CONFIG = {
+            token: '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',
+            gistId: '4f2edb397d263d098ea70ed17b0df8e6',
+            username: 'DigiSenseiZim'
         };
         
         // Make it globally available
         window.GITHUB_CONFIG = GITHUB_CONFIG;
-        
-        // Function to re-initialize config (for async updates if needed)
-        function initializeConfig() {
-            // Re-check window.GITHUB_CONFIG in case it was updated
-            if (window.GITHUB_CONFIG && window.GITHUB_CONFIG.token && !GITHUB_CONFIG.token) {
-                // config.js has set window.GITHUB_CONFIG with token, use it
-                GITHUB_CONFIG = window.GITHUB_CONFIG;
-                window.appLogger.debug('Config', 'Updated config from window.GITHUB_CONFIG');
-            }
-            
-            // Ensure window.GITHUB_CONFIG is always set
-            window.GITHUB_CONFIG = GITHUB_CONFIG;
-            
-            // Log configuration status
-            if (window.appLogger) {
-                window.appLogger.debug('Config', 'GitHub configuration loaded', {
-                    hasToken: !!GITHUB_CONFIG.token,
-                    tokenLength: GITHUB_CONFIG.token?.length || 0,
-                    hasGistId: !!GITHUB_CONFIG.gistId,
-                    gistId: GITHUB_CONFIG.gistId,
-                    username: GITHUB_CONFIG.username,
-                    source: window.GITHUB_CONFIG && window.GITHUB_CONFIG.token ? 'config.js' : 'default'
-                });
-                
-                if (!GITHUB_CONFIG.token) {
-                    window.appLogger.warn('Config', 'GitHub token not configured', {
-                        message: 'Create config.js locally and upload it to your server to enable data saving',
-                        note: 'config.js is gitignored, so you must manually upload it to GitHub Pages',
-                        exampleFile: 'config.example.js'
-                    });
-                }
-            }
-        }
 
         window.appLogger.info('App', 'Application initializing', { 
             config: { 
@@ -140,8 +103,8 @@
             async load() {
                 window.appLogger.trace('StorageAPI', 'load');
                 
-                // Get config from window (always use the latest)
-                const GITHUB_CONFIG = window.GITHUB_CONFIG || {};
+                // Use hardcoded config
+                const GITHUB_CONFIG = window.GITHUB_CONFIG;
                 
                 if (!GITHUB_CONFIG.gistId) {
                     window.appLogger.warn('StorageAPI', 'GitHub Gist not configured');
@@ -226,8 +189,8 @@
                     visitorCount: Object.keys(data.visitors || {}).length
                 });
                 
-                // Get config from window (always use the latest)
-                const GITHUB_CONFIG = window.GITHUB_CONFIG || {};
+                // Use hardcoded config
+                const GITHUB_CONFIG = window.GITHUB_CONFIG;
                 
                 // Validate configuration
                 if (!GITHUB_CONFIG.token || !GITHUB_CONFIG.gistId) {
@@ -9750,8 +9713,8 @@ hiringGradients[2].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
                             saveError.name = 'SaveError';
                             saveError.details = {
                                 messageId: messageData.id,
-                                gistId: GITHUB_CONFIG?.gistId,
-                                hasToken: !!GITHUB_CONFIG?.token
+                                gistId: GITHUB_CONFIG.gistId,
+                                hasToken: !!GITHUB_CONFIG.token
                             };
                             window.appLogger.error('MessageForm', 'Save operation failed unexpectedly', {
                                 error: saveError.message,
@@ -9777,10 +9740,10 @@ hiringGradients[2].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
                                 hasEmail: !!email
                             },
                             config: {
-                                hasToken: !!GITHUB_CONFIG?.token,
-                                hasGistId: !!GITHUB_CONFIG?.gistId,
-                                username: GITHUB_CONFIG?.username,
-                                gistId: GITHUB_CONFIG?.gistId
+                                hasToken: !!GITHUB_CONFIG.token,
+                                hasGistId: !!GITHUB_CONFIG.gistId,
+                                username: GITHUB_CONFIG.username,
+                                gistId: GITHUB_CONFIG.gistId
                             }
                         };
                         
