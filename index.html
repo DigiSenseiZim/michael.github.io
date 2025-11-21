@@ -97,17 +97,29 @@
             document.head.appendChild(configScript);
         })();
         
+        // Initialize GITHUB_CONFIG immediately with defaults (will be updated when config.js loads)
+        let GITHUB_CONFIG = window.GITHUB_CONFIG || {
+            token: '', // Will be loaded from config.js
+            gistId: '0bdf6369fc962c756e2ede6a490c9b4d',        // Paste your Gist ID from Step 2
+            username: 'DigiSenseiZim'       // Your GitHub username
+        };
+        
+        // Make it globally available immediately
+        window.GITHUB_CONFIG = GITHUB_CONFIG;
+        
         function initializeConfig() {
-            // Use config from external file if available, otherwise use defaults
+            // Update config from external file if available
             // IMPORTANT: Create config.js from config.example.js with your actual credentials
             // For GitHub Pages: You need to manually upload config.js to the server (it's gitignored)
-            let GITHUB_CONFIG = window.GITHUB_CONFIG || {
-                token: '', // Will be loaded from config.js
-                gistId: '0bdf6369fc962c756e2ede6a490c9b4d',        // Paste your Gist ID from Step 2
-                username: 'DigiSenseiZim'       // Your GitHub username
-            };
+            if (window.GITHUB_CONFIG && window.GITHUB_CONFIG.token) {
+                // config.js has set window.GITHUB_CONFIG, use it
+                GITHUB_CONFIG = window.GITHUB_CONFIG;
+            } else {
+                // Use defaults or what's already set
+                GITHUB_CONFIG = window.GITHUB_CONFIG || GITHUB_CONFIG;
+            }
             
-            // Make it globally available
+            // Make sure it's globally available
             window.GITHUB_CONFIG = GITHUB_CONFIG;
             
             // Log configuration status
@@ -142,6 +154,9 @@
         window.storageAPI = {
             async load() {
                 window.appLogger.trace('StorageAPI', 'load');
+                
+                // Get config from window (always use the latest)
+                const GITHUB_CONFIG = window.GITHUB_CONFIG || {};
                 
                 if (!GITHUB_CONFIG.gistId) {
                     window.appLogger.warn('StorageAPI', 'GitHub Gist not configured');
@@ -225,6 +240,9 @@
                     messageCount: data.messages?.length || 0,
                     visitorCount: Object.keys(data.visitors || {}).length
                 });
+                
+                // Get config from window (always use the latest)
+                const GITHUB_CONFIG = window.GITHUB_CONFIG || {};
                 
                 // Validate configuration
                 if (!GITHUB_CONFIG.token || !GITHUB_CONFIG.gistId) {
@@ -1541,11 +1559,36 @@ transform: none !important;
         /* Skills Overview Styles */
 
 .chart-container {
-    background: var(--card-bg);
-    border-radius: 12px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    border-radius: 16px;
     padding: 1.5rem;
     border: 1px solid var(--glass-border);
+    box-shadow: 
+        0 8px 32px 0 rgba(0, 0, 0, 0.37),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
+        inset 0 -1px 0 0 rgba(0, 0, 0, 0.2);
     position: relative;
+    overflow: hidden;
+}
+
+.chart-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.2) 20%, 
+        rgba(255, 255, 255, 0.3) 50%, 
+        rgba(255, 255, 255, 0.2) 80%, 
+        transparent
+    );
+    pointer-events: none;
+    z-index: 1;
 }
 
 /* Skills Radar specific sizing - prevent stretching and overlap */
@@ -1582,7 +1625,34 @@ transform: none !important;
     text-align: center;
     font-weight: 600;
     font-family: var(--font-display);
-    text-shadow: var(--text-shadow-complete);
+    text-shadow: 
+        0px 1px 0px rgba(255, 255, 255, 0.4),
+        0px 2px 2px rgba(0, 0, 0, 0.3),
+        0px 0px 8px rgba(99, 102, 241, 0.2),
+        -1px 0px 0px rgba(0, 0, 0, 0.4),
+        1px 0px 0px rgba(0, 0, 0, 0.4),
+        0px -1px 0px rgba(0, 0, 0, 0.4),
+        -1px -1px 0px rgba(0, 0, 0, 0.4);
+    letter-spacing: 0.5px;
+}
+
+/* Chart typography with etched glass effect */
+.chart-container canvas,
+.chart-container .chartjs-chart {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* Chart.js legend and labels with glass effect */
+.chart-container .chartjs-legend,
+.chart-container .chartjs-tooltip {
+    text-shadow: 
+        0px 1px 0px rgba(255, 255, 255, 0.3),
+        0px 1px 2px rgba(0, 0, 0, 0.4),
+        -1px 0px 0px rgba(0, 0, 0, 0.3),
+        1px 0px 0px rgba(0, 0, 0, 0.3),
+        0px -1px 0px rgba(0, 0, 0, 0.3);
+    font-weight: 500;
+    letter-spacing: 0.3px;
 }
 
 .dashboard-content {
@@ -7001,10 +7071,15 @@ if (!skillsRadarCanvas) {
       }
     }
   },
-});
+        });
+            }
+        }
+    }
 
 // Optional: focus keyboard support - simple example
-document.getElementById('skillsRadar').tabIndex = 0;
+const skillsRadarForTab = document.getElementById('skillsRadar');
+if (skillsRadarForTab) {
+    skillsRadarForTab.tabIndex = 0;
 document.getElementById('skillsRadar').addEventListener('keydown', (e) => {
   if (e.key === 'l') {
     // toggle visibility of 'Target' dataset (example hotkey)
