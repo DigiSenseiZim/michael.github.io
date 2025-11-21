@@ -280,135 +280,136 @@
             // Exponential growth pattern: y = a * e^(bx) where growth rate = 0.35 (35% YoY)
             // Portfolio data: 5→8→12→18→25 (2020-2024) = 400% total growth, 35% CAGR
             try {
-                    window.appLogger.debug('Charts', 'Initializing certification timeline chart');
-                    const certCtx = document.getElementById('certificationTimeline');
-                    if (!certCtx) {
-                        window.appLogger.warn('Charts', 'Certification timeline canvas not found - skipping chart initialization');
-                        // Chart will not be initialized, but code continues without error
-                    } else {
-                        window.appLogger.debug('Charts', 'Certification timeline canvas found, getting context');
-                        const ctx2d = certCtx.getContext('2d');
-                        if (!ctx2d) {
-                            window.appLogger.error('Charts', 'Failed to get 2d context for certification timeline');
-                        } else {
-                            window.appLogger.debug('Charts', 'Creating certification timeline chart');
+                window.appLogger.debug('Charts', 'Initializing certification timeline chart');
+                const certCtx = document.getElementById('certificationTimeline');
+                if (!certCtx) {
+                    window.appLogger.warn('Charts', 'Certification timeline canvas not found - skipping chart initialization');
+                    // Chart will not be initialized, but code continues without error
+                } else {
+                    window.appLogger.debug('Charts', 'Certification timeline canvas found, getting context');
+                    const ctx2d = certCtx.getContext('2d');
                     if (!ctx2d) {
-                        console.warn('Could not get 2d context for certification timeline canvas');
+                        window.appLogger.error('Charts', 'Failed to get 2d context for certification timeline');
                     } else {
-                        const certGradient = ctx2d.createLinearGradient(0, 0, 0, 400);
-                        certGradient.addColorStop(0, 'rgba(99, 102, 241, 0.5)');
-                        certGradient.addColorStop(0.5, 'rgba(99, 102, 241, 0.25)');
-                        certGradient.addColorStop(1, 'rgba(99, 102, 241, 0)');
-                        
-                        new Chart(certCtx, {
-                    type: 'line',
-        data: {
-                        labels: ['2020', '2021', '2022', '2023', '2024', '2025 (Projected)'],
-            datasets: [{
-                            label: 'Certifications (Actual)',
-                            data: [5, 8, 12, 18, 25, null],
-                            borderColor: '#6366f1',
-                            backgroundColor: certGradient,
-                            borderWidth: 4,
-                            pointRadius: 8,
-                            pointHoverRadius: 12,
-                            fill: true,
-                            tension: 0.5,
-                            spanGaps: true
-                        }, {
-                            label: 'Growth Trend (Exponential Fit)',
-                            data: [5, 7.5, 11.2, 16.8, 25.2, 37.8],
-                            borderColor: '#8b5cf6',
-                            borderWidth: 2,
-                            borderDash: [5, 5],
-                            pointRadius: 0,
-                            fill: false,
-                            tension: 0.5
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'top',
-                                labels: {
-                                    color: '#6366f1',
-                                    font: { size: 13, weight: 'bold' },
-                                    padding: 12,
-                                    usePointStyle: true
-                                }
-                            },
-                            tooltip: {
-                                backgroundColor: 'rgba(0, 0, 0, 0.95)',
-                                titleColor: '#6366f1',
-                                bodyColor: '#ffffff',
-                                borderColor: '#6366f1',
-                                borderWidth: 2,
-                                padding: 12,
-                                callbacks: {
-                                    title: (ctx) => `Year: ${ctx[0].label}`,
-                                    label: (ctx) => {
-                                        const value = ctx.parsed.y;
-                                        if (!value) return '';
-                                        const growth = ctx.dataIndex > 0 ? 
-                                            ((value / ctx.dataset.data[ctx.dataIndex - 1] - 1) * 100).toFixed(1) : '0';
-                                        return `${ctx.dataset.label}: ${value} certs (${growth > 0 ? '+' : ''}${growth}% YoY)`;
-                                    },
-                                    footer: (ctx) => {
-                                        if (ctx[0].dataIndex === 4) {
-                                            return 'CAGR: 35.0% | Total Growth: 400%';
+                        window.appLogger.debug('Charts', 'Creating certification timeline chart');
+                        if (!ctx2d) {
+                            console.warn('Could not get 2d context for certification timeline canvas');
+                        } else {
+                            const certGradient = ctx2d.createLinearGradient(0, 0, 0, 400);
+                            certGradient.addColorStop(0, 'rgba(99, 102, 241, 0.5)');
+                            certGradient.addColorStop(0.5, 'rgba(99, 102, 241, 0.25)');
+                            certGradient.addColorStop(1, 'rgba(99, 102, 241, 0)');
+                            
+                            new Chart(certCtx, {
+                                type: 'line',
+                                data: {
+                                    labels: ['2020', '2021', '2022', '2023', '2024', '2025 (Projected)'],
+                                    datasets: [{
+                                        label: 'Certifications (Actual)',
+                                        data: [5, 8, 12, 18, 25, null],
+                                        borderColor: '#6366f1',
+                                        backgroundColor: certGradient,
+                                        borderWidth: 4,
+                                        pointRadius: 8,
+                                        pointHoverRadius: 12,
+                                        fill: true,
+                                        tension: 0.5,
+                                        spanGaps: true
+                                    }, {
+                                        label: 'Growth Trend (Exponential Fit)',
+                                        data: [5, 7.5, 11.2, 16.8, 25.2, 37.8],
+                                        borderColor: '#8b5cf6',
+                                        borderWidth: 2,
+                                        borderDash: [5, 5],
+                                        pointRadius: 0,
+                                        fill: false,
+                                        tension: 0.5
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    plugins: {
+                                        legend: {
+                                            display: true,
+                                            position: 'top',
+                                            labels: {
+                                                color: '#6366f1',
+                                                font: { size: 13, weight: 'bold' },
+                                                padding: 12,
+                                                usePointStyle: true
+                                            }
+                                        },
+                                        tooltip: {
+                                            backgroundColor: 'rgba(0, 0, 0, 0.95)',
+                                            titleColor: '#6366f1',
+                                            bodyColor: '#ffffff',
+                                            borderColor: '#6366f1',
+                                            borderWidth: 2,
+                                            padding: 12,
+                                            callbacks: {
+                                                title: (ctx) => `Year: ${ctx[0].label}`,
+                                                label: (ctx) => {
+                                                    const value = ctx.parsed.y;
+                                                    if (!value) return '';
+                                                    const growth = ctx.dataIndex > 0 ? 
+                                                        ((value / ctx.dataset.data[ctx.dataIndex - 1] - 1) * 100).toFixed(1) : '0';
+                                                    return `${ctx.dataset.label}: ${value} certs (${growth > 0 ? '+' : ''}${growth}% YoY)`;
+                                                },
+                                                footer: (ctx) => {
+                                                    if (ctx[0].dataIndex === 4) {
+                                                        return 'CAGR: 35.0% | Total Growth: 400%';
+                                                    }
+                                                    return '';
+                                                }
+                                            }
                                         }
-                                        return '';
+                                    },
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            grid: {
+                                                color: 'rgba(99, 102, 241, 0.15)',
+                                                lineWidth: 1
+                                            },
+                                            ticks: {
+                                                color: '#6366f1',
+                                                font: { size: 11, weight: 'bold' },
+                                                callback: (value) => value + ' certs'
+                                            },
+                                            title: {
+                                                display: true,
+                                                text: 'Certification Count',
+                                                color: '#6366f1',
+                                                font: { size: 12, weight: 'bold' }
+                                            }
+                                        },
+                                        x: {
+                                            grid: {
+                                                display: false
+                                            },
+                                            ticks: {
+                                                color: '#6366f1',
+                                                font: { size: 11, weight: 'bold' }
+                                            }
+                                        }
+                                    },
+                                    animation: {
+                                        duration: 2000,
+                                        easing: 'easeOutQuart'
                                     }
                                 }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: {
-                                    color: 'rgba(99, 102, 241, 0.15)',
-                                    lineWidth: 1
-                                },
-                                ticks: {
-                                    color: '#6366f1',
-                                    font: { size: 11, weight: 'bold' },
-                                    callback: (value) => value + ' certs'
-                                },
-                                title: {
-                                    display: true,
-                                    text: 'Certification Count',
-                                    color: '#6366f1',
-                                    font: { size: 12, weight: 'bold' }
-                                }
-                            },
-                            x: {
-                                grid: {
-                                    display: false
-                                },
-                                ticks: {
-                                    color: '#6366f1',
-                                    font: { size: 11, weight: 'bold' }
-                                }
-                            }
-                        },
-                        animation: {
-                            duration: 2000,
-                            easing: 'easeOutQuart'
+                            });
                         }
-                    }
-                        });
                     }
                 }
             } catch (error) {
                 window.appLogger.error('Charts', 'Error initializing certification timeline chart', error);
             }
             
-                // Data Science: Tech Stack Distribution
-                // Based on portfolio: Full-stack focus with AI/ML specialization
-                try {
+            // Data Science: Tech Stack Distribution
+            // Based on portfolio: Full-stack focus with AI/ML specialization
+            try {
                     const techStackCtx1 = document.getElementById('techStackChart');
                     if (techStackCtx1) {
                         const ctx = techStackCtx1.getContext('2d');
@@ -801,11 +802,8 @@
             window.appLogger.info('Charts', 'Tech mastery chart created successfully');
         }
     }
-                } catch (error) {
-                    window.appLogger.error('Charts', 'Error initializing additional charts', error);
-                }
             } catch (error) {
-                window.appLogger.error('Charts', 'Error in main chart initialization', error);
+                window.appLogger.error('Charts', 'Error initializing additional charts', error);
             }
         
             window.appLogger.info('App', 'Chart initialization complete');
