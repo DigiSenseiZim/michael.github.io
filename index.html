@@ -82,7 +82,7 @@
         // Initialize GITHUB_CONFIG - config.js should have set window.GITHUB_CONFIG if it exists
         // If config.js doesn't exist or failed to load, use defaults
         let GITHUB_CONFIG = window.GITHUB_CONFIG || {
-            token: '', // Will be loaded from config.js
+            token: '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', // ⚠️ YOUR GITHUB PERSONAL ACCESS TOKEN (keep secret, never commit!)
             gistId: '0bdf6369fc962c756e2ede6a490c9b4d',        // Paste your Gist ID from Step 2
             username: 'DigiSenseiZim'       // Your GitHub username
         };
@@ -455,15 +455,15 @@
                     // Chart will not be initialized, but code continues without error
                 } else {
                     window.appLogger.debug('Charts', 'Certification timeline canvas found, getting context');
-                    const ctx2d = certCtx.getContext('2d');
-                    if (!ctx2d) {
+                    const certCtx2d = certCtx.getContext('2d');
+                    if (!certCtx2d) {
                         window.appLogger.error('Charts', 'Failed to get 2d context for certification timeline');
                     } else {
                         window.appLogger.debug('Charts', 'Creating certification timeline chart');
-                        if (!ctx2d) {
+                        if (!certCtx2d) {
                             console.warn('Could not get 2d context for certification timeline canvas');
                         } else {
-                            const certGradient = ctx2d.createLinearGradient(0, 0, 0, 400);
+                            const certGradient = certCtx2d.createLinearGradient(0, 0, 0, 400);
                             certGradient.addColorStop(0, 'rgba(99, 102, 241, 0.5)');
                             certGradient.addColorStop(0.5, 'rgba(99, 102, 241, 0.25)');
                             certGradient.addColorStop(1, 'rgba(99, 102, 241, 0)');
@@ -3877,7 +3877,7 @@ transform: none !important;
             <stop offset="0.07" stop-color="#9c536b" />
             <stop offset="0.98" stop-color="#d98981" />
         </linearGradient>
-        <radialGradient id="bg_grad" cx="375" cy="-30" r="318.69" gradientUnits="userSpaceOnUse">
+        <radialGradient id="bg-grad" cx="375" cy="-30" r="318.69" gradientUnits="userSpaceOnUse">
             <stop offset="0.1" stop-color="#F5C54E" id="sun" />
             <stop offset="0.1" stop-color="#BDE9FF" />
             <stop offset="0.0" stop-color="#A7D8FF" />
@@ -3967,7 +3967,7 @@ transform: none !important;
         <linearGradient id="linear-gradient-4" x1="193.48" y1="508.3" x2="761.05" y2="508.3" xlink:href="#linear-gradient" />
     </defs>
 
-    <rect id="bg" width="750" height="500" opacity="0.8" fill="url(#bg_grad)" />
+    <rect id="bg" width="750" height="500" opacity="0.8" fill="url(#bg-grad)" />
 
     <g id="clouds" fill="#fefefe">
         <path id="cloud4" transform='translate(600 0)'
@@ -4411,7 +4411,7 @@ transform: none !important;
             </div>
             
             <!-- Asset Management -->
-            <div class="project-card completed fade-in" data-image="asset__mgt.jpg">
+            <div class="project-card completed fade-in" data-image="asset-mgt.jpg">
                 <div class="video-bg"></div>
                 <div class="project-header">
                     <div class="project-title-completed">Asset Management</div>
@@ -4988,14 +4988,14 @@ transform: none !important;
         }
         throw new Error('techMasteryChart canvas not found');
       }
-      const ctxT = techMasteryCanvas.getContext('2d');
-      if (!ctxT) {
+      const techMasteryCtx = techMasteryCanvas.getContext('2d');
+      if (!techMasteryCtx) {
         if (window.appLogger) {
           window.appLogger.warn('Charts', 'Failed to get 2D context for techMasteryChart');
         }
         throw new Error('Failed to get 2D context for techMasteryChart');
       }
-      window.techMasteryChart = new Chart(ctxT, {
+      window.techMasteryChart = new Chart(techMasteryCtx, {
         type: 'radar',
         data: {
           labels: ['Frontend Engineering', 'Backend Engineering', 'AI/ML Integration', 'Security & SDLC', 'Cloud Architecture', 'DevOps/MLOps'],
@@ -5132,18 +5132,18 @@ transform: none !important;
         }
         throw new Error('motivationROIChart canvas not found');
       }
-      const ctxROI = motivationROICanvas.getContext('2d');
-      if (!ctxROI) {
+      const motivationROICtx = motivationROICanvas.getContext('2d');
+      if (!motivationROICtx) {
         if (window.appLogger) {
           window.appLogger.warn('Charts', 'Failed to get 2D context for motivationROIChart');
         }
         throw new Error('Failed to get 2D context for motivationROIChart');
       }
-      const gradROI = ctxROI.createLinearGradient(0,0,0,220);
+      const gradROI = motivationROICtx.createLinearGradient(0,0,0,220);
       gradROI.addColorStop(0, toRgba(colLinked, 0.20));
       gradROI.addColorStop(1, toRgba(colLinked, 0.03));
 
-      window.motROIChart = new Chart(ctxROI, {
+      window.motROIChart = new Chart(motivationROICtx, {
         type: 'line',
         data: {
           labels: months,
@@ -5303,8 +5303,8 @@ transform: none !important;
         <i class="fas fa-question"></i>
     </div>
 <script src="assets/js/gsap.min.js"></script>
-<script src="assets/js/ScrollTrigger.min.js"></script>
-<script src="assets/js/ScrollToPlugin.min.js"></script>
+<script src="assets/js/scroll-trigger.min.js"></script>
+<script src="assets/js/scroll-to-plugin.min.js"></script>
  <script>
         document.addEventListener("DOMContentLoaded", () => {
             // Process project thumbnails (prefer static images over videos)
@@ -6192,7 +6192,7 @@ let height = document.querySelector("svg").getBBox().height;
 //let svgCord = screenToSVG(document.querySelector("svg"), window.innerWidth / 2, window.innerHeight / 2);
 
 gsap.set("#h2-1", { opacity: 0 });
-gsap.set("#bg_grad", { attr: { cy: "-50" } });
+gsap.set("#bg-grad", { attr: { cy: "-50" } });
 gsap.set(["#dinoL", "#dinoR"], { y: 80 });
 gsap.set("#dinoL", { x: -10 });
 
@@ -6288,14 +6288,14 @@ ScrollTrigger.create({
 });
 
 //sun motion
-sun.fromTo("#bg_grad", { attr: { cy: "-50" } }, { attr: { cy: "330" } }, 0);
+sun.fromTo("#bg-grad", { attr: { cy: "-50" } }, { attr: { cy: "330" } }, 0);
 //bg change
 //sun.to("#sun", { attr: { offset: "0.15" } }, 0);
-sun.to("#bg_grad stop:nth-child(2)", { attr: { offset: "0.15" } }, 0);
-sun.to("#bg_grad stop:nth-child(3)", { attr: { offset: "0.18" } }, 0);
-sun.to("#bg_grad stop:nth-child(4)", { attr: { offset: "0.25" } }, 0);
-sun.to("#bg_grad stop:nth-child(5)", { attr: { offset: "0.46" } }, 0);
-sun.to("#bg_grad stop:nth-child(6)", { attr: { "stop-color": "#3A7CBF" } }, 0);
+sun.to("#bg-grad stop:nth-child(2)", { attr: { offset: "0.15" } }, 0);
+sun.to("#bg-grad stop:nth-child(3)", { attr: { offset: "0.18" } }, 0);
+sun.to("#bg-grad stop:nth-child(4)", { attr: { offset: "0.25" } }, 0);
+sun.to("#bg-grad stop:nth-child(5)", { attr: { offset: "0.46" } }, 0);
+sun.to("#bg-grad stop:nth-child(6)", { attr: { "stop-color": "#3A7CBF" } }, 0);
 
 /*   SCENE 2  */
 let scene2 = gsap.timeline();
@@ -6360,11 +6360,11 @@ ScrollTrigger.create({
 });
 
 sun2.to("#sun", { attr: { offset: "1.4" } }, 0);
-sun2.to("#bg_grad stop:nth-child(2)", { attr: { offset: "0.7" } }, 0);
+sun2.to("#bg-grad stop:nth-child(2)", { attr: { offset: "0.7" } }, 0);
 sun2.to("#sun", { attr: { "stop-color": "#ffff00" } }, 0);
 sun2.to("#lg4 stop:nth-child(1)", { attr: { "stop-color": "#623951" } }, 0);
 sun2.to("#lg4 stop:nth-child(2)", { attr: { "stop-color": "#261F36" } }, 0);
-sun2.to("#bg_grad stop:nth-child(6)", { attr: { "stop-color": "#1E3A5F" } }, 0);
+sun2.to("#bg-grad stop:nth-child(6)", { attr: { "stop-color": "#1E3A5F" } }, 0);
 
 /* Transition (from Scene2 to Scene3) */
 gsap.set("#scene3", { y: height - 40, visibility: "visible" });
@@ -6378,7 +6378,7 @@ ScrollTrigger.create({
 });
 
 sceneTransition.to("#h2-1", { y: -height - 100, scale: 1.5, transformOrigin: "50% 50%" }, 0);
-sceneTransition.to("#bg_grad", { attr: { cy: "-80" } }, 0.0);
+sceneTransition.to("#bg-grad", { attr: { cy: "-80" } }, 0.0);
 sceneTransition.to("#bg2", { y: 0 }, 0);
 
 /* Scene 3 */
@@ -7908,8 +7908,8 @@ if (!udemyCanvas) {
         window.appLogger.debug('Charts', 'udemyChart canvas not found - skipping chart initialization');
     }
 } else {
-    const ctxUdemy = udemyCanvas.getContext('2d');
-    if (!ctxUdemy) {
+    const udemyCtx = udemyCanvas.getContext('2d');
+    if (!udemyCtx) {
         if (window.appLogger) {
             window.appLogger.warn('Charts', 'Failed to get 2D context for udemyChart');
         }
@@ -7930,10 +7930,10 @@ const totalCourses = categoryData.reduce((sum, val) => sum + val, 0);
 // Sleek modern gradient colors
 const categoryGradients = categoryLabels.map((label, index) => {
   const gradients = [
-    [ctxUdemy.createLinearGradient(0, 0, 300, 300), '#6366f1', '#818cf8'],      // AI/ML - Indigo gradient
-    [ctxUdemy.createLinearGradient(0, 0, 300, 300), '#8b5cf6', '#a78bfa'],      // Full-Stack - Purple gradient
-    [ctxUdemy.createLinearGradient(0, 0, 300, 300), '#06b6d4', '#22d3ee'],      // Cloud/DevOps - Cyan gradient
-    [ctxUdemy.createLinearGradient(0, 0, 300, 300), '#ec4899', '#f472b6']       // Tools/Design - Pink gradient
+    [udemyCtx.createLinearGradient(0, 0, 300, 300), '#6366f1', '#818cf8'],      // AI/ML - Indigo gradient
+    [udemyCtx.createLinearGradient(0, 0, 300, 300), '#8b5cf6', '#a78bfa'],      // Full-Stack - Purple gradient
+    [udemyCtx.createLinearGradient(0, 0, 300, 300), '#06b6d4', '#22d3ee'],      // Cloud/DevOps - Cyan gradient
+    [udemyCtx.createLinearGradient(0, 0, 300, 300), '#ec4899', '#f472b6']       // Tools/Design - Pink gradient
   ];
   const [grad, startColor, endColor] = gradients[index];
   grad.addColorStop(0, startColor);
@@ -7943,7 +7943,7 @@ const categoryGradients = categoryLabels.map((label, index) => {
 
 const categoryBorders = ['#6366f1', '#8b5cf6', '#06b6d4', '#ec4899'];
 
-        window.udemyChartInstance = new Chart(ctxUdemy, {
+        window.udemyChartInstance = new Chart(udemyCtx, {
   type: 'pie',
   data: {
     labels: categoryLabels,
@@ -8170,8 +8170,8 @@ if (!linkedInCanvas) {
         window.appLogger.debug('Charts', 'linkedinChart canvas not found - skipping chart initialization');
     }
 } else {
-    const ctxLinkedIn = linkedInCanvas.getContext('2d');
-    if (!ctxLinkedIn) {
+    const linkedInCtx = linkedInCanvas.getContext('2d');
+    if (!linkedInCtx) {
         if (window.appLogger) {
             window.appLogger.warn('Charts', 'Failed to get 2D context for linkedinChart');
         }
@@ -8192,10 +8192,10 @@ const totalLinkedInHours = linkedInData.reduce((sum, val) => sum + val, 0);
 // Create gradients for LinkedIn chart
 const linkedInGradients = linkedInLabels.map((label, index) => {
   const gradients = [
-    [ctxLinkedIn.createLinearGradient(0, 0, 250, 250), '#6366f1', '#818cf8'],
-    [ctxLinkedIn.createLinearGradient(0, 0, 250, 250), '#06b6d4', '#22d3ee'],
-    [ctxLinkedIn.createLinearGradient(0, 0, 250, 250), '#8b5cf6', '#a78bfa'],
-    [ctxLinkedIn.createLinearGradient(0, 0, 250, 250), '#ec4899', '#f472b6']
+    [linkedInCtx.createLinearGradient(0, 0, 250, 250), '#6366f1', '#818cf8'],
+    [linkedInCtx.createLinearGradient(0, 0, 250, 250), '#06b6d4', '#22d3ee'],
+    [linkedInCtx.createLinearGradient(0, 0, 250, 250), '#8b5cf6', '#a78bfa'],
+    [linkedInCtx.createLinearGradient(0, 0, 250, 250), '#ec4899', '#f472b6']
   ];
   const [grad, startColor, endColor] = gradients[index];
   grad.addColorStop(0, startColor);
@@ -8205,7 +8205,7 @@ const linkedInGradients = linkedInLabels.map((label, index) => {
 
 const linkedInBorders = ['#6366f1', '#06b6d4', '#8b5cf6', '#ec4899'];
 
-        window.linkedinChartInstance = new Chart(ctxLinkedIn, {
+        window.linkedinChartInstance = new Chart(linkedInCtx, {
   type: 'doughnut',
   data: {
     labels: linkedInLabels,
@@ -8408,16 +8408,16 @@ if (!hiringCanvas) {
         window.appLogger.debug('Charts', 'hiringTrendsChart canvas not found - skipping chart initialization');
     }
 } else {
-    const ctxHiring = hiringCanvas.getContext('2d');
-    if (!ctxHiring) {
+    const hiringCtx = hiringCanvas.getContext('2d');
+    if (!hiringCtx) {
         if (window.appLogger) {
             window.appLogger.warn('Charts', 'Failed to get 2D context for hiringTrendsChart');
         }
     } else {
 const hiringGradients = [
-  ctxHiring.createLinearGradient(0, 0, 0, 400),
-  ctxHiring.createLinearGradient(0, 0, 0, 400),
-  ctxHiring.createLinearGradient(0, 0, 0, 400)
+  hiringCtx.createLinearGradient(0, 0, 0, 400),
+  hiringCtx.createLinearGradient(0, 0, 0, 400),
+  hiringCtx.createLinearGradient(0, 0, 0, 400)
 ];
 hiringGradients[0].addColorStop(0, 'rgba(99, 102, 241, 1)');
 hiringGradients[0].addColorStop(1, 'rgba(139, 92, 246, 0.7)');
@@ -8426,7 +8426,7 @@ hiringGradients[1].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
 hiringGradients[2].addColorStop(0, 'rgba(205, 92, 92, 1)');
 hiringGradients[2].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
 
-        new Chart(ctxHiring, {
+        new Chart(hiringCtx, {
   type: 'bar',
   data: {
     labels: ['Work Experience', 'Skills Assessments', 'University Degree'],
@@ -9128,7 +9128,7 @@ hiringGradients[2].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
             <span>Skills Overview</span>
         </div>
         <div class="skills-matrix-embed" style="position: relative; padding-top: 56.25%; border-radius: var(--panel-radius, 18px); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05); background: transparent;">
-            <iframe src="tref_refactored.html"
+            <iframe src="tref-refactored.html"
                     title="Skills Overview"
                     loading="lazy"
                     allowfullscreen
