@@ -5093,14 +5093,14 @@ transform: none !important;
         if (window.appLogger) {
           window.appLogger.debug('Charts', 'motivationROIChart canvas not found - skipping chart initialization');
         }
-        throw new Error('motivationROIChart canvas not found');
+        return; // Skip chart initialization if canvas not found
       }
       const motivationROICtx = motivationROICanvas.getContext('2d');
       if (!motivationROICtx) {
         if (window.appLogger) {
           window.appLogger.warn('Charts', 'Failed to get 2D context for motivationROIChart');
         }
-        throw new Error('Failed to get 2D context for motivationROIChart');
+        return; // Skip chart initialization if context can't be obtained
       }
       const gradROI = motivationROICtx.createLinearGradient(0,0,0,220);
       gradROI.addColorStop(0, toRgba(colLinked, 0.20));
