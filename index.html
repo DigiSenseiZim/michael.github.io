@@ -149,13 +149,22 @@
                     const initialized = {
                         stats: !parsedData.stats,
                         visitors: !parsedData.visitors,
-                        messages: !parsedData.messages,
+                        messages: !parsedData.messages || !Array.isArray(parsedData.messages),
                         analytics: !parsedData.analytics
                     };
                     
                     if (!parsedData.stats) parsedData.stats = { totalVisits: 0, uniqueVisitors: 0, firstVisit: '', lastVisit: '' };
                     if (!parsedData.visitors) parsedData.visitors = {};
-                    if (!parsedData.messages) parsedData.messages = [];
+                    
+                    // Ensure messages is always an array (critical for message retention)
+                    if (!parsedData.messages || !Array.isArray(parsedData.messages)) {
+                        window.appLogger.warn('StorageAPI', 'Messages array missing or invalid, initializing empty array', {
+                            messagesType: typeof parsedData.messages,
+                            messagesValue: parsedData.messages
+                        });
+                        parsedData.messages = [];
+                    }
+                    
                     if (!parsedData.analytics) parsedData.analytics = {
                         visitsByDate: {}, visitsByHour: {}, visitsByReferrer: {},
                         visitsByDevice: {}, visitsByCountry: {}
@@ -168,7 +177,8 @@
                     window.appLogger.info('StorageAPI', 'Data loaded successfully', {
                         totalVisits: parsedData.stats?.totalVisits || 0,
                         uniqueVisitors: parsedData.stats?.uniqueVisitors || 0,
-                        messageCount: parsedData.messages?.length || 0
+                        messageCount: parsedData.messages?.length || 0,
+                        messagesIsArray: Array.isArray(parsedData.messages)
                     });
                     
                     window.appLogger.traceEnd('StorageAPI', 'load', { success: true });
@@ -188,6 +198,37 @@
                     messageCount: data.messages?.length || 0,
                     visitorCount: Object.keys(data.visitors || {}).length
                 });
+                
+                // Validate data structure before saving (ensure message retention)
+                if (!data) {
+                    const error = new Error('Cannot save: data is null or undefined');
+                    error.name = 'ValidationError';
+                    window.appLogger.error('StorageAPI', 'Save validation failed', { error: error.message });
+                    throw error;
+                }
+                
+                // Ensure messages array exists and is preserved
+                if (!Array.isArray(data.messages)) {
+                    window.appLogger.warn('StorageAPI', 'Messages array missing or invalid, initializing empty array', {
+                        messagesType: typeof data.messages,
+                        messagesValue: data.messages
+                    });
+                    data.messages = [];
+                }
+                
+                // Ensure other required structures exist
+                if (!data.stats) {
+                    data.stats = { totalVisits: 0, uniqueVisitors: 0, firstVisit: '', lastVisit: '' };
+                }
+                if (!data.visitors) {
+                    data.visitors = {};
+                }
+                if (!data.analytics) {
+                    data.analytics = {
+                        visitsByDate: {}, visitsByHour: {}, visitsByReferrer: {},
+                        visitsByDevice: {}, visitsByCountry: {}
+                    };
+                }
                 
                 // Use hardcoded config
                 const GITHUB_CONFIG = window.GITHUB_CONFIG;
@@ -6505,6 +6546,12 @@ const launched = [0, 0, 0, 1, 2, 3, 3, 4];
     return g;
   }
 
+  // Check if Chart.js is loaded before creating chart
+  if (typeof Chart === 'undefined') {
+    console.error('Chart.js is not loaded - cannot initialize innovation chart');
+    return;
+  }
+
   // Create chart
   window.innovationChartInstance = new Chart(ctx, {
     type: 'line',
@@ -7018,11 +7065,8 @@ if (!skillsRadarCanvas) {
         event.native.target.style.cursor = activeElements.length > 0 ? 'pointer' : 'default';
       }
     }
-  },
-        });
-            }
-        }
-    }
+  });
+})();
 
 // Optional: focus keyboard support - simple example
 const skillsRadarForTab = document.getElementById('skillsRadar');
@@ -7329,6 +7373,12 @@ if (window.knowledgeChartInstance) {
   try { window.knowledgeChartInstance.destroy(); } catch(e) { console.warn('previous chart destroy failed', e); }
 }
 
+// Check if Chart.js is loaded before proceeding
+if (typeof Chart === 'undefined') {
+  console.error('Chart.js is not loaded - cannot initialize knowledge charts');
+  throw new Error('Chart.js not loaded');
+}
+
 try {
   // Make sure canvas exists and parent has height
   const canvas = document.getElementById('knowledgeChart');
@@ -7416,6 +7466,12 @@ try {
     }
     meta.data[idx].hidden = !currentlyHidden;
     chart.update();
+  }
+
+  // Check if Chart.js is loaded before creating chart
+  if (typeof Chart === 'undefined') {
+    console.error('Chart.js is not loaded - cannot initialize knowledge chart');
+    return;
   }
 
   // Create the chart
@@ -8489,7 +8545,8 @@ hiringGradients[2].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
 });
 </script>
 
-<script src="assets/js/d3.v7.min.js">
+<script src="assets/js/d3.v7.min.js"></script>
+<script>
         const skillsData = {
             name: "Michael",
             children: [
@@ -9291,6 +9348,15 @@ hiringGradients[2].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
                         };
                     }
                     
+                    // Ensure messages array exists and is preserved (critical for message retention)
+                    if (!Array.isArray(data.messages)) {
+                        window.appLogger.warn('VisitorTracker', 'Messages array missing or invalid, initializing empty array', {
+                            messagesType: typeof data.messages,
+                            messagesValue: data.messages
+                        });
+                        data.messages = [];
+                    }
+                    
                     const visitorMeta = getVisitorMetadata();
                     const visitorId = visitorMeta.fingerprint;
                     const today = new Date().toISOString().split('T')[0];
@@ -9361,14 +9427,29 @@ hiringGradients[2].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
                     const device = /Mobile|Android|iPhone|iPad/.test(visitorMeta.userAgent) ? 'mobile' : 'desktop';
                     data.analytics.visitsByDevice[device] = (data.analytics.visitsByDevice[device] || 0) + 1;
                     
-                    // Save updated data
-                    window.appLogger.debug('VisitorTracker', 'Saving updated visitor data');
+                    // Ensure messages array is preserved (safeguard for message retention)
+                    if (!Array.isArray(data.messages)) {
+                        window.appLogger.warn('VisitorTracker', 'Messages array missing or invalid, initializing empty array', {
+                            messagesType: typeof data.messages,
+                            messagesValue: data.messages
+                        });
+                        data.messages = [];
+                    }
+                    
+                    // Save updated data (save function will also validate and preserve messages)
+                    window.appLogger.debug('VisitorTracker', 'Saving updated visitor data', {
+                        messageCount: data.messages?.length || 0,
+                        totalVisits: data.stats?.totalVisits || 0,
+                        uniqueVisitors: data.stats?.uniqueVisitors || 0
+                    });
                     const saveResult = await window.storageAPI.save(data);
                     
                     if (!saveResult) {
                         window.appLogger.error('VisitorTracker', 'Failed to save visitor data');
                     } else {
-                        window.appLogger.info('VisitorTracker', 'Visitor data saved successfully');
+                        window.appLogger.info('VisitorTracker', 'Visitor data saved successfully', {
+                            messageCount: data.messages?.length || 0
+                        });
                     }
                     
                     // Update display
@@ -9663,6 +9744,18 @@ hiringGradients[2].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
                         };
                     }
                     
+                    // Ensure messages array exists and is an array (safeguard for data retention)
+                    if (!Array.isArray(data.messages)) {
+                        window.appLogger.warn('MessageForm', 'Messages array missing or invalid, initializing', {
+                            messagesType: typeof data.messages,
+                            messagesValue: data.messages
+                        });
+                        data.messages = [];
+                    }
+                    
+                    // Preserve existing message count for logging
+                    const existingMessageCount = data.messages.length;
+                    
                     // Add message
                     const messageData = {
                         id: 'msg_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
@@ -9679,13 +9772,17 @@ hiringGradients[2].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
                         messageId: messageData.id,
                         nameLength: name.length,
                         emailLength: email.length,
-                        messageLength: message.length
+                        messageLength: message.length,
+                        existingMessageCount: existingMessageCount
                     });
                     
+                    // Add message to array (preserving all existing messages)
                     data.messages.push(messageData);
                     window.appLogger.info('MessageForm', 'Message added to data', {
+                        existingMessages: existingMessageCount,
                         totalMessages: data.messages.length,
-                        messageId: messageData.id
+                        messageId: messageData.id,
+                        messageRetained: existingMessageCount === data.messages.length - 1
                     });
                     
                     // Save
