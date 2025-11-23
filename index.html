@@ -4990,7 +4990,7 @@ transform: none !important;
         if (window.appLogger) {
           window.appLogger.debug('Charts', 'techMasteryChart canvas not found - skipping chart initialization');
         }
-        throw new Error('techMasteryChart canvas not found');
+        return; // Skip chart initialization if canvas not found
       }
       const techMasteryCtx = techMasteryCanvas.getContext('2d');
       if (!techMasteryCtx) {
@@ -7066,7 +7066,9 @@ if (!skillsRadarCanvas) {
       }
     }
   });
-})();
+    }
+  }
+}
 
 // Optional: focus keyboard support - simple example
 const skillsRadarForTab = document.getElementById('skillsRadar');
@@ -7471,11 +7473,9 @@ try {
   // Check if Chart.js is loaded before creating chart
   if (typeof Chart === 'undefined') {
     console.error('Chart.js is not loaded - cannot initialize knowledge chart');
-    return;
-  }
-
-  // Create the chart
-  window.knowledgeChartInstance = new Chart(ctx, {
+  } else {
+    // Create the chart
+    window.knowledgeChartInstance = new Chart(ctx, {
     type: 'doughnut',
     data: {
       labels,
@@ -8543,6 +8543,9 @@ hiringGradients[2].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
     }
   }
 });
+    }
+  }
+}
 </script>
 
 <script src="assets/js/d3.v7.min.js"></script>
@@ -8629,8 +8632,13 @@ hiringGradients[2].addColorStop(1, 'rgba(160, 82, 45, 0.7)');
             }
             
             const container = d3.select("#skills-orbit");
-            const width = document.getElementById('skills-orbit-container').offsetWidth;
-            const height = document.getElementById('skills-orbit-container').offsetHeight;
+            const containerElement = document.getElementById('skills-orbit-container');
+            if (!containerElement) {
+                console.error('skills-orbit-container element not found');
+                return;
+            }
+            const width = containerElement.offsetWidth;
+            const height = containerElement.offsetHeight;
 
             const svg = container.append("svg")
                 .attr("width", width)
