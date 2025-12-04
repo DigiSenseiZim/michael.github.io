@@ -85,10 +85,18 @@
 
         // GitHub Gist Storage Configuration
         window.GITHUB_CONFIG = {
-            token: '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', // Paste your CLASSIC token from Step 1 (starts with ghp_)
-            gistId: 'f45f4c36b5a819e14dd53feb58ae0888',        // Paste your Gist ID from Step 2
+            token: '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'.trim(), // Paste your CLASSIC token from Step 1 (starts with ghp_)
+            gistId: 'f45f4c36b5a819e14dd53feb58ae0888'.trim(),        // Paste your Gist ID from Step 2
             username: 'DigiSenseiZim'       // Your GitHub username
         };
+        
+        // Debug: Verify token format (check console for details)
+        console.log('🔍 Token Debug:', {
+            tokenLength: window.GITHUB_CONFIG.token.length,
+            tokenStart: window.GITHUB_CONFIG.token.substring(0, 10) + '...',
+            gistIdLength: window.GITHUB_CONFIG.gistId.length,
+            gistIdFormat: window.GITHUB_CONFIG.gistId.length === 32 ? '✅ Valid' : '❌ Invalid'
+        });
 
         window.appLogger.info('App', 'Application initializing', { 
             config: { 
