@@ -641,29 +641,27 @@
                         },
                         textShadow: 'var(--text-shadow-complete)'
                     }
-                }
-            },
-            plugins: {
-                legend: {
-                    labels: {
-                        color: '#a277ff',
-                        font: {
-                            size: 14,
-                            weight: 'bold'
-                        },
-                        textShadow: 'var(--text-shadow-complete)'
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#a277ff',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                            textShadow: 'var(--text-shadow-complete)'
+                        }
                     }
                 }
-                }
-            }
             });
-            window.appLogger.info('Charts', 'Tech mastery chart created successfully');
-        }
-            } catch (error) {
-                window.appLogger.error('Charts', 'Error initializing charts', error);
-            }
-        
-            window.appLogger.info('App', 'Chart initialization complete');
+            window.appLogger.info('Charts', 'All charts initialized successfully');
+    } catch (error) {
+        window.appLogger.error('Charts', 'Error initializing charts', error);
+    }
+    
+    window.appLogger.info('App', 'Chart initialization complete');
             
             // Filtering logic (outside chart initialization)
             window.appLogger.debug('App', 'Initializing project filtering logic');
