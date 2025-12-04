@@ -2,76 +2,56 @@
 
 A modern, interactive portfolio website with 3D visualizations, analytics, and GitHub Gist-based data storage.
 
-## 🚀 Quick Start (Plug & Play)
+## 🚀 Quick Start
 
-### Prerequisites
-- A GitHub account
-- A GitHub Personal Access Token with `gist` scope
-- A GitHub Gist ID (create a gist with a file named `portfolio-data.json`)
-
-### Setup Steps
-
+### Option 1: Local Development (No Setup Required)
 1. **Clone or download this repository**
    ```bash
    git clone <repository-url>
    cd portfolio
    ```
 
-2. **Configure GitHub Gist Storage**
-   - Copy `config.example.js` to `config.js`:
-     ```bash
-     cp config.example.js config.js
-     ```
-   - Edit `config.js` and fill in your credentials:
-     ```javascript
-     window.GITHUB_CONFIG = {
-         token: 'your_github_token_here',  // GitHub Personal Access Token
-         gistId: 'your_gist_id_here',      // Your Gist ID
-         username: 'your_username_here'    // Your GitHub username
-     };
-     ```
-
-3. **Open in Browser**
+2. **Open in Browser**
    - Simply open `index.html` in your web browser
-   - Or deploy to GitHub Pages (see below)
+   - The portfolio will work locally without any configuration
+
+### Option 2: Enable Visitor Tracking & Contact Form (Optional)
+If you want visitor analytics and the contact form to work, you'll need to set up GitHub Gist storage:
+
+**Prerequisites:**
+- A GitHub account
+- A GitHub Personal Access Token with `gist` scope
+- A GitHub Gist ID (create a gist with a file named `portfolio-data.json`)
+
+**Setup:**
+See detailed instructions in [`docs/VISITOR_COUNTER_SETUP.md`](docs/VISITOR_COUNTER_SETUP.md)
 
 ## 📁 Project Structure
 
 ```
 portfolio/
 ├── index.html              # Main application file
-├── config.js              # Configuration (gitignored - add your credentials)
-├── config.example.js      # Configuration template
+├── tref_refactored.html   # 3D star systems visualization
 ├── storage-api.js         # GitHub Gist storage module
 ├── README.md              # This file
-├── SEPARATION_OF_CONCERNS.md  # Architecture documentation
+├── docs/                  # Documentation
+│   ├── SEPARATION_OF_CONCERNS.md    # Architecture documentation
+│   ├── REFACTORING_SUMMARY.md       # Refactoring history
+│   └── VISITOR_COUNTER_SETUP.md     # Setup guide for visitor tracking
 ├── assets/                # Static assets
 │   ├── css/              # Stylesheets
-│   ├── js/               # Third-party libraries
-│   ├── images/           # Image assets
-│   └── fonts/            # Custom fonts
-└── models/               # 3D model files
+│   ├── js/               # Third-party libraries (D3, Chart.js, GSAP)
+│   ├── images/           # Project images
+│   ├── fonts/            # Custom fonts
+│   └── marquee/          # Marquee background images
+└── models/               # 3D model files (.glb format)
 ```
 
-## 🔧 Configuration
+## 🔧 Configuration (Optional)
 
-### Getting a GitHub Personal Access Token
+The portfolio works out of the box without any configuration. However, to enable visitor tracking and the contact form, you need to set up GitHub Gist storage.
 
-1. Go to GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)
-2. Click "Generate new token (classic)"
-3. Give it a name (e.g., "Portfolio Gist Access")
-4. Select the `gist` scope
-5. Click "Generate token"
-6. Copy the token (starts with `ghp_`)
-
-### Creating a GitHub Gist
-
-1. Go to [gist.github.com](https://gist.github.com)
-2. Create a new gist
-3. Name the file `portfolio-data.json`
-4. Add initial content: `{}`
-5. Click "Create public gist"
-6. Copy the Gist ID from the URL (e.g., `https://gist.github.com/username/4f2edb397d263d098ea70ed17b0df8e6` → ID is `4f2edb397d263d098ea70ed17b0df8e6`)
+**For detailed setup instructions, see:** [`docs/VISITOR_COUNTER_SETUP.md`](docs/VISITOR_COUNTER_SETUP.md)
 
 ## 🌐 GitHub Pages Deployment
 
@@ -82,7 +62,7 @@ portfolio/
 5. Click Save
 6. Your site will be available at `https://yourusername.github.io/repository-name/`
 
-**Important:** Make sure `config.js` is in `.gitignore` to avoid committing your token!
+**Note:** The portfolio will work on GitHub Pages even without setting up visitor tracking. Configure GitHub Gist storage only if you want analytics and contact form functionality.
 
 ## 📱 Features
 
@@ -101,15 +81,17 @@ The portfolio is optimized for mobile devices:
 
 ## 🔒 Security
 
-- `config.js` is gitignored and should never be committed
-- Use GitHub Personal Access Tokens with minimal required scopes
+If you set up visitor tracking:
+- Never commit sensitive credentials to your repository
+- Use GitHub Personal Access Tokens with minimal required scopes (only `gist`)
 - Rotate tokens regularly
-- Never share your `config.js` file
+- Never share your configuration details publicly
 
 ## 📚 Documentation
 
-- See `SEPARATION_OF_CONCERNS.md` for architecture details
-- See `TOKEN_SETUP_WALKTHROUGH.md` for detailed token setup instructions
+- [`docs/SEPARATION_OF_CONCERNS.md`](docs/SEPARATION_OF_CONCERNS.md) - Architecture details
+- [`docs/REFACTORING_SUMMARY.md`](docs/REFACTORING_SUMMARY.md) - Refactoring history
+- [`docs/VISITOR_COUNTER_SETUP.md`](docs/VISITOR_COUNTER_SETUP.md) - Visitor tracking setup guide
 
 ## 🛠️ Customization
 
@@ -130,21 +112,23 @@ Edit CSS variables in `index.html`:
 
 ## 🐛 Troubleshooting
 
-### Storage API Not Working
+### Portfolio Not Loading
+- Clear browser cache (Ctrl+Shift+R or Cmd+Shift+R)
+- Check browser console (F12) for JavaScript errors
+- Ensure all asset files are present in their directories
+- Try opening in a different browser
+
+### Visitor Counter Not Working
+- The counter requires GitHub Gist setup (see `docs/VISITOR_COUNTER_SETUP.md`)
+- Check browser console for API errors
 - Verify your GitHub token has the `gist` scope
-- Check that the Gist ID is correct
 - Ensure the Gist file is named `portfolio-data.json`
-- Check browser console for error messages
 
-### Charts Not Displaying
-- Ensure Chart.js is loaded (check network tab)
-- Verify canvas elements exist in the DOM
-- Check browser console for JavaScript errors
-
-### Mobile Layout Issues
-- Clear browser cache
-- Check viewport meta tag is present
-- Verify responsive CSS is loading
+### 3D Visualization Not Loading
+- Ensure all `.glb` model files are in the `models/` directory
+- Check browser console for loading errors
+- Verify your browser supports WebGL
+- Try disabling browser extensions that might block WebGL
 
 ## 📄 License
 

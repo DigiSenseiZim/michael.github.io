@@ -3,6 +3,16 @@
 <head>
   <meta charset="utf-8">
   <title>Three.js Categories Star Systems</title>
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4B17BR1ZSB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4B17BR1ZSB');
+  </script>
+  
   <style>
     /* Custom fonts */
     @font-face { font-family: 'Nebulax'; src: url('assets/fonts/Nebulax-3lqLp.ttf'); font-display: swap; }
@@ -597,6 +607,24 @@
     let marqueeInitialized = false;
     let experienceMode = 'pending';
 
+    // Raycaster and tooltip (needed by many functions below)
+    const raycaster = new THREE.Raycaster();
+    raycaster.params.Line = raycaster.params.Line || {};
+    raycaster.params.Line.threshold = 0.2;
+    const mouse = new THREE.Vector2();
+    const tooltip = document.getElementById('tooltip');
+
+    // Hover state variables (needed by hover functions)
+    const HOVER_HOLD_DURATION = 3000;
+    const HOVER_TOOLTIP_OFFSET = 18;
+    let tooltipHideTimeout = null;
+    let hoveredSystemGroup = null;
+    let isHovering = false;
+    let hoveredObj = null;
+    let pendingPointerEvent = null;
+    let pointerFrameRequested = false;
+    let lastPointerWasTouch = false;
+
     const updateProgress = (itemsLoaded, itemsTotal) => {
       if (!progressBarFill || !progressPercent) return;
       const total = itemsTotal > 0 ? itemsTotal : 1;
@@ -921,11 +949,6 @@
       totalPlanets: categories.reduce((sum, cat) => sum + cat.certifications.length, 0),
       loadedPlanets: 0
     };
-
-    const HOVER_HOLD_DURATION = 3000;
-    const HOVER_TOOLTIP_OFFSET = 18;
-    let tooltipHideTimeout = null;
-    let hoveredSystemGroup = null;
 
     const hashString = str => {
       let hash = 0;
@@ -1293,6 +1316,211 @@
     const starGroup = new THREE.Group();
     scene.add(starGroup);
 
+    // Mapping for planet models by club
+    const clubPlanetModels = {
+      'Web Development': './models/planet_design_club.glb',
+      'Strategy & Design': './models/planet_code_club.glb',
+      'Security': './models/planet_security_club.glb',
+      'Programming': './models/planet_programming_club.glb',
+      'Neuron (AI & ML)': './models/planet_ai_club.glb',
+      'AI & ML': './models/planet_ai_club.glb',
+      'Cloud & Data Engineering': './models/planet_data_club.glb',
+      'DevOps & Tools': './models/planet_devops_club.glb',
+      'Data Analysis': './models/planet_data_club.glb',
+      'Databases & SQL': './models/planet_database_club.glb',
+      'Soft Skills': './models/planet_soft_skills_club.glb',
+      'Business & ERP': './models/planet_business_club.glb'
+    };
+    const DEFAULT_PLANET_MODEL = './models/planet_default.glb';
+    const PLANET_TARGET_SIZE = 0.9;
+    const BASE_ROTATION_SPEED = 0.12;
+    const ROTATION_SMOOTHING = 5.0;
+    const coarsePointerQuery = window.matchMedia('(pointer: coarse)');
+    const narrowScreenQuery = window.matchMedia('(max-width: 768px)');
+    let mobileCoursePool = [];
+
+    const SIMULATED_HOVER_VISIBLE_DURATION = 7000;
+    const SIMULATED_HOVER_INTERVAL = 2000;
+    let simulatedHoverLoopHandle = null;
+    let simulatedHoverHideHandle = null;
+    let simulatedHoverActive = false;
+
+    const CATEGORY_VALUE_SNIPPETS = {
+      'Web Development': "Transforms concepts into polished interfaces that load fast, feel intuitive, and reinforce the developer's obsession with front-of-funnel quality.",
+      'Strategy & Design': "Sharpens the product sense needed to align engineering choices with business impact, keeping delivery outcomes customer-led.",
+      'Security': "Layers in hardened delivery practices so every build ships with resilient guardrails and fewer downstream vulnerabilities.",
+      'Programming': "Expands language depth and algorithmic thinking, giving the developer more options when troubleshooting complex systems.",
+      'AI & ML': "Keeps the developer fluent in emerging AI patterns so human workflows can be amplified with pragmatic intelligence.",
+      'Neuron (AI & ML)': "Turns ML theory into deployable accelerators that unlock smarter automation throughout the stack.",
+      'Cloud & Data Engineering': "Elevates data plumbing and cloud resilience, ensuring new features ride on reliable, observable infrastructure.",
+      'DevOps & Tools': "Tightens build, release, and monitoring loops so product increments move from commit to customer with fewer manual hops.",
+      'Data Analysis': "Injects evidence-based storytelling into delivery, letting product decisions ride on real insight rather than intuition.",
+      'Databases & SQL': "Improves the fidelity of data stores powering products, reducing latency, drift, and noisy handoffs between services.",
+      'Soft Skills': "Reinforces the human layer of leadership—clear comms, coaching, and stakeholder steering—so delivery momentum never stalls.",
+      'Business & ERP': "Connects engineering throughput to commercial levers, helping technical decisions translate into revenue and efficiency gains.",
+      default: "Adds another layer of craft to the developer's toolkit, compounding into faster launches, steadier systems, and happier teams."
+    };
+
+    const buildMobileCoursePool = () => {
+      const pool = [];
+      categories.forEach(cat => {
+        if (!Array.isArray(cat.certifications) || !cat.certifications.length) return;
+        const colorHex = `#${new THREE.Color(cat.color).getHexString()}`;
+        cat.certifications.forEach(cert => {
+          pool.push({
+            title: cert.title,
+            category: cat.name,
+            color: colorHex
+          });
+        });
+      });
+      return pool;
+    };
+    mobileCoursePool = buildMobileCoursePool();
+
+    const manageSimulatedHoverLoop = () => {
+      if (document.hidden || experienceMode !== 'galaxy') {
+        stopSimulatedHoverLoop();
+      } else {
+        beginSimulatedHoverLoop();
+      }
+    };
+
+    const stopSimulatedHoverLoop = () => {
+      if (simulatedHoverLoopHandle) {
+        clearInterval(simulatedHoverLoopHandle);
+        simulatedHoverLoopHandle = null;
+      }
+      hideSimulatedHover();
+    };
+
+    const beginSimulatedHoverLoop = () => {
+      if (experienceMode !== 'galaxy' || simulatedHoverLoopHandle || !mobileCoursePool.length) return;
+      const kickoffDelay = 600 + Math.random() * 800;
+      simulatedHoverLoopHandle = setInterval(() => {
+        if (!simulatedHoverActive) {
+          showSimulatedHover();
+        }
+      }, SIMULATED_HOVER_INTERVAL);
+      setTimeout(() => {
+        if (!simulatedHoverActive) {
+          showSimulatedHover();
+        }
+      }, kickoffDelay);
+    };
+
+    const hideSimulatedHover = () => {
+      if (simulatedHoverHideHandle) {
+        clearTimeout(simulatedHoverHideHandle);
+        simulatedHoverHideHandle = null;
+      }
+      if (tooltip && !isHovering) {
+        tooltip.classList.remove('visible');
+        tooltip.style.transform = 'translate3d(-9999px, -9999px, 0)';
+      }
+      simulatedHoverActive = false;
+    };
+
+    const showSimulatedHover = () => {
+      if (experienceMode !== 'galaxy' || !tooltip || !mobileCoursePool.length || document.hidden) return;
+      if (tooltipHideTimeout) {
+        clearTimeout(tooltipHideTimeout);
+        tooltipHideTimeout = null;
+      }
+      hideSimulatedHover();
+      const randomIndex = Math.floor(Math.random() * mobileCoursePool.length);
+      const selected = mobileCoursePool[randomIndex];
+      const color = new THREE.Color(selected.color);
+      tooltip.style.setProperty('--tooltip-r', Math.floor(color.r * 255));
+      tooltip.style.setProperty('--tooltip-g', Math.floor(color.g * 255));
+      tooltip.style.setProperty('--tooltip-b', Math.floor(color.b * 255));
+
+      const planetClass = getPlanetClass(selected.title);
+      updateTooltipContent(selected.title, planetClass);
+
+      const tooltipWidth = 220;
+      const tooltipHeight = 140;
+      const padding = 80;
+      const availableWidth = Math.max(window.innerWidth - tooltipWidth - padding * 2, 0);
+      const availableHeight = Math.max(window.innerHeight - tooltipHeight - padding * 2, 0);
+      const offsetX = padding + Math.random() * (availableWidth || 1);
+      const offsetY = padding + Math.random() * (availableHeight || 1);
+      tooltip.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0)`;
+      tooltip.classList.add('visible');
+      simulatedHoverActive = true;
+
+      simulatedHoverHideHandle = setTimeout(() => {
+        hideSimulatedHover();
+      }, SIMULATED_HOVER_VISIBLE_DURATION);
+    };
+
+    const attachMediaListener = (query, handler) => {
+      if (!query) return;
+      if (typeof query.addEventListener === 'function') {
+        query.addEventListener('change', handler);
+      } else if (typeof query.addListener === 'function') {
+        query.addListener(handler);
+      }
+    };
+    attachMediaListener(coarsePointerQuery, () => {
+      if (experienceMode === 'galaxy') {
+        manageSimulatedHoverLoop();
+      }
+    });
+    attachMediaListener(narrowScreenQuery, () => {
+      if (experienceMode === 'galaxy') {
+        manageSimulatedHoverLoop();
+      }
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (experienceMode === 'galaxy') {
+        manageSimulatedHoverLoop();
+      }
+    });
+
+    // Tooltip helper variables and functions
+    let lastTooltipTitle = '';
+    let lastTooltipClass = '';
+
+    const getPlanetClass = title => {
+      if (!title) return '';
+      const normalized = title.toLowerCase();
+      if (normalized.includes('web')) return 'planet-web';
+      if (normalized.includes('design')) return 'planet-design';
+      if (normalized.includes('security')) return 'planet-security';
+      if (normalized.includes('programming')) return 'planet-programming';
+      if (normalized.includes('ai')) return 'planet-ai';
+      if (normalized.includes('cloud')) return 'planet-cloud';
+      if (normalized.includes('devops')) return 'planet-devops';
+      if (normalized.includes('data') && !normalized.includes('database')) return 'planet-data';
+      if (normalized.includes('database')) return 'planet-database';
+      if (normalized.includes('soft skills')) return 'planet-softskills';
+      if (normalized.includes('business')) return 'planet-business';
+      return '';
+    };
+
+    const updateTooltipContent = (title, planetClass) => {
+      if (!tooltip) return;
+      const safeTitle = title || 'No Title';
+      const safeClass = planetClass || '';
+      const valueSnippet = getCourseValueSnippet(safeTitle);
+      if (safeTitle !== lastTooltipTitle || safeClass !== lastTooltipClass) {
+        tooltip.innerHTML = `
+          <div class="holographic-tooltip ${safeClass}">
+            <div class="tooltip-outline">
+              <div class="tooltip-title">${escapeHtml(safeTitle)}</div>
+              <div class="tooltip-value-pane">
+                <div class="value-label">Value</div>
+                <div class="value-copy">${escapeHtml(valueSnippet)}</div>
+              </div>
+            </div>
+          </div>`;
+        lastTooltipTitle = safeTitle;
+        lastTooltipClass = safeClass;
+      }
+      tooltip.classList.add('visible');
+    };
+
     // Flag to track if models have been loaded
     let modelsLoaded = false;
 
@@ -1382,175 +1610,6 @@
         scene.add(halo);
       }
     );
-
-    // Raycaster and tooltip
-    const raycaster = new THREE.Raycaster();
-    raycaster.params.Line = raycaster.params.Line || {};
-    raycaster.params.Line.threshold = 0.2;
-    const mouse = new THREE.Vector2();
-    const tooltip = document.getElementById('tooltip');
-
-    // Mapping for planet models by club
-    const clubPlanetModels = {
-      'Web Development': './models/planet_design_club.glb',
-      'Strategy & Design': './models/planet_code_club.glb',
-      'Security': './models/planet_security_club.glb',
-      'Programming': './models/planet_programming_club.glb',
-      'Neuron (AI & ML)': './models/planet_ai_club.glb',
-      'AI & ML': './models/planet_ai_club.glb',
-      'Cloud & Data Engineering': './models/planet_cloud_club.glb',
-      'DevOps & Tools': './models/planet_devops_club.glb',
-      'Data Analysis': './models/planet_data_club.glb',
-      'Databases & SQL': './models/planet_database_club.glb',
-      'Soft Skills': './models/planet_soft_skills_club.glb',
-      'Business & ERP': './models/planet_business_club.glb'
-    };
-    const DEFAULT_PLANET_MODEL = './models/planet_default.glb';
-    const PLANET_TARGET_SIZE = 0.9;
-    const BASE_ROTATION_SPEED = 0.12;
-    const ROTATION_SMOOTHING = 5.0;
-    const coarsePointerQuery = window.matchMedia('(pointer: coarse)');
-    const narrowScreenQuery = window.matchMedia('(max-width: 768px)');
-    let mobileCoursePool = [];
-
-    const SIMULATED_HOVER_VISIBLE_DURATION = 7000;
-    const SIMULATED_HOVER_INTERVAL = 2000;
-    let simulatedHoverLoopHandle = null;
-    let simulatedHoverHideHandle = null;
-    let simulatedHoverActive = false;
-
-    const CATEGORY_VALUE_SNIPPETS = {
-      'Web Development': 'Transforms concepts into polished interfaces that load fast, feel intuitive, and reinforce the developer’s obsession with front-of-funnel quality.',
-      'Strategy & Design': 'Sharpens the product sense needed to align engineering choices with business impact, keeping delivery outcomes customer-led.',
-      'Security': 'Layers in hardened delivery practices so every build ships with resilient guardrails and fewer downstream vulnerabilities.',
-      'Programming': 'Expands language depth and algorithmic thinking, giving the developer more options when troubleshooting complex systems.',
-      'AI & ML': 'Keeps the developer fluent in emerging AI patterns so human workflows can be amplified with pragmatic intelligence.',
-      'Neuron (AI & ML)': 'Turns ML theory into deployable accelerators that unlock smarter automation throughout the stack.',
-      'Cloud & Data Engineering': 'Elevates data plumbing and cloud resilience, ensuring new features ride on reliable, observable infrastructure.',
-      'DevOps & Tools': 'Tightens build, release, and monitoring loops so product increments move from commit to customer with fewer manual hops.',
-      'Data Analysis': 'Injects evidence-based storytelling into delivery, letting product decisions ride on real insight rather than intuition.',
-      'Databases & SQL': 'Improves the fidelity of data stores powering products, reducing latency, drift, and noisy handoffs between services.',
-      'Soft Skills': 'Reinforces the human layer of leadership—clear comms, coaching, and stakeholder steering—so delivery momentum never stalls.',
-      'Business & ERP': 'Connects engineering throughput to commercial levers, helping technical decisions translate into revenue and efficiency gains.',
-      default: 'Adds another layer of craft to the developer’s toolkit, compounding into faster launches, steadier systems, and happier teams.'
-    };
-
-    const buildMobileCoursePool = () => {
-      const pool = [];
-      categories.forEach(cat => {
-        if (!Array.isArray(cat.certifications) || !cat.certifications.length) return;
-        const colorHex = `#${new THREE.Color(cat.color).getHexString()}`;
-        cat.certifications.forEach(cert => {
-          pool.push({
-            title: cert.title,
-            category: cat.name,
-            color: colorHex
-          });
-        });
-      });
-      return pool;
-    };
-    mobileCoursePool = buildMobileCoursePool();
-
-    const hideSimulatedHover = () => {
-      if (simulatedHoverHideHandle) {
-        clearTimeout(simulatedHoverHideHandle);
-        simulatedHoverHideHandle = null;
-      }
-      if (tooltip && !isHovering) {
-        tooltip.classList.remove('visible');
-        tooltip.style.transform = 'translate3d(-9999px, -9999px, 0)';
-      }
-      simulatedHoverActive = false;
-    };
-
-    const showSimulatedHover = () => {
-      if (experienceMode !== 'galaxy' || !tooltip || !mobileCoursePool.length || document.hidden) return;
-      if (tooltipHideTimeout) {
-        clearTimeout(tooltipHideTimeout);
-        tooltipHideTimeout = null;
-      }
-      hideSimulatedHover();
-      const randomIndex = Math.floor(Math.random() * mobileCoursePool.length);
-      const selected = mobileCoursePool[randomIndex];
-      const color = new THREE.Color(selected.color);
-      tooltip.style.setProperty('--tooltip-r', Math.floor(color.r * 255));
-      tooltip.style.setProperty('--tooltip-g', Math.floor(color.g * 255));
-      tooltip.style.setProperty('--tooltip-b', Math.floor(color.b * 255));
-
-      const planetClass = getPlanetClass(selected.title);
-      updateTooltipContent(selected.title, planetClass);
-
-      const tooltipWidth = 220;
-      const tooltipHeight = 140;
-      const padding = 80;
-      const availableWidth = Math.max(window.innerWidth - tooltipWidth - padding * 2, 0);
-      const availableHeight = Math.max(window.innerHeight - tooltipHeight - padding * 2, 0);
-      const offsetX = padding + Math.random() * (availableWidth || 1);
-      const offsetY = padding + Math.random() * (availableHeight || 1);
-      tooltip.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0)`;
-      tooltip.classList.add('visible');
-      simulatedHoverActive = true;
-
-      simulatedHoverHideHandle = setTimeout(() => {
-        hideSimulatedHover();
-      }, SIMULATED_HOVER_VISIBLE_DURATION);
-    };
-
-    const stopSimulatedHoverLoop = () => {
-      if (simulatedHoverLoopHandle) {
-        clearInterval(simulatedHoverLoopHandle);
-        simulatedHoverLoopHandle = null;
-      }
-      hideSimulatedHover();
-    };
-
-    const beginSimulatedHoverLoop = () => {
-      if (experienceMode !== 'galaxy' || simulatedHoverLoopHandle || !mobileCoursePool.length) return;
-      const kickoffDelay = 600 + Math.random() * 800;
-      simulatedHoverLoopHandle = setInterval(() => {
-        if (!simulatedHoverActive) {
-          showSimulatedHover();
-        }
-      }, SIMULATED_HOVER_INTERVAL);
-      setTimeout(() => {
-        if (!simulatedHoverActive) {
-          showSimulatedHover();
-        }
-      }, kickoffDelay);
-    };
-
-    const manageSimulatedHoverLoop = () => {
-      if (document.hidden || experienceMode !== 'galaxy') {
-        stopSimulatedHoverLoop();
-      } else {
-        beginSimulatedHoverLoop();
-      }
-    };
-
-    const attachMediaListener = (query, handler) => {
-      if (!query) return;
-      if (typeof query.addEventListener === 'function') {
-        query.addEventListener('change', handler);
-      } else if (typeof query.addListener === 'function') {
-        query.addListener(handler);
-      }
-    };
-    attachMediaListener(coarsePointerQuery, () => {
-      if (experienceMode === 'galaxy') {
-        manageSimulatedHoverLoop();
-      }
-    });
-    attachMediaListener(narrowScreenQuery, () => {
-      if (experienceMode === 'galaxy') {
-        manageSimulatedHoverLoop();
-      }
-    });
-    document.addEventListener('visibilitychange', () => {
-      if (experienceMode === 'galaxy') {
-        manageSimulatedHoverLoop();
-      }
-    });
 
     // Create each star system
     categories.forEach(cat => {
@@ -1782,54 +1841,6 @@
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
     });
-
-    // Hover state variables
-    let isHovering = false;
-    let hoveredObj = null;
-    let pendingPointerEvent = null;
-    let pointerFrameRequested = false;
-    let lastTooltipTitle = '';
-    let lastTooltipClass = '';
-    let lastPointerWasTouch = false;
-
-    const getPlanetClass = title => {
-      if (!title) return '';
-      const normalized = title.toLowerCase();
-      if (normalized.includes('web')) return 'planet-web';
-      if (normalized.includes('design')) return 'planet-design';
-      if (normalized.includes('security')) return 'planet-security';
-      if (normalized.includes('programming')) return 'planet-programming';
-      if (normalized.includes('ai')) return 'planet-ai';
-      if (normalized.includes('cloud')) return 'planet-cloud';
-      if (normalized.includes('devops')) return 'planet-devops';
-      if (normalized.includes('data') && !normalized.includes('database')) return 'planet-data';
-      if (normalized.includes('database')) return 'planet-database';
-      if (normalized.includes('soft skills')) return 'planet-softskills';
-      if (normalized.includes('business')) return 'planet-business';
-      return '';
-    };
-
-    const updateTooltipContent = (title, planetClass) => {
-      if (!tooltip) return;
-      const safeTitle = title || 'No Title';
-      const safeClass = planetClass || '';
-      const valueSnippet = getCourseValueSnippet(safeTitle);
-      if (safeTitle !== lastTooltipTitle || safeClass !== lastTooltipClass) {
-        tooltip.innerHTML = `
-          <div class="holographic-tooltip ${safeClass}">
-            <div class="tooltip-outline">
-              <div class="tooltip-title">${escapeHtml(safeTitle)}</div>
-              <div class="tooltip-value-pane">
-                <div class="value-label">Value</div>
-                <div class="value-copy">${escapeHtml(valueSnippet)}</div>
-              </div>
-            </div>
-          </div>`;
-        lastTooltipTitle = safeTitle;
-        lastTooltipClass = safeClass;
-      }
-      tooltip.classList.add('visible');
-    };
 
     const scheduleTooltipHide = () => {
       if (tooltipHideTimeout) return;
