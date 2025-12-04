@@ -83,172 +83,32 @@
             }
         };
 
-        const GITHUB_CONFIG = {
-            token: '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', // Paste your CLASSIC token from Step 1 (starts with ghp_)
-            gistId: '0bdf6369fc962c756e2ede6a490c9b4d',        // Paste your Gist ID from Step 2
+        // GitHub Gist Storage Configuration
+        window.GITHUB_CONFIG = {
+            token: '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', // Paste your CLASSIC token from Step 1 (starts with ghp_)
+            gistId: 'f45f4c36b5a819e14dd53feb58ae0888',        // Paste your Gist ID from Step 2
             username: 'DigiSenseiZim'       // Your GitHub username
         };
 
         window.appLogger.info('App', 'Application initializing', { 
             config: { 
-                hasToken: !!GITHUB_CONFIG.token, 
-                hasGistId: !!GITHUB_CONFIG.gistId,
-                username: GITHUB_CONFIG.username 
+                hasToken: !!window.GITHUB_CONFIG.token, 
+                hasGistId: !!window.GITHUB_CONFIG.gistId,
+                username: window.GITHUB_CONFIG.username 
             } 
         });
-
-        window.storageAPI = {
-            async load() {
-                window.appLogger.trace('StorageAPI', 'load');
-                
-                if (!GITHUB_CONFIG.gistId) {
-                    window.appLogger.warn('StorageAPI', 'GitHub Gist not configured');
-                    return null;
-                }
-                
-                try {
-                    window.appLogger.debug('StorageAPI', 'Fetching gist data', { gistId: GITHUB_CONFIG.gistId });
-                    const startTime = performance.now();
-                    
-                    const response = await fetch(`https://api.github.com/gists/${GITHUB_CONFIG.gistId}`);
-                    const fetchTime = performance.now() - startTime;
-                    
-                    window.appLogger.debug('StorageAPI', 'Fetch response received', { 
-                        status: response.status, 
-                        statusText: response.statusText,
-                        duration: `${fetchTime.toFixed(2)}ms`
-                    });
-                    
-                    if (!response.ok) {
-                        if (response.status === 404) {
-                            window.appLogger.warn('StorageAPI', 'Gist not found', { 
-                                gistId: GITHUB_CONFIG.gistId,
-                                status: response.status 
-                            });
-                        } else {
-                            window.appLogger.error('StorageAPI', 'Failed to load gist', new Error(`HTTP ${response.status}: ${response.statusText}`));
-                        }
-                        throw new Error(`Failed to load data: ${response.status} ${response.statusText}`);
-                    }
-                    
-                    const gist = await response.json();
-                    window.appLogger.debug('StorageAPI', 'Gist data parsed', { 
-                        fileCount: Object.keys(gist.files || {}).length,
-                        hasPortfolioData: !!gist.files['portfolio-data.json']
-                    });
-                    
-                    const content = gist.files['portfolio-data.json']?.content || '{}';
-                    const parsedData = JSON.parse(content);
-                    
-                    // Ensure data structure is complete
-                    const initialized = {
-                        stats: !parsedData.stats,
-                        visitors: !parsedData.visitors,
-                        messages: !parsedData.messages,
-                        analytics: !parsedData.analytics
-                    };
-                    
-                    if (!parsedData.stats) parsedData.stats = { totalVisits: 0, uniqueVisitors: 0, firstVisit: '', lastVisit: '' };
-                    if (!parsedData.visitors) parsedData.visitors = {};
-                    if (!parsedData.messages) parsedData.messages = [];
-                    if (!parsedData.analytics) parsedData.analytics = {
-                        visitsByDate: {}, visitsByHour: {}, visitsByReferrer: {},
-                        visitsByDevice: {}, visitsByCountry: {}
-                    };
-                    
-                    if (Object.values(initialized).some(v => v)) {
-                        window.appLogger.info('StorageAPI', 'Initialized missing data structures', initialized);
-                    }
-                    
-                    window.appLogger.info('StorageAPI', 'Data loaded successfully', {
-                        totalVisits: parsedData.stats?.totalVisits || 0,
-                        uniqueVisitors: parsedData.stats?.uniqueVisitors || 0,
-                        messageCount: parsedData.messages?.length || 0
-                    });
-                    
-                    window.appLogger.traceEnd('StorageAPI', 'load', { success: true });
-                    return parsedData;
-                } catch (error) {
-                    window.appLogger.error('StorageAPI', 'Error loading data', error);
-                    window.appLogger.traceEnd('StorageAPI', 'load', { success: false });
-                    return null;
-                }
-            },
-            
-            async save(data) {
-                window.appLogger.trace('StorageAPI', 'save', { 
-                    dataSize: JSON.stringify(data).length,
-                    hasStats: !!data.stats,
-                    hasMessages: !!data.messages
-                });
-                
-                if (!GITHUB_CONFIG.token || !GITHUB_CONFIG.gistId) {
-                    window.appLogger.warn('StorageAPI', 'GitHub token not configured - data will not be saved', {
-                        hasToken: !!GITHUB_CONFIG.token,
-                        hasGistId: !!GITHUB_CONFIG.gistId
-                    });
-                    return false;
-                }
-                
-                try {
-                    const payload = {
-                        files: {
-                            'portfolio-data.json': {
-                                content: JSON.stringify(data, null, 2)
-                            }
-                        }
-                    };
-                    
-                    window.appLogger.debug('StorageAPI', 'Sending save request', {
-                        payloadSize: JSON.stringify(payload).length,
-                        gistId: GITHUB_CONFIG.gistId
-                    });
-                    
-                    const startTime = performance.now();
-                    const response = await fetch(`https://api.github.com/gists/${GITHUB_CONFIG.gistId}`, {
-                        method: 'PATCH',
-                        headers: {
-                            'Authorization': `Bearer ${GITHUB_CONFIG.token}`,
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/vnd.github.v3+json',
-                            'X-GitHub-Api-Version': '2022-11-28'
-                        },
-                        body: JSON.stringify(payload)
-                    });
-                    const saveTime = performance.now() - startTime;
-                    
-                    window.appLogger.debug('StorageAPI', 'Save response received', {
-                        status: response.status,
-                        statusText: response.statusText,
-                        duration: `${saveTime.toFixed(2)}ms`
-                    });
-                    
-                    if (!response.ok) {
-                        const errorData = await response.json().catch(() => ({}));
-                        window.appLogger.error('StorageAPI', 'Save request failed', {
-                            status: response.status,
-                            statusText: response.statusText,
-                            errorData: errorData
-                        });
-                        throw new Error(`Failed to save data: ${response.status} ${response.statusText}. ${errorData.message || ''}`);
-                    }
-                    
-                    window.appLogger.info('StorageAPI', 'Data saved successfully', { duration: `${saveTime.toFixed(2)}ms` });
-                    window.appLogger.traceEnd('StorageAPI', 'save', { success: true });
-                    return true;
-                } catch (error) {
-                    window.appLogger.error('StorageAPI', 'Error saving data', error);
-                    if (error.message.includes('401') || error.message.includes('403')) {
-                        window.appLogger.warn('StorageAPI', 'Authentication failed', {
-                            message: 'Please verify your token is valid and has the "gist" scope.',
-                            error: error.message
-                        });
-                    }
-                    window.appLogger.traceEnd('StorageAPI', 'save', { success: false });
-                    return false;
-                }
-            }
-        };
+    </script>
+    
+    <!-- Load Storage API Module (must be after logger and config) -->
+    <script src="storage-api.js"></script>
+    
+    <script>
+        // Verify storage API loaded
+        if (!window.storageAPI) {
+            console.error('StorageAPI', 'storage-api.js failed to load!');
+        } else {
+            window.appLogger.info('App', 'Storage API loaded successfully');
+        }
     </script>
 </head>
 <body>
@@ -281,10 +141,11 @@
                 console.warn('Chart.js failed to load. Some visualizations may not work.');
             }
             
-            // Data Science: Certification Growth Analysis
-            // Exponential growth pattern: y = a * e^(bx) where growth rate = 0.35 (35% YoY)
-            // Portfolio data: 5→8→12→18→25 (2020-2024) = 400% total growth, 35% CAGR
+            // Charts initialization - wrapped in try-catch for error handling
             try {
+                // Data Science: Certification Growth Analysis
+                // Exponential growth pattern: y = a * e^(bx) where growth rate = 0.35 (35% YoY)
+                // Portfolio data: 5→8→12→18→25 (2020-2024) = 400% total growth, 35% CAGR
                     window.appLogger.debug('Charts', 'Initializing certification timeline chart');
                     const certCtx = document.getElementById('certificationTimeline');
                     if (!certCtx) {
@@ -297,19 +158,16 @@
                             window.appLogger.error('Charts', 'Failed to get 2d context for certification timeline');
                         } else {
                             window.appLogger.debug('Charts', 'Creating certification timeline chart');
-                    if (!ctx2d) {
-                        console.warn('Could not get 2d context for certification timeline canvas');
-                    } else {
-                        const certGradient = ctx2d.createLinearGradient(0, 0, 0, 400);
+                            const certGradient = ctx2d.createLinearGradient(0, 0, 0, 400);
                         certGradient.addColorStop(0, 'rgba(99, 102, 241, 0.5)');
                         certGradient.addColorStop(0.5, 'rgba(99, 102, 241, 0.25)');
                         certGradient.addColorStop(1, 'rgba(99, 102, 241, 0)');
                         
                         new Chart(certCtx, {
-                    type: 'line',
-        data: {
-                        labels: ['2020', '2021', '2022', '2023', '2024', '2025 (Projected)'],
-            datasets: [{
+                            type: 'line',
+                            data: {
+                                labels: ['2020', '2021', '2022', '2023', '2024', '2025 (Projected)'],
+                                datasets: [{
                             label: 'Certifications (Actual)',
                             data: [5, 8, 12, 18, 25, null],
                             borderColor: '#6366f1',
@@ -330,8 +188,8 @@
                             fill: false,
                             tension: 0.5
                         }]
-                    },
-                    options: {
+                            },
+                            options: {
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
@@ -399,17 +257,17 @@
                                 }
                             }
                         },
-                        animation: {
-                            duration: 2000,
-                            easing: 'easeOutQuart'
-                        }
-                    }
+                                animation: {
+                                    duration: 2000,
+                                    easing: 'easeOutQuart'
+                                }
+                            }
                         });
                     }
                 }
+            
                 // Data Science: Tech Stack Distribution
                 // Based on portfolio: Full-stack focus with AI/ML specialization
-                try {
                     const techStackCtx1 = document.getElementById('techStackChart');
                     if (techStackCtx1) {
                         const ctx = techStackCtx1.getContext('2d');
@@ -796,15 +654,14 @@
                         textShadow: 'var(--text-shadow-complete)'
                     }
                 }
+                }
             }
-        }
             });
             window.appLogger.info('Charts', 'Tech mastery chart created successfully');
         }
-    }
-                } catch (error) {
-                    window.appLogger.error('Charts', 'Error initializing additional charts', error);
-                }
+            } catch (error) {
+                window.appLogger.error('Charts', 'Error initializing charts', error);
+            }
         
             window.appLogger.info('App', 'Chart initialization complete');
             
