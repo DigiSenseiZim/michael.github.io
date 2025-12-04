@@ -99,9 +99,9 @@ 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
 
 ```javascript
 window.GITHUB_CONFIG = {
-    token: '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', // Paste your CLASSIC token from Step 1 (starts with ghp_)
-    gistId: '0bdf6369fc962c756e2ede6a490c9b4d',        // Paste your Gist ID from Step 2
-    username: 'DigiSenseiZim'       // Your GitHub username
+    token: 'YOUR_GITHUB_TOKEN_HERE',   // Replace with your CLASSIC token (starts with ghp_)
+    gistId: 'YOUR_GIST_ID_HERE',       // Replace with your Gist ID  
+    username: 'YOUR_USERNAME_HERE'     // Replace with your GitHub username
 };
 ```
 

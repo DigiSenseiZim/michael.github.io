@@ -8732,6 +8732,18 @@ new Chart(ctxHiring, {
             // Track visitor count
             async function trackVisitor() {
                 window.appLogger.trace('VisitorTracker', 'trackVisitor');
+                
+                // Verify storage API is available
+                if (!storage || typeof storage.load !== 'function') {
+                    const error = new Error('Storage API not loaded. Ensure storage-api.js is loaded correctly.');
+                    window.appLogger.error('VisitorTracker', 'Storage API not available', {
+                        hasStorage: !!storage,
+                        storageType: typeof storage,
+                        hasLoad: storage ? typeof storage.load : 'N/A'
+                    });
+                    throw error;
+                }
+                
                 try {
                     window.appLogger.debug('VisitorTracker', 'Loading visitor data');
                     let data = await storage.load();
@@ -8870,7 +8882,20 @@ new Chart(ctxHiring, {
                     window.appLogger.error('VisitorTracker', 'Error tracking visitor', error);
                     const counterElement = document.getElementById('visitor-counter');
                     if (counterElement) {
-                        counterElement.innerHTML = '<span style="color: #ff3d5e;">Error loading counter</span>';
+                        // Display detailed error for debugging
+                        const errorMsg = error.message || 'Unknown error';
+                        const errorDetails = error.details ? JSON.stringify(error.details) : '';
+                        counterElement.innerHTML = `
+                            <div style="color: #ff3d5e; font-size: 1rem;">
+                                <i class="fas fa-exclamation-triangle"></i> Error loading counter<br>
+                                <small style="font-size: 0.8rem; opacity: 0.8;">${errorMsg}</small>
+                            </div>
+                        `;
+                        console.error('Visitor Counter Error Details:', {
+                            message: errorMsg,
+                            details: errorDetails,
+                            error: error
+                        });
                     }
                     window.appLogger.traceEnd('VisitorTracker', 'trackVisitor', { success: false });
                 }
