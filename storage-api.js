@@ -205,7 +205,7 @@ window.storageAPI = {
             const response = await fetch(`https://api.github.com/gists/${GITHUB_CONFIG.gistId}`, {
                 method: 'PATCH',
                 headers: {
-                    'Authorization': `token ${GITHUB_CONFIG.token}`,
+                    'Authorization': `Bearer ${GITHUB_CONFIG.token}`,
                     'Content-Type': 'application/json',
                     'Accept': 'application/vnd.github.v3+json',
                     'X-GitHub-Api-Version': '2022-11-28'

@@ -1,0 +1,28 @@
+# GitHub Configuration (contains sensitive token)
+config.js
+
+# Node modules (if you add npm later)
+node_modules/
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Environment files
+.env
+.env.local
+
+# Temporary files
+*.tmp
+*.temp
+
