@@ -1321,31 +1321,33 @@ transform: none !important;
         /* Skills Overview Styles */
 
 /* ============================================
-   CHART CONTAINER - RESPONSIVE & BEAUTIFUL
+   CHART CONTAINER - MODERN MINIMAL DESIGN
+   Clean, flat, focused on data
    ============================================ */
 
 .chart-container {
-    background: var(--card-bg);
-    border-radius: 16px;
-    padding: clamp(1rem, 2vw, 2rem);
-    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     position: relative;
-    min-height: 250px;
+    min-height: 300px;
     height: auto;
     display: flex;
     flex-direction: column;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(8px);
+    /* Modern flat shadow */
     box-shadow: 
-        0 8px 32px 0 rgba(31, 38, 135, 0.2),
-        0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+        0 1px 3px 0 rgba(0, 0, 0, 0.1),
+        0 1px 2px -1px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
 }
 
 .chart-container:hover {
-    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.12);
     box-shadow: 
-        0 12px 48px 0 rgba(31, 38, 135, 0.3),
-        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -2px rgba(0, 0, 0, 0.1);
 }
 
 /* Chart canvas responsive sizing */
@@ -1358,22 +1360,26 @@ transform: none !important;
     margin: 0 auto;
 }
 
-/* Chart title styling */
+/* Chart title styling - modern and minimal */
 .chart-title {
-    font-size: clamp(1rem, 1rem + 0.5vw, 1.5rem);
-    font-weight: 600;
-    margin-bottom: 1rem;
-    color: var(--text-primary);
-    text-align: center;
+    font-size: clamp(0.875rem, 0.875rem + 0.3vw, 1.125rem);
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: left;
+    letter-spacing: -0.01em;
+    text-transform: none;
 }
 
-/* Chart grid layout */
+/* Chart grid layout - SINGLE COLUMN for focus */
 .chart-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
-    gap: clamp(1rem, 2vw, 2rem);
-    margin: clamp(1rem, 2vw, 2rem) 0;
+    grid-template-columns: 1fr;
+    gap: clamp(1.5rem, 3vw, 3rem);
+    margin: clamp(1.5rem, 3vw, 3rem) 0;
     width: 100%;
+    max-width: 900px;
+    margin-inline: auto;
 }
 
 /* Specific chart height adjustments */
@@ -1814,8 +1820,8 @@ transform: none !important;
     
         .stats-container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            grid-template-columns: 1fr;
+            gap: 1rem;
             text-shadow: 
         0px 1px 0px rgba(255, 255, 255, 0.4),
         0px -1px 0px rgba(0, 0, 0, 0.3),
@@ -1933,8 +1939,10 @@ transform: none !important;
     
         .project-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 2rem;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            max-width: 900px;
+            margin-inline: auto;
             margin-top: 2rem;
             text-shadow: 
         0px 1px 0px rgba(255, 255, 255, 0.4),
@@ -4143,16 +4151,16 @@ transform: none !important;
                     </div>
                     <div class="snapshot-body">
                     <p>
-                        I transform complex technical challenges into <strong>high-impact digital solutions</strong> that drive measurable business results. Combining deep full-stack engineering expertise with strategic product leadership, I help organisations ship dependable, scalable systems that customers love and teams can maintain.
+                        I build scalable systems that ship fast and last. Full-stack engineer with product leadership experience—I write code, lead teams, and deliver software that drives business results.
                     </p>
                     <ul style="margin:12px 0 16px 18px; line-height:1.55;">
-                        <li><strong>Product Leadership:</strong> Led cross-functional teams delivering enterprise-grade multi-channel platforms, orchestrating end-to-end roadmaps from discovery to production launch with measurable ROI.</li>
-                        <li><strong>Engineering Excellence:</strong> Architected cloud-native, security-first systems that reduced operational overhead by 40% while accelerating developer productivity and deployment velocity.</li>
-                        <li><strong>Governance & Mentorship:</strong> Established engineering best practices, AI-powered development frameworks, and mentorship programs adopted across 5+ teams, elevating code quality and team capabilities.</li>
-                        <li><strong>AI Innovation:</strong> Pioneered GenAI integration strategies, building production-ready AI solutions with guardrails that safely enhance customer experiences and operational efficiency.</li>
+                        <li><strong>Product Leadership:</strong> Led cross-functional teams shipping enterprise platforms from discovery to production.</li>
+                        <li><strong>Engineering:</strong> Architected cloud-native systems reducing ops overhead 40% while improving dev velocity.</li>
+                        <li><strong>Mentorship:</strong> Established AI-powered frameworks and best practices adopted across 5+ teams.</li>
+                        <li><strong>AI Integration:</strong> Built production-ready GenAI solutions with safety guardrails.</li>
                     </ul>
                     <p>
-                        <strong>I partner best with forward-thinking organisations</strong> that need a technical leader who can bridge strategy and execution—someone who writes production code, leads engineering teams, and delivers software that creates real business value.
+                        <strong>I work best</strong> with teams that need someone who bridges strategy and execution—writing code, leading engineers, shipping value.
                     </p>
                     </div>
                 </div>
